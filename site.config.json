@@ -1,0 +1,29 @@
+{
+  "handelsnaam": "AET Solutions",
+  "domein": "aet-solutions.nl",
+  "eigenaar": "",
+  "portret": "",
+  "kvk": "42153046",
+  "btw": "",
+  "vestigingsplaats": "",
+  "adres": "",
+  "telefoon": "",
+  "whatsapp": true,
+  "email": "AET-Works@hotmail.com",
+  "regio": "Midden-Nederland",
+  "steden": ["Utrecht", "Amersfoort", "Nieuwegein", "Zeist", "Houten", "Veenendaal", "Hilversum", "Woerden"],
+  "reactietijd": "",
+  "kwalificaties": [
+    "Mbo-diploma elektrotechniek niveau 4 (crebo 25309)",
+    "NEN 3140 Vakbekwaam Persoon (VP)"
+  ],
+  "vca": "",
+  "verzekerd": false,
+  "partner": { "naam": "", "tonen": false },
+  "garantieArbeid": "",
+  "beschikbaarheidZakelijk": "",
+  "vanafPrijs": { "thuisbatterij": "", "laadpaal": "", "meterkast": "" },
+  "bewaartermijn": "12 maanden",
+  "formulierEndpoint": "",
+  "formulierdienst": ""
+}
