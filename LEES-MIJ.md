@@ -10,6 +10,12 @@ Statische site: geen build-stap, geen CMS. Upload de **inhoud** van deze map (ni
 5. **Algemene voorwaarden**: de volledige voorwaarden stuurt u als PDF mee met elke offerte.
 6. **Domein**: de site gaat uit van `https://aet-solutions.nl` (zonder www). Zet in uw hosting een redirect van www naar deze naam en zet https aan.
 
+## Nog open
+- Telefoonnummer invullen (punt 1).
+- Formulierdienst koppelen (punt 2) en e-mailadres op eigen domein (punt 3).
+- Vestigingsadres en btw-id vermelden: wettelijk verplicht op een bedrijfswebsite (art. 3:15d BW).
+- Werkgebied: de steden staan op de homepage (blok Werkgebied en veelgestelde vragen), in de dienstpagina's en in de structured data van `index.html`.
+
 ## Daarna
 - Meld de site aan bij Google Search Console en dien `sitemap.xml` in.
 - Maak een Google Bedrijfsprofiel aan.
