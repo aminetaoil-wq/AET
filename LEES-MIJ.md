@@ -1,25 +1,27 @@
 # AET Solutions – website (aet-solutions.nl)
 
-Statische site: geen build-stap, geen CMS. Upload de **inhoud** van deze map (niet de map zelf) naar uw hosting.
+Statische site op GitHub Pages. De pagina's worden gegenereerd; pas de HTML-bestanden niet met de hand aan.
 
-## Vóór livegang
-1. **Telefoonnummer**: `assets/site.js`, regel `PHONE=""`. Vul in als `31612345678`. Dan verschijnen bellen/WhatsApp automatisch.
-2. **Formulier**: maak een formulier aan bij uw formulierdienst (bijv. Formspree) en zet het adres in `assets/site.js`, regel `ENDPOINT=""`. Test daarna een aanvraag. Zolang ENDPOINT leeg is, opent het formulier het e-mailprogramma.
-3. **E-mailadres**: zoek op `AET-Works@hotmail.com` en vervang door uw adres op het eigen domein (in alle .html-bestanden en `assets/site.js`).
-4. **Privacyverklaring**: de bewaartermijn staat op 12 maanden na het laatste contact. Pas aan als u een andere termijn hanteert en laat de tekst tegenlezen.
-5. **Algemene voorwaarden**: de volledige voorwaarden stuurt u als PDF mee met elke offerte.
-6. **Domein**: de site gaat uit van `https://aet-solutions.nl` (zonder www). Zet in uw hosting een redirect van www naar deze naam en zet https aan.
+## Iets wijzigen
+1. **Gegevens** (telefoon, e-mail, naam, btw-id, regio, steden, reactietijd, garantie, formulieradres): `site.config.json`.
+2. **Teksten**: `src/pages.js`.
+3. **Reviews en projecten**: `content/` (zie `content/LEES-MIJ.md`).
+4. Voer daarna uit: `node tools/build.js` en controleer met `node tools/check.js .`
+5. Commit en push naar `main`; GitHub Pages zet de site live.
+
+Een leeg veld in `site.config.json` betekent dat het onderdeel niet op de site verschijnt. Vul `telefoon` in en de belknop, WhatsApp-knop en mobiele balk verschijnen op elke pagina.
 
 ## Nog open
-- Telefoonnummer invullen (punt 1).
-- Formulierdienst koppelen (punt 2) en e-mailadres op eigen domein (punt 3).
-- Vestigingsadres en btw-id vermelden: wettelijk verplicht op een bedrijfswebsite (art. 3:15d BW).
-- Werkgebied: de steden staan op de homepage (blok Werkgebied en veelgestelde vragen), in de dienstpagina's en in de structured data van `index.html`.
+- `telefoon`, `eigenaar`, `portret`, `vestigingsplaats`, `btw`, `reactietijd`, `garantieArbeid`.
+- `formulierEndpoint` (bijv. Formspree) en `formulierdienst` (naam, voor de privacyverklaring). Zolang dit leeg is, opent het formulier het e-mailprogramma.
+- `email`: adres op het eigen domein.
+- Volledige algemene voorwaarden aanleveren; nu staat er een samenvatting.
+- Vestigingsadres en btw-id zijn wettelijk verplicht op een bedrijfswebsite (art. 3:15d BW).
 
 ## Daarna
-- Meld de site aan bij Google Search Console en dien `sitemap.xml` in.
-- Maak een Google Bedrijfsprofiel aan.
-- Voeg een eigen foto, werkfoto's en reviews toe zodra u die heeft.
+- Google Search Console: sitemap `https://aet-solutions.nl/sitemap.xml` indienen.
+- Google Bedrijfsprofiel aanmaken.
+- Mailsjablonen staan in `docs/mailsjablonen.md`.
 
-## Bestanden
-`index.html` (home), `thuisbatterij/`, `laadpaal/`, `meterkast/`, `overige-elektrotechniek/`, `privacyverklaring/`, `algemene-voorwaarden/`, `bedankt/` (na verzenden), `404.html`, `assets/`, `robots.txt`, `sitemap.xml`.
+## Niet mogelijk op GitHub Pages
+Eigen redirects, security headers en cache-headers. GitHub Pages regelt https en www zelf; een tweede domein stuurt u door bij de domeinregistratie.
