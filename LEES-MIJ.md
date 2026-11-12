@@ -15,9 +15,8 @@ Een leeg veld in `site.config.json` betekent dat het onderdeel niet op de site v
 - `kvk` is leeg: het KvK-nummer staat niet op de site, omdat zoekmachines het koppelen aan het vestigingsadres in het Handelsregister. Het nummer hoort wel op offertes en facturen.
 
 ## Nog open
-- `telefoon`, `eigenaar`, `portret`, `vestigingsplaats`, `btw`, `reactietijd`, `garantieArbeid`.
+- `eigenaar`, `portret`, `vestigingsplaats`, `btw`, `reactietijd`, `garantieArbeid`.
 - `formulierEndpoint` (bijv. Formspree) en `formulierdienst` (naam, voor de privacyverklaring). Zolang dit leeg is, opent het formulier het e-mailprogramma.
-- `email`: adres op het eigen domein.
 - Volledige algemene voorwaarden aanleveren; nu staat er een samenvatting.
 - Vestigingsadres en btw-id zijn wettelijk verplicht op een bedrijfswebsite (art. 3:15d BW).
 
