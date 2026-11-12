@@ -17,7 +17,7 @@ module.exports = function (c) {
 <ol class="crumbs"><li><a href="/">Home</a></li><li>${o.crumb}</li></ol>
 <h1>${o.h1}</h1>
 <p class="lead">${o.lead}</p>
-${knop ? `<div class="cta"><a class="btn" href="#offerte">Offerte aanvragen</a>${tel ? `<a class="btn ghost" href="${tel.href}">Bel ${esc(tel.label)}</a>` : ""}</div>` : ""}
+${knop ? `<div class="cta"><a class="btn" href="#offerte">${o.knop || "Offerte aanvragen"}</a>${tel ? `<a class="btn ghost" href="${tel.href}">Bel ${esc(tel.label)}</a>` : ""}</div>` : ""}
 </div></div>`;
   const diensten = {
     meterkast: ["meterkast", "Meterkast / verdeelinrichting", "/meterkast/", "Vervangen of uitbreiden"],
@@ -29,18 +29,18 @@ ${knop ? `<div class="cta"><a class="btn" href="#offerte">Offerte aanvragen</a>$
 <h2>Andere diensten</h2>
 <div class="grid">${Object.keys(diensten).filter(k => k !== key).map(k => { const d = diensten[k]; return `<a class="rel" href="${d[2]}"><span class="ic">${ico(d[0])}</span>${d[1]}<span class="arr">${ico("arrow")}</span></a>`; }).join("")}</div>
 </div></div>`;
-  const side = kort => `<aside class="side" aria-label="In het kort">
+  const side = (kort, knop) => `<aside class="side" aria-label="In het kort">
 <h2>In het kort</h2>
 <ul class="checks">${kort.map(k => `<li>${k}</li>`).join("")}</ul>
-<a class="btn" href="#offerte">Offerte aanvragen</a>
+<a class="btn" href="#offerte">${knop || "Offerte aanvragen"}</a>
 <div class="sidec">${tel ? `<a href="${tel.href}">${ico("phone")}${esc(tel.label)}</a>` : ""}${wa ? `<a href="${wa}">${ico("chat")}WhatsApp</a>` : ""}<a href="mailto:${esc(cfg.email)}">${ico("mail")}${esc(cfg.email)}</a></div>
 </aside>`;
   const svc = o => `${phead(o, true)}
 <div class="wrap layout"><div class="prose">
 ${o.body}
 </div>
-${side(o.kort)}</div>
-${related(o.key)}`;
+${side(o.kort, o.knop)}</div>
+${o.geenRelated ? "" : related(o.key)}`;
   const tekst = o => `${phead(o, false)}
 <div class="wrap solo prose">
 ${o.body}
@@ -58,7 +58,7 @@ ${o.body}
     cfg.erkendLeerbedrijf ? ["user", "Erkend leerbedrijf", "Erkend door SBB"] : ["doc", "KvK-ingeschreven", "Handelsregister"],
     ["cap", "Gediplomeerd technicus", "Opgeleid en ervaren"],
     ["shield", "NEN 3140 VP", "Vakbekwaam Persoon"],
-    ["tag", "Prijs vooraf", "Duidelijke offerte, geen verrassingen"]
+    ["tag", "Prijs vooraf", "Duidelijke, vrijblijvende offerte"]
   ];
 
   const kaart = (key, tekstje, punten, link) => { const d = diensten[key]; return `<a class="svc" href="${d[2]}"><span class="ic">${ico(d[0])}</span><h3>${d[1]}</h3><p>${tekstje}</p><ul>${punten.map(p => `<li>${ico("check")}${p}</li>`).join("")}</ul><span class="more">${link}${ico("arrow")}</span></a>`; };
@@ -75,7 +75,7 @@ ${o.body}
     ["Met wie heb ik contact?", `Met de vakman zelf. Dezelfde persoon behandelt uw aanvraag, maakt de offerte, voert het werk uit en levert het op. U krijgt dus niet met verschillende contactpersonen te maken.`],
     ["Wat gebeurt er als er meerwerk nodig is?", `Komt er tijdens het werk iets onverwachts naar voren, dan bespreken wij dat eerst met u. Meerwerk voeren wij alleen uit nadat u akkoord bent.`],
     ["In welke plaatsen werkt u?", `Wij werken als elektricien voor particulieren in ${cfg.steden.map(esc).join(", ")} en omliggende plaatsen. Zakelijke opdrachten voeren wij in heel Nederland uit.`],
-    ["Welke kwalificaties heeft u?", `Wij zijn gediplomeerd elektrotechnicus en gecertificeerd als Vakbekwaam Persoon (VP) volgens NEN 3140. Ons werk voldoet aan NEN 1010, de norm voor elektrische installaties.${cfg.erkendLeerbedrijf ? " " + naam + " is bovendien erkend leerbedrijf (SBB) en mag studenten elektrotechniek in de praktijk opleiden." : ""}`],
+    ["Welke kwalificaties heeft u?", `Wij zijn gediplomeerd elektrotechnicus en gecertificeerd als Vakbekwaam Persoon (VP) volgens NEN 3140. Ons werk voldoet aan NEN 1010, de norm voor elektrische installaties.${cfg.erkendLeerbedrijf ? " " + naam + " is bovendien erkend leerbedrijf (SBB) en mag studenten elektrotechniek in de praktijk opleiden. <a href=\"/stage/\">Meer over stage lopen</a>." : ""}`],
     ["Sluit u ook een laadpaal aan die ik zelf heb gekocht?", `Ja. Geeft u het merk en type door, dan bepalen wij welke beveiliging en bekabeling daarbij horen. Meer leest u op de pagina over de <a href="/laadpaal/">laadpaal</a>.`],
     ["Werkt u ook voor bedrijven?", `Ja. Wij werken als elektricien voor bedrijven en als onderaannemer voor installatiebedrijven en leveranciers, per klus of per project. Op de pagina <a href="/zakelijk/">Zakelijk</a> leest u waarvoor u ons kunt inschakelen.`]
   ].concat(cfg.garantieArbeid ? [["Welke garantie krijg ik?", `Op ons installatiewerk krijgt u ${esc(cfg.garantieArbeid)} garantie. Voor materialen geldt de garantie van de fabrikant. De volledige regeling staat in de algemene voorwaarden, die u bij de offerte ontvangt.`]] : []);
@@ -137,6 +137,7 @@ ${cfg.portret ? `<img class="portret" src="${esc(cfg.portret)}" alt="${esc(cfg.e
 <li><span class="ic">${ico("grid")}</span><div><b>Voor zakelijke opdrachtgevers</b><p>Elektrotechnische ondersteuning en onderaanneming, per klus of per project. <a href="/zakelijk/">Bekijk de zakelijke dienstverlening</a>.</p></div></li>
 <li><span class="ic">${ico("tag")}</span><div><b>Duidelijkheid vooraf</b><p>U weet vooraf wat wij gaan doen, welke materialen nodig zijn en wat het kost. Eventuele reiskosten staan in de offerte.</p></div></li>
 <li><span class="ic">${ico("shield")}</span><div><b>Persoonlijk verantwoordelijk</b><p>Wij staan zelf in voor het werk dat wij opleveren. Is er meerwerk nodig, dan overleggen wij eerst met u.</p></div></li>
+${cfg.erkendLeerbedrijf ? `<li><span class="ic">${ico("cap")}</span><div><b>Erkend leerbedrijf</b><p>Wij leiden studenten elektrotechniek op in de praktijk. Stage lopen? <a href="/stage/">Bekijk de mogelijkheden</a>.</p></div></li>` : ""}
 </ul></div></section>
 
 <section class="alt" id="werkgebied"><div class="wrap">
@@ -381,6 +382,31 @@ ${icards([
 <ul class="checks">${docs.map(d => `<li>${d}</li>`).join("")}</ul>
 <p><a href="#offerte">Leg uw opdracht voor</a>, dan hoort u of wij in uw planning passen.</p>` });
 
+
+  /* ---------- Stage ---------- */
+  const stage = svc({ key: "stage", crumb: "Stage", knop: "Aanmelden voor een stage", geenRelated: true,
+    h1: "Stage lopen bij een erkend leerbedrijf in de elektrotechniek",
+    lead: `${naam} is erkend leerbedrijf (SBB). Volg je een opleiding elektrotechniek en zoek je een stageplek waar je echt meewerkt? Bij ons loop je mee met één vakman en leer je het vak in de praktijk, in de regio ${stedenTekst(3)}.`,
+    kort: ["Erkend leerbedrijf (SBB)", "Je werkt mee aan echte opdrachten", "Eén vaste begeleider", "Aanmelden via het formulier"],
+    body: `<h2>Wat je bij ons leert</h2>
+${icards([
+      ["meterkast", "Meterkasten en verdeelinrichtingen", "Groepenkasten vervangen en uitbreiden, in woningen en bedrijfspanden."],
+      ["laadpaal", "Laadpalen", "Een eigen groep aanleggen, de kabel trekken, de laadpaal monteren en instellen."],
+      ["alert", "Storingen", "Meten, de oorzaak opsporen en de storing verhelpen."],
+      ["tool", "Elektra bij verbouwingen", "Leidingen en aansluitpunten aanleggen en afmonteren."]
+    ])}
+
+<h2>Zo ziet je stage eruit</h2>
+<p>Je loopt mee met de vakman die het werk uitvoert. Zo zie je een opdracht van begin tot eind: de beoordeling, de voorbereiding, de uitvoering en het meten en testen bij de oplevering. Je werkt volgens NEN 1010 en leert veilig werken volgens NEN 3140. Wat je zelfstandig doet, bouwen we stap voor stap op.</p>
+
+<h2>Wat we van je vragen</h2>
+<ul class="checks"><li>Je volgt een mbo-opleiding in de elektrotechniek.</li><li>Je bent gemotiveerd en komt je afspraken na.</li><li>Je werkt netjes en neemt veiligheid serieus.</li></ul>
+
+<h2>Aanmelden</h2>
+<p>Stuur ons via het formulier deze gegevens:</p>
+<ul class="checks"><li>Je opleiding, niveau en leerjaar.</li><li>Of je BOL of BBL volgt.</li><li>De periode en het aantal dagen per week.</li><li>In een paar zinnen waarom je bij ons stage wilt lopen.</li></ul>
+<p>Je cv stuur je per e-mail naar ${mail}. Je krijgt antwoord van de vakman zelf. Of er op dat moment een stageplek vrij is, hoor je na je aanmelding. <a href="#offerte">Meld je aan</a>.</p>` });
+
   /* ---------- Privacy ---------- */
   const privacy = tekst({ crumb: "Privacyverklaring", h1: "Privacyverklaring",
     lead: `Laatst bijgewerkt: november 2026. Hier leest u hoe ${naam} met uw gegevens omgaat.`,
@@ -440,6 +466,11 @@ ${related("")}`;
     { path: "zakelijk/", form: true, dienst: "Zakelijke inhuur", type: "Bedrijf", service: "Elektromonteur inhuren als onderaannemer", crumb: "Zakelijk", body: zakelijk,
       title: `Elektromonteur inhuren als onderaannemer | ${H}`,
       desc: `Elektromonteur als onderaannemer en elektricien voor bedrijven. Gediplomeerd technicus met NEN 3140 VP. Per klus of project, in heel Nederland.` },
+  ].concat(cfg.erkendLeerbedrijf ? [
+    { path: "stage/", form: true, stage: true, dienst: "Stage", crumb: "Stage", body: stage,
+      title: `Stage elektrotechniek regio Utrecht | ${H}`,
+      desc: `Stage lopen in de elektrotechniek? ${H} is erkend leerbedrijf (SBB) in de regio Utrecht, Amersfoort en Amsterdam. Meld je aan via het formulier.` }
+  ] : []).concat([
     { path: "privacyverklaring/", crumb: "Privacyverklaring", body: privacy,
       title: `Privacyverklaring | ${H}`,
       desc: `Privacyverklaring van ${H}: welke gegevens wij verwerken, waarvoor, hoe lang wij ze bewaren en wat uw rechten zijn.` },
@@ -448,5 +479,5 @@ ${related("")}`;
       desc: `Algemene voorwaarden van ${H}: hoe u ze ontvangt, bedenktijd voor particulieren en onze bedrijfsgegevens.` },
     { path: "bedankt/", noindex: true, body: bedankt, title: `Bedankt voor uw aanvraag | ${H}`, desc: "Uw aanvraag is ontvangen." },
     { path: "", file: "404.html", noindex: true, body: nietGevonden, title: `Pagina niet gevonden | ${H}`, desc: "Deze pagina bestaat niet." }
-  ];
+  ]);
 };

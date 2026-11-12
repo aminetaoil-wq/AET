@@ -212,3 +212,4 @@ section,.band{padding:60px 0}.layout,.solo{padding-top:40px;padding-bottom:60px}
 .err:empty,.ok:empty{display:none}
 .band .checks{margin:0 0 22px;color:#fff;font-weight:600}
 @media(max-width:640px){.quick{display:none}.hero{padding-bottom:92px}}
+.prose .checks+p{margin-top:14px}
