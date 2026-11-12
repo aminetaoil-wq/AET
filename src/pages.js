@@ -55,30 +55,24 @@ ${o.body}
 
   /* ---------- Homepage ---------- */
   const trust = [
-    cfg.erkendLeerbedrijf ? ["user", "Erkend leerbedrijf", "Erkend door SBB"] : ["doc", "KvK-ingeschreven", "Handelsregister"],
-    ["cap", "Gediplomeerd technicus", "Opgeleid en ervaren"],
-    ["shield", "NEN 3140 VP", "Vakbekwaam Persoon"],
-    ["tag", "Prijs vooraf", "Duidelijke, vrijblijvende offerte"]
+    ["doc", "Werk volgens NEN 1010", "Norm voor elektrische installaties"],
+    ["shield", "NEN 3140 VP", "Gecertificeerd Vakbekwaam Persoon"],
+    cfg.erkendLeerbedrijf ? ["cap", "Erkend leerbedrijf", "Erkend door SBB"] : ["cap", "Gediplomeerd", "Elektrotechniek"],
+    ["tag", "Vaste prijs vooraf", "Duidelijke, vrijblijvende offerte"]
   ];
 
   const kaart = (key, tekstje, punten, link) => { const d = diensten[key]; return `<a class="svc" href="${d[2]}"><span class="ic">${ico(d[0])}</span><h3>${d[1]}</h3><p>${tekstje}</p><ul>${punten.map(p => `<li>${ico("check")}${p}</li>`).join("")}</ul><span class="more">${link}${ico("arrow")}</span></a>`; };
 
-  const over = cfg.eigenaar
-    ? `<h2>${esc(cfg.eigenaar)}, uw elektricien</h2>
-<p class="sub">Ik ben ${esc(cfg.eigenaar)}, eigenaar van ${naam}. Ik behandel uw aanvraag, maak de offerte en voer het werk zelf uit. U legt uw situatie één keer uit en u weet wie er bij u over de vloer komt.</p>`
-    : `<h2>Eén vakman, één aanspreekpunt</h2>
-<p class="sub">${naam} is een elektrotechnisch installatiebedrijf met een persoonlijke aanpak. De vakman die uw aanvraag behandelt, maakt ook de offerte en voert het werk zelf uit. U legt uw situatie één keer uit en u weet wie er bij u over de vloer komt.</p>`;
-
   const homeFaq = [
-    ["Is mijn meterkast geschikt voor een laadpaal, inductieplaat of warmtepomp?", `Dat hangt af van drie dingen: uw aansluiting (1-fase of 3-fase), de waarde van uw hoofdzekering en de vrije ruimte in uw groepenkast. Apparaten met een hoog vermogen krijgen elk een eigen groep. Stuurt u een foto van uw meterkast mee, dan krijgt u van ons een eerste inschatting. Meer leest u op de pagina over de <a href="/meterkast/">meterkast</a>.`],
-    ["Wat kost een elektricien?", `Dat verschilt per opdracht. De prijs bestaat uit materiaal, arbeid en eventuele reiskosten. Het aantal groepen of aansluitpunten, de lengte van de kabels en eventuele aanpassingen aan uw meterkast bepalen het grootste deel. U ontvangt altijd vooraf een vrijblijvende offerte waarin deze onderdelen apart staan.`],
-    ["Met wie heb ik contact?", `Met de vakman zelf. Dezelfde persoon behandelt uw aanvraag, maakt de offerte, voert het werk uit en levert het op. U krijgt dus niet met verschillende contactpersonen te maken.`],
-    ["Wat gebeurt er als er meerwerk nodig is?", `Komt er tijdens het werk iets onverwachts naar voren, dan bespreken wij dat eerst met u. Meerwerk voeren wij alleen uit nadat u akkoord bent.`],
-    ["In welke plaatsen werkt u?", `Wij werken als elektricien voor particulieren in ${cfg.steden.map(esc).join(", ")} en omliggende plaatsen. Zakelijke opdrachten voeren wij in heel Nederland uit.`],
-    ["Welke kwalificaties heeft u?", `Wij zijn gediplomeerd elektrotechnicus en gecertificeerd als Vakbekwaam Persoon (VP) volgens NEN 3140. Ons werk voldoet aan NEN 1010, de norm voor elektrische installaties.${cfg.erkendLeerbedrijf ? " " + naam + " is bovendien erkend leerbedrijf (SBB) en mag studenten elektrotechniek in de praktijk opleiden. <a href=\"/stage/\">Meer over stage lopen</a>." : ""}`],
-    ["Sluit u ook een laadpaal aan die ik zelf heb gekocht?", `Ja. Geeft u het merk en type door, dan bepalen wij welke beveiliging en bekabeling daarbij horen. Meer leest u op de pagina over de <a href="/laadpaal/">laadpaal</a>.`],
-    ["Werkt u ook voor bedrijven?", `Ja. Wij werken als elektricien voor bedrijven en als onderaannemer voor installatiebedrijven en leveranciers, per klus of per project. Op de pagina <a href="/zakelijk/">Zakelijk</a> leest u waarvoor u ons kunt inschakelen.`]
-  ].concat(cfg.garantieArbeid ? [["Welke garantie krijg ik?", `Op ons installatiewerk krijgt u ${esc(cfg.garantieArbeid)} garantie. Voor materialen geldt de garantie van de fabrikant. De volledige regeling staat in de algemene voorwaarden, die u bij de offerte ontvangt.`]] : []);
+    ["Is mijn meterkast geschikt voor een laadpaal, inductieplaat of warmtepomp?", `Dat hangt af van drie dingen: uw aansluiting (1-fase of 3-fase), de waarde van uw hoofdzekering en de vrije ruimte in uw groepenkast. Apparaten met een hoog vermogen krijgen elk een eigen groep. Stuurt u een foto van uw meterkast mee, dan ontvangt u een eerste inschatting. Meer leest u op de pagina over de <a href="/meterkast/">meterkast</a>.`],
+    ["Wat kost een elektricien?", `Dat verschilt per opdracht. De prijs bestaat uit materiaal, arbeid en eventuele reiskosten. Het aantal groepen of aansluitpunten, de lengte van de kabels en eventuele aanpassingen aan uw meterkast bepalen het grootste deel. U ontvangt vooraf een vrijblijvende offerte met een vaste scope en een vaste prijs.`],
+    ["Wat gebeurt er als er meerwerk nodig is?", `Komt er tijdens het werk iets onverwachts naar voren, dan bespreken wij dat eerst met u. Meerwerk voeren wij alleen uit na uw akkoord.`],
+    ["In welk gebied zijn jullie actief?", `Voor particulieren in ${cfg.steden.map(esc).join(", ")} en omliggende plaatsen. Zakelijke projecten voeren wij in heel Nederland uit.`],
+    ["Werken jullie ook als onderaannemer?", `Ja. ${naam} werkt als onderaannemer voor installatiebedrijven en voor leveranciers van thuisbatterijen en laadpalen, per klus of per project. Op de pagina <a href="/zakelijk/">Zakelijk</a> leest u waarvoor u ons kunt inschakelen.`],
+    ["Welke kwalificaties heeft ${naam}?", `Wij werken volgens NEN 1010, de norm voor elektrische installaties, en zijn gecertificeerd als Vakbekwaam Persoon (VP) volgens NEN 3140.${cfg.erkendLeerbedrijf ? " " + naam + " is daarnaast erkend leerbedrijf (SBB). <a href=\"/stage/\">Meer over stage lopen</a>." : ""}`],
+    ["Sluiten jullie ook een laadpaal aan die ik zelf heb gekocht?", `Ja. Geeft u het merk en type door, dan bepalen wij welke beveiliging en bekabeling daarbij horen. Meer leest u op de pagina over de <a href="/laadpaal/">laadpaal</a>.`]
+  ].concat(cfg.startTermijn ? [["Hoe snel kunnen jullie starten?", esc(cfg.startTermijn)]] : [])
+   .concat(cfg.garantieArbeid ? [["Welke garantie krijg ik?", `Op ons installatiewerk krijgt u ${esc(cfg.garantieArbeid)} garantie. Voor materialen geldt de garantie van de fabrikant. De volledige regeling staat in de algemene voorwaarden, die u bij de offerte ontvangt.`]] : []);
 
   const reviewsBlok = reviews.length ? `<section id="reviews"><div class="wrap">
 <div class="shead"><span class="kicker">Ervaringen</span><h2>Wat klanten zeggen</h2></div>
@@ -89,12 +83,19 @@ ${o.body}
 <div class="grid">${projecten.map(p => `<article class="card">${p.fotos && p.fotos[0] ? `<img src="${esc(p.fotos[0].src)}" alt="${esc(p.fotos[0].alt)}" width="${p.fotos[0].w}" height="${p.fotos[0].h}" loading="lazy">` : ""}<h3>${esc(p.klus)} in ${esc(p.plaats)}</h3><p>${esc(p.beschrijving)}</p></article>`).join("")}</div>
 </div></section>\n\n` : "";
 
+  const waarom = [
+    ["doc", "Werk volgens de norm", "Wij werken volgens NEN 1010 en zijn gecertificeerd als Vakbekwaam Persoon (VP) volgens NEN 3140."],
+    ["batterij", "Ervaring met kritische stroomvoorziening", "Achtergrond in UPS-systemen, batterijsystemen en noodstroomvoorzieningen, onder meer in zorginstellingen en bij energiebedrijven."]
+  ].concat(cfg.partner.tonen && cfg.partner.naam ? [["shield", "Installatiepartner", "Officieel installatiepartner van " + esc(cfg.partner.naam) + "."]] : [])
+   .concat([["tag", "Vaste prijs vooraf", "U ontvangt een offerte met een vaste scope en een vaste prijs. Meerwerk voeren wij alleen uit na overleg en akkoord."]])
+   .concat(cfg.erkendLeerbedrijf ? [["cap", "Erkend leerbedrijf", "Erkend door SBB. Wij leiden studenten elektrotechniek op in de praktijk. <a href=\"/stage/\">Meer over stage lopen</a>."]] : []);
+
   const home = `
 <div class="hero" id="top"><div class="wrap">
 <div>
 <div class="eyebrow">Elektrotechniek · Utrecht · Amsterdam · Omgeving</div>
 <h1>Elektrotechniek, goed geregeld.<br><em>Van meterkast tot laadpaal.</em></h1>
-<p class="lead">Een nieuwe groepenkast, een laadpaal, een uitbreiding van uw installatie of een storing: bij ${naam} heeft u één vast aanspreekpunt. Wij leveren vakkundig werk, maken duidelijke afspraken en laten u vooraf weten wat het kost.${cfg.reactietijd ? " U krijgt " + esc(cfg.reactietijd) + " een reactie." : ""}</p>
+<p class="lead">${naam} is een elektrotechnisch installatiebedrijf voor particulieren en zakelijke opdrachtgevers. Wij installeren en vervangen meterkasten, laadpalen en thuisbatterijen en verhelpen storingen. U ontvangt vooraf een offerte met een vaste scope en een vaste prijs.${cfg.reactietijd ? " U krijgt " + esc(cfg.reactietijd) + " een reactie." : ""}</p>
 <div class="cta"><a class="btn" href="#offerte">Offerte aanvragen</a>${tel ? `<a class="btn ghost" href="${tel.href}">Bel ${esc(tel.label)}</a>` : `<a class="btn ghost" href="#diensten">Bekijk onze diensten</a>`}</div>
 </div>
 <div class="quick"><p class="quick-t">Direct naar</p>
@@ -117,36 +118,45 @@ ${kaart("thuisbatterij", "Zonnestroom opslaan en later zelf gebruiken. U hoort e
 </div>
 </div></section>
 
-<section class="alt" id="werkwijze"><div class="wrap">
+<section class="alt" id="voor-wie"><div class="wrap">
+<div class="shead"><span class="kicker">Voor wie</span><h2>Voor particulieren en zakelijke opdrachtgevers</h2></div>
+<div class="grid two">
+<article class="card"><span class="ic">${ico("home")}</span><h3>Particulieren</h3><p>Installatie, advies en oplevering met uitleg, in ${stedenOmg(3)}.</p>
+<ul class="checks"><li>Advies op basis van uw aansluiting en uw wensen</li><li>Offerte met een vaste scope en een vaste prijs</li><li>Installatie volgens NEN 1010</li><li>Oplevering met meting en uitleg over het gebruik</li></ul>
+<p><a href="#diensten">Bekijk de diensten</a></p></article>
+<article class="card"><span class="ic">${ico("grid")}</span><h3>Zakelijk</h3><p>Onderaanneming voor installatiebedrijven en voor leveranciers van thuisbatterijen en laadpalen, in heel Nederland.</p>
+<ul class="checks"><li>Inzet per klus of op projectbasis</li><li>Zelfstandige uitvoering volgens afspraak</li><li>Oplevering volgens NEN 1010</li><li>Opleverdocumentatie bij elke oplevering</li></ul>
+<p><a href="/zakelijk/">Bekijk de zakelijke dienstverlening</a></p></article>
+</div></div></section>
+
+<section id="werkwijze"><div class="wrap">
 <div class="shead"><span class="kicker">Werkwijze</span><h2>Van aanvraag tot oplevering</h2>
-<p class="sub">U heeft steeds met dezelfde vakman te maken. Zo weet u vooraf wat er gebeurt, wat het kost en wanneer wij komen.</p></div>
+<p class="sub">Vier stappen, met vooraf duidelijkheid over werkzaamheden, prijs en planning.</p></div>
 <ol class="steps">
-<li><b>U doet een aanvraag</b><span>Vul het formulier in en stuur foto's van uw meterkast mee. Veel kunnen wij daarmee al op afstand beoordelen.</span></li>
-<li><b>U ontvangt een offerte</b><span>Wij beoordelen uw aanvraag en zetten werkzaamheden, materialen, prijs en planning op een rij. Vrijblijvend.</span></li>
-<li><b>Dezelfde vakman voert het werk uit</b><span>Op de afgesproken dag en volgens NEN 1010. Meerwerk bespreken wij altijd vooraf met u.</span></li>
-<li><b>Controle en oplevering</b><span>Wij meten en testen de installatie en lopen de werking met u door.</span></li>
+<li><b>Aanvraag</b><span>U vult het formulier in en stuurt foto's van uw meterkast mee. Daarmee beoordelen wij de situatie grotendeels op afstand.</span></li>
+<li><b>Offerte met vaste scope</b><span>U ontvangt een vrijblijvende offerte met de werkzaamheden, de materialen, de prijs en de planning.</span></li>
+<li><b>Installatie</b><span>Wij voeren het werk uit op de afgesproken datum, volgens NEN 1010. Meerwerk alleen na uw akkoord.</span></li>
+<li><b>Meting en oplevering</b><span>Wij meten en testen de installatie en leveren op met uitleg over het gebruik.</span></li>
 </ol></div></section>
+
+<section class="alt" id="waarom"><div class="wrap">
+<div class="shead"><span class="kicker">Waarom ${naam}</span><h2>Aantoonbaar vakwerk, duidelijke afspraken</h2></div>
+<div class="grid">
+${waarom.map(w => `<article class="card"><span class="ic">${ico(w[0])}</span><h3>${w[1]}</h3><p>${w[2]}</p></article>`).join("\n")}
+</div></div></section>
 
 <section id="over"><div class="wrap two">
 <div><span class="kicker">Over ons</span>
-${over}
-<ul class="tags">${kwal.concat(["Werkzaamheden volgens NEN 1010"]).map(k => `<li>${ico("check")}${k}</li>`).join("")}</ul>
-${cfg.portret ? `<img class="portret" src="${esc(cfg.portret)}" alt="${esc(cfg.eigenaar || naam)}" width="480" height="480" loading="lazy">` : ""}</div>
-<ul class="points">
-<li><span class="ic">${ico("home")}</span><div><b>Voor particulieren</b><p>Heldere uitleg zonder vakjargon, een offerte waarin arbeid en materiaal apart staan en een vaste afspraak voor de uitvoering.</p></div></li>
-<li><span class="ic">${ico("grid")}</span><div><b>Voor zakelijke opdrachtgevers</b><p>Elektrotechnische ondersteuning en onderaanneming, per klus of per project. <a href="/zakelijk/">Bekijk de zakelijke dienstverlening</a>.</p></div></li>
-<li><span class="ic">${ico("tag")}</span><div><b>Duidelijkheid vooraf</b><p>U weet vooraf wat wij gaan doen, welke materialen nodig zijn en wat het kost. Eventuele reiskosten staan in de offerte.</p></div></li>
-<li><span class="ic">${ico("shield")}</span><div><b>Persoonlijk verantwoordelijk</b><p>Wij staan zelf in voor het werk dat wij opleveren. Is er meerwerk nodig, dan overleggen wij eerst met u.</p></div></li>
-${cfg.erkendLeerbedrijf ? `<li><span class="ic">${ico("cap")}</span><div><b>Erkend leerbedrijf</b><p>Wij leiden studenten elektrotechniek op in de praktijk. Stage lopen? <a href="/stage/">Bekijk de mogelijkheden</a>.</p></div></li>` : ""}
-</ul></div></section>
-
-<section class="alt" id="werkgebied"><div class="wrap">
-<div class="shead"><span class="kicker">Werkgebied</span><h2>Elektricien in ${regio} en regio Amsterdam</h2>
-<p class="sub">Particulieren helpen wij in de provincie Utrecht, het Gooi en de regio Amsterdam. Woont u net buiten dit gebied? Neem gerust contact op, dan hoort u of wij ook bij u komen. Zakelijke opdrachten voeren wij in heel Nederland uit.</p></div>
-<ul class="tags">${cfg.steden.map(s => `<li>${ico("pin")}${esc(s)}</li>`).join("")}<li>En omliggende plaatsen</li></ul>
+<h2>Over ${naam}</h2>
+<p class="sub">${naam} is een elektrotechnisch installatiebedrijf. Wij verzorgen meterkasten en verdeelinrichtingen, laadpalen, thuisbatterijen en overige elektrotechnische werkzaamheden, voor particulieren en zakelijke opdrachtgevers.</p>
+<p class="sub">Onze specialisatie ligt bij installaties die meer van de aansluiting vragen: laadinfrastructuur, energieopslag en de uitbreiding van verdeelinrichtingen.</p>
+<ul class="tags">${["Werk volgens NEN 1010", "NEN 3140 Vakbekwaam Persoon (VP)"].concat(cfg.erkendLeerbedrijf ? ["Erkend leerbedrijf (SBB)"] : []).map(k => `<li>${ico("check")}${k}</li>`).join("")}</ul></div>
+<div class="card" id="werkgebied"><h3>Elektricien in ${regio} en regio Amsterdam</h3>
+<p>Werkgebied voor particulieren: ${stedenOmg(3)}. Zakelijke projecten voeren wij in heel Nederland uit.</p>
+<ul class="tags">${cfg.steden.map(s => `<li>${ico("pin")}${esc(s)}</li>`).join("")}<li>En omliggende plaatsen</li></ul></div>
 </div></section>
 
-${reviewsBlok}${projectenBlok}<section id="faq"><div class="wrap narrow">
+${reviewsBlok}${projectenBlok}<section class="alt" id="faq"><div class="wrap narrow">
 <div class="shead"><span class="kicker">Veelgestelde vragen</span><h2>Goed om vooraf te weten</h2></div>
 ${faq(homeFaq)}
 </div></section>
@@ -157,7 +167,10 @@ ${faq(homeFaq)}
     h1: `Meterkast of verdeelinrichting vervangen: veilig en klaar voor uitbreiding`,
     lead: `Wilt u een laadpaal, inductieplaat of warmtepomp aansluiten? Dan heeft elk van die apparaten een eigen groep nodig. In een volle of verouderde meterkast is daar geen ruimte voor. ${naam} vervangt uw groepenkast of breidt hem uit, in woningen en in bedrijfspanden. U weet vooraf wat er gebeurt en wat het kost. ${werkgebied}`,
     kort: ["Groepenkast of verdeelinrichting vervangen of uitbreiden", "Opgebouwd en getest volgens NEN 1010", "Meestal binnen één werkdag klaar", "Offerte met arbeid en materiaal apart"],
-    body: `<h2>Wat wij voor u doen</h2>
+    body: `<h2>Voor wie?</h2>
+<p>Voor woningeigenaren met een volle of verouderde meterkast, en voor bedrijven en installateurs die een verdeelinrichting willen laten vervangen of uitbreiden.</p>
+
+<h2>Wat wij voor u doen</h2>
 ${icards([
       ["meterkast", "Groepenkast vervangen", "U krijgt een nieuwe kast met moderne automaten en aardlekschakelaars, opgebouwd volgens NEN 1010."],
       ["grid", "Groepen bijplaatsen", "Extra groepen voor bijvoorbeeld een laadpaal, inductieplaat, warmtepomp of schuur."],
@@ -208,9 +221,12 @@ ${faq([
   /* ---------- Laadpaal ---------- */
   const laadpaal = svc({ key: "laadpaal", crumb: "Laadpaal",
     h1: `Laadpaal laten installeren, veilig aangesloten op uw meterkast`,
-    lead: `Een laadpaal belast uw elektrische installatie urenlang achter elkaar. Daarom sluiten wij hem aan op een eigen groep met de juiste beveiliging, en waar nodig met load balancing. U heeft één aanspreekpunt, van de eerste beoordeling tot de uitleg bij de oplevering. ${werkgebied}`,
+    lead: `Een laadpaal belast uw elektrische installatie urenlang achter elkaar. Daarom sluiten wij hem aan op een eigen groep met de juiste beveiliging, en waar nodig met load balancing. U ontvangt vooraf een offerte met een vaste scope en een vaste prijs. ${werkgebied}`,
     kort: ["Aangesloten op een eigen groep met de juiste beveiliging", "1-fase of 3-fase, afgestemd op uw auto en aansluiting", "Load balancing voorkomt een overbelaste hoofdzekering", "Ook voor een laadpaal die u zelf heeft gekocht"],
-    body: `<h2>Van beoordeling tot eerste laadbeurt</h2>
+    body: `<h2>Voor wie?</h2>
+<p>Voor particulieren met een eigen oprit of parkeerplaats, voor bedrijven die op eigen terrein willen laden en voor leveranciers van laadpalen die de installatie willen uitbesteden.</p>
+
+<h2>Van beoordeling tot eerste laadbeurt</h2>
 <ol class="steps v">
 <li><b>Beoordelen</b><span>Wij bekijken uw aansluiting en de ruimte in uw groepenkast.</span></li>
 <li><b>Groep en kabel aanleggen</b><span>Wij leggen een eigen groep aan met de bijbehorende beveiliging en trekken de kabel naar de laadplek.</span></li>
@@ -261,7 +277,10 @@ ${faq([
     h1: `Elektrotechnische werkzaamheden: storingen, uitbreidingen en verbouwingen`,
     lead: `Een groep die steeds uitvalt, te weinig stopcontacten of een verbouwing waarbij de elektra opnieuw moet worden aangelegd. ${naam} spoort de oorzaak op, legt aan wat u nodig heeft en levert het werk getest op. De prijs hoort u vooraf. Wij werken als elektricien in ${regio}: ${stedenOmg(4)}.`,
     kort: ["Storingen opsporen en verhelpen", "Extra groepen en aansluitpunten", "Apparaten veilig op een eigen groep", "Elektra bij een verbouwing, afgestemd met uw aannemer"],
-    body: `<h2>Waarvoor kunt u ons inschakelen?</h2>
+    body: `<h2>Voor wie?</h2>
+<p>Voor woningeigenaren, verhuurders en bedrijven met een storing, een uitbreiding of een verbouwing.</p>
+
+<h2>Waarvoor kunt u ons inschakelen?</h2>
 ${icards([
       ["alert", "Storing opsporen", "Een groep of aardlekschakelaar die steeds uitvalt, of een deel van uw woning zonder stroom."],
       ["plug", "Extra aansluitpunten", "Meer wandcontactdozen, lichtpunten en schakelaars, in huis, in de schuur of in de tuin."],
@@ -303,7 +322,10 @@ ${faq([
     h1: `Thuisbatterij laten installeren? Eerst weten of het bij u past.`,
     lead: `Een thuisbatterij slaat de zonnestroom op die u overdag niet gebruikt, zodat u die 's avonds zelf kunt verbruiken. ${naam} rekent eerst met uw eigen verbruikscijfers door of dat voor u zinvol is. Is dat zo, dan installeren wij de batterij en stellen wij hem voor u in. ${werkgebied}`,
     kort: ["Advies op basis van uw eigen verbruik", "Beoordeling van meterkast en omvormer", "Installatie, instellen en uitleg", "Geen beloftes over terugverdientijd"],
-    body: `<h2>Wat verandert er op 1 januari 2027?</h2>
+    body: `<h2>Voor wie?</h2>
+<p>Voor woningeigenaren met zonnepanelen die meer van hun eigen stroom willen gebruiken, en voor leveranciers van thuisbatterijen die de installatie willen uitbesteden.</p>
+
+<h2>Wat verandert er op 1 januari 2027?</h2>
 <p>Tot die datum mag u de stroom die u teruglevert wegstrepen tegen de stroom die u afneemt. Dat heet salderen. Op 1 januari 2027 vervalt die regeling. Vanaf dat moment betaalt u de volle prijs voor alle stroom die u van het net afneemt. Voor de stroom die u teruglevert, ontvangt u een terugleververgoeding van uw energieleverancier.</p>
 <p>Tot 2030 is die vergoeding wettelijk minimaal de helft van het kale leveringstarief. Leveranciers mogen daarnaast terugleverkosten rekenen. Per saldo levert zelf gebruiken van uw zonnestroom daardoor meer op dan terugleveren. Met een batterij verschuift u uw overschot van de middag naar de avond.</p>
 
@@ -362,9 +384,9 @@ ${faq([
 
   /* ---------- Zakelijk ---------- */
   const zakelijk = svc({ key: "zakelijk", crumb: "Zakelijk",
-    h1: "Elektromonteur als onderaannemer, per klus of per project",
-    lead: `${naam} ondersteunt installatiebedrijven en leveranciers van laadpalen, zonnestroomsystemen en thuisbatterijen met elektrotechnisch werk. U schakelt een zelfstandige, gediplomeerde vakman in die volgens afspraak werkt en u op de hoogte houdt van de voortgang. Inzetbaar in heel Nederland.`,
-    kort: ["Inzet per klus of per project", "Inzetbaar in heel Nederland", "Gediplomeerd en NEN 3140 VP", "Eén contactpersoon: de monteur zelf"],
+    h1: "Onderaanneming elektrotechniek, per klus of per project",
+    lead: `${naam} werkt als onderaannemer voor installatiebedrijven en voor leveranciers van laadpalen, zonnestroomsystemen en thuisbatterijen. Zoekt u een elektromonteur voor de installatie en aansluiting? Wij voeren het werk zelfstandig uit, volgens afspraak en volgens NEN 1010, en leveren op met opleverdocumentatie. Inzetbaar in heel Nederland.`,
+    kort: ["Inzet per klus of per project", "Inzetbaar in heel Nederland", "Gecertificeerd volgens NEN 3140 (VP)", "Oplevering met opleverdocumentatie"],
     body: `<h2>Waarvoor u ons inschakelt</h2>
 ${icards([
       ["meterkast", "Groepenkasten en verdeelinrichtingen", "Vervangen en uitbreiden, in woningen en bedrijfspanden."],
@@ -373,7 +395,7 @@ ${icards([
       ["batterij", "Thuisbatterijen", "Installatie en aansluiting van batterijsystemen."]
     ])}
 <h2>Zelfstandig en volgens afspraak</h2>
-<p>U geeft de opdracht, wij voeren hem zelfstandig uit. Vooraf leggen wij de werkzaamheden, de levering van materiaal, het tarief en de melding van meerwerk vast. Tijdens het werk heeft u één contactpersoon: de monteur zelf. Wijkt iets af van de opdracht, dan hoort u dat direct.</p>
+<p>U geeft de opdracht, wij voeren die zelfstandig uit. Vooraf leggen wij de werkzaamheden, de levering van materiaal, het tarief en de melding van meerwerk vast. Tijdens het project heeft u een vast contactpersoon. Wijkt iets af van de opdracht, dan hoort u dat direct. Elke oplevering gaat vergezeld van opleverdocumentatie.</p>
 <h2>Inzetbaar in heel Nederland</h2>
 <p>Wij werken per klus of per project, door heel Nederland.${cfg.beschikbaarheidZakelijk ? " Beschikbaarheid: " + esc(cfg.beschikbaarheidZakelijk) + "." : " Vraag de beschikbaarheid op voor de periode waarin u capaciteit nodig heeft."}</p>
 <h2>Aantoonbare vakbekwaamheid</h2>
@@ -386,8 +408,8 @@ ${icards([
   /* ---------- Stage ---------- */
   const stage = svc({ key: "stage", crumb: "Stage", knop: "Aanmelden voor een stage", geenRelated: true,
     h1: "Stage lopen bij een erkend leerbedrijf in de elektrotechniek",
-    lead: `${naam} is erkend leerbedrijf (SBB). Volg je een opleiding elektrotechniek en zoek je een stageplek waar je echt meewerkt? Bij ons loop je mee met één vakman en leer je het vak in de praktijk, in de regio ${stedenTekst(3)}.`,
-    kort: ["Erkend leerbedrijf (SBB)", "Je werkt mee aan echte opdrachten", "Eén vaste begeleider", "Aanmelden via het formulier"],
+    lead: `${naam} is erkend leerbedrijf (SBB). Volg je een opleiding elektrotechniek en zoek je een stageplek waar je echt meewerkt? Bij ons werk je mee aan echte opdrachten en leer je het vak in de praktijk, in de regio ${stedenTekst(3)}.`,
+    kort: ["Erkend leerbedrijf (SBB)", "Je werkt mee aan echte opdrachten", "Vaste begeleiding", "Aanmelden via het formulier"],
     body: `<h2>Wat je bij ons leert</h2>
 ${icards([
       ["meterkast", "Meterkasten en verdeelinrichtingen", "Groepenkasten vervangen en uitbreiden, in woningen en bedrijfspanden."],
@@ -397,7 +419,7 @@ ${icards([
     ])}
 
 <h2>Zo ziet je stage eruit</h2>
-<p>Je loopt mee met de vakman die het werk uitvoert. Zo zie je een opdracht van begin tot eind: de beoordeling, de voorbereiding, de uitvoering en het meten en testen bij de oplevering. Je werkt volgens NEN 1010 en leert veilig werken volgens NEN 3140. Wat je zelfstandig doet, bouwen we stap voor stap op.</p>
+<p>Je loopt mee op de opdrachten die wij uitvoeren. Zo zie je een opdracht van begin tot eind: de beoordeling, de voorbereiding, de uitvoering en het meten en testen bij de oplevering. Je werkt volgens NEN 1010 en leert veilig werken volgens NEN 3140. Wat je zelfstandig doet, bouwen we stap voor stap op.</p>
 
 <h2>Wat we van je vragen</h2>
 <ul class="checks"><li>Je volgt een mbo-opleiding in de elektrotechniek.</li><li>Je bent gemotiveerd en komt je afspraken na.</li><li>Je werkt netjes en neemt veiligheid serieus.</li></ul>
@@ -405,7 +427,7 @@ ${icards([
 <h2>Aanmelden</h2>
 <p>Stuur ons via het formulier deze gegevens:</p>
 <ul class="checks"><li>Je opleiding, niveau en leerjaar.</li><li>Of je BOL of BBL volgt.</li><li>De periode en het aantal dagen per week.</li><li>In een paar zinnen waarom je bij ons stage wilt lopen.</li></ul>
-<p>Je cv stuur je per e-mail naar ${mail}. Je krijgt antwoord van de vakman zelf. Of er op dat moment een stageplek vrij is, hoor je na je aanmelding. <a href="#offerte">Meld je aan</a>.</p>` });
+<p>Je cv stuur je per e-mail naar ${mail}. Wij reageren op je aanmelding. Of er op dat moment een stageplek vrij is, hoor je na je aanmelding. <a href="#offerte">Meld je aan</a>.</p>` });
 
   /* ---------- Privacy ---------- */
   const privacy = tekst({ crumb: "Privacyverklaring", h1: "Privacyverklaring",
@@ -443,14 +465,14 @@ ${cfg.garantieArbeid ? `<h2>Garantie</h2><p>Op ons installatiewerk krijgt u ${es
 
   const kaal = (h1, lead, extra, knop) => `<div class="phead" id="top"><div class="wrap"><h1>${h1}</h1><p class="lead">${lead}</p>${extra ? `<p class="lead">${extra}</p>` : ""}<div class="cta"><a class="btn" href="/">${knop}</a></div></div></div>
 ${related("")}`;
-  const bedankt = kaal("Bedankt voor uw aanvraag", `Uw aanvraag is goed aangekomen. De vakman zelf bekijkt uw bericht${cfg.reactietijd ? " en reageert " + esc(cfg.reactietijd) : " en neemt contact met u op"}.`, c.fotoRoute, "Terug naar de homepage");
+  const bedankt = kaal("Bedankt voor uw aanvraag", `Uw aanvraag is goed aangekomen. Wij bekijken uw bericht${cfg.reactietijd ? " en reageren " + esc(cfg.reactietijd) : " en nemen contact met u op"}.`, c.fotoRoute, "Terug naar de homepage");
   const nietGevonden = kaal("Deze pagina bestaat niet", "De pagina die u zoekt, is verplaatst of bestaat niet meer.", "", "Naar de homepage");
 
   const H = cfg.handelsnaam;
   return [
     { path: "", form: true, body: home,
       title: `Elektricien Utrecht, Amersfoort en Amsterdam | ${H}`,
-      desc: `Elektricien in Utrecht, Amersfoort, Amsterdam en omgeving. Meterkast, laadpaal, uitbreidingen en storingen. Eén vast aanspreekpunt en de prijs vooraf.` },
+      desc: `Elektrotechnisch installatiebedrijf in Utrecht, Amersfoort, Amsterdam en omgeving. Meterkast, laadpaal, thuisbatterij en storingen. Vaste prijs vooraf.` },
     { path: "meterkast/", form: true, dienst: "Meterkast / verdeelinrichting", service: "Meterkast, groepenkast of verdeelinrichting vervangen of uitbreiden", crumb: "Meterkast / verdeelinrichting", body: meterkast,
       title: `Meterkast vervangen Utrecht en Amersfoort | ${H}`,
       desc: `Meterkast of groepenkast vervangen in Utrecht, Amersfoort of Amsterdam? Lees wanneer vervangen nodig is, hoe lang het duurt en wat de prijs bepaalt.` },
@@ -465,7 +487,7 @@ ${related("")}`;
       desc: `Thuisbatterij laten installeren in Utrecht, Amersfoort of omgeving? Lees wat er na 1 januari 2027 verandert, voor wie het past en wat de prijs bepaalt.` },
     { path: "zakelijk/", form: true, dienst: "Zakelijke inhuur", type: "Bedrijf", service: "Elektromonteur inhuren als onderaannemer", crumb: "Zakelijk", body: zakelijk,
       title: `Elektromonteur inhuren als onderaannemer | ${H}`,
-      desc: `Elektromonteur als onderaannemer en elektricien voor bedrijven. Gediplomeerd technicus met NEN 3140 VP. Per klus of project, in heel Nederland.` },
+      desc: `Elektromonteur als onderaannemer en elektricien voor bedrijven. Werk volgens NEN 1010, NEN 3140 VP. Per klus of project, in heel Nederland.` },
   ].concat(cfg.erkendLeerbedrijf ? [
     { path: "stage/", form: true, stage: true, dienst: "Stage", crumb: "Stage", body: stage,
       title: `Stage elektrotechniek regio Utrecht | ${H}`,

@@ -15,6 +15,9 @@ Een leeg veld in `site.config.json` betekent dat het onderdeel niet op de site v
 - `kvk` is leeg: het KvK-nummer staat niet op de site, omdat zoekmachines het koppelen aan het vestigingsadres in het Handelsregister. Het nummer hoort wel op offertes en facturen.
 
 ## Nog open
+- `startTermijn`: antwoord op de vraag "Hoe snel kunnen jullie starten?"; de vraag verschijnt pas als dit is ingevuld.
+- `partner`: naam van het merk en `tonen: true` zodra de leverancier akkoord is.
+- Projectfoto's en reviews: zie `content/LEES-MIJ.md`.
 - `eigenaar`, `portret`, `vestigingsplaats`, `btw`, `reactietijd`, `garantieArbeid`.
 - `formulierEndpoint` (bijv. Formspree) en `formulierdienst` (naam, voor de privacyverklaring). Zolang dit leeg is, opent het formulier het e-mailprogramma.
 - Volledige algemene voorwaarden aanleveren; nu staat er een samenvatting.

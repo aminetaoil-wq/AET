@@ -58,12 +58,9 @@ const homeDesc = pages[0].desc;
 const business = () => {
   const b = { "@type": "Electrician", "@id": base + "/#bedrijf", name: cfg.handelsnaam, url: base + "/", description: homeDesc,
     logo: base + "/assets/logo.jpg", image: base + "/assets/og.png", email: cfg.email,
-    areaServed: [{ "@type": "AdministrativeArea", name: "Provincie Utrecht" }].concat(cfg.steden.map(c => ({ "@type": "City", name: c }))) };
+    areaServed: [{ "@type": "AdministrativeArea", name: "Provincie Utrecht" }].concat(cfg.steden.map(c => ({ "@type": "City", name: c }))),
+    knowsAbout: ["Meterkast en groepenkast vervangen", "Verdeelinrichtingen", "Laadpalen en laadinfrastructuur", "Thuisbatterijen en energieopslag", "NEN 1010", "NEN 3140", "Storingen in elektrische installaties"] };
   if (tel) b.telephone = "+" + intl;
-  if (cfg.vestigingsplaats) {
-    b.address = { "@type": "PostalAddress", addressLocality: cfg.vestigingsplaats, addressCountry: "NL" };
-    if (cfg.adres) b.address.streetAddress = cfg.adres;
-  }
   if (cfg.btw) b.vatID = cfg.btw;
   return b;
 };
@@ -113,11 +110,12 @@ function form(p) {
   return `<section class="band" id="offerte"><div class="wrap two">
 <div><span class="eyebrow">${st ? "Stage" : "Offerte"}</span>
 <h2>${st ? "Meld je aan voor een stage" : "Vraag vrijblijvend een offerte aan"}</h2>
-<p class="lead">${st ? "Vertel kort welke opleiding je volgt en wanneer je stage wilt lopen. Je krijgt antwoord van de vakman zelf." : `Vertel in een paar zinnen wat u wilt laten doen. De vakman zelf bekijkt uw aanvraag en stuurt u een offerte met de werkzaamheden, de materialen en de prijs.${cfg.reactietijd ? ` Wij reageren ${esc(cfg.reactietijd)}.` : ""}`}</p>
+<p class="lead">${st ? "Vertel kort welke opleiding je volgt en wanneer je stage wilt lopen. Wij reageren op je aanmelding." : `Vertel in een paar zinnen wat u wilt laten doen. Wij beoordelen uw aanvraag en sturen u een offerte met de werkzaamheden, de materialen en een vaste prijs.${cfg.reactietijd ? ` Wij reageren ${esc(cfg.reactietijd)}.` : ""}`}</p>
 <ul class="contact-list">
 <li><span class="ic">${ico("mail")}</span>${mail}</li>
 ${tel ? `<li><span class="ic">${ico("phone")}</span><a href="${tel.href}">${esc(tel.label)}</a></li>\n` : ""}${wa ? `<li><span class="ic">${ico("chat")}</span><a href="${wa}">WhatsApp</a></li>\n` : ""}</ul>
-<ul class="checks">${st ? "<li>Noem je opleiding, niveau en leerjaar</li><li>Geef aan of je BOL of BBL volgt</li><li>Vermeld de periode en het aantal dagen per week</li><li>Je cv stuur je mee per e-mail</li>" : `<li>Vrijblijvend: u zit nergens aan vast</li><li>U weet de prijs voordat u beslist</li><li>U krijgt antwoord van de vakman zelf</li><li>${ctx.fotoRoute}</li>`}</ul></div>
+<ul class="checks">${st ? "<li>Noem je opleiding, niveau en leerjaar</li><li>Geef aan of je BOL of BBL volgt</li><li>Vermeld de periode en het aantal dagen per week</li><li>Je cv stuur je mee per e-mail</li>" : `<li>Vrijblijvend: u zit nergens aan vast</li><li>U weet de prijs voordat u beslist</li><li>Offerte met een vaste scope en een vaste prijs</li><li>${ctx.fotoRoute}</li>`}</ul>
+${wa && !st ? `<div class="cta"><a class="btn ghost" href="https://wa.me/${intl}?text=${encodeURIComponent("Goedendag, hierbij foto's van mijn meterkast voor een offerte.")}">Stuur foto's via WhatsApp</a></div>` : ""}</div>
 <form id="f" novalidate>
 <div class="hp" aria-hidden="true"><label>Laat dit veld leeg<input name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
 <div class="row"><label id="typewrap">Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>

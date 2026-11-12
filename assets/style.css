@@ -213,3 +213,5 @@ section,.band{padding:60px 0}.layout,.solo{padding-top:40px;padding-bottom:60px}
 .band .checks{margin:0 0 22px;color:#fff;font-weight:600}
 @media(max-width:640px){.quick{display:none}.hero{padding-bottom:92px}}
 .prose .checks+p{margin-top:14px}
+.card>.ic{margin-bottom:14px}.card .checks+p{margin-top:14px}.card .tags{margin-top:16px}
+section:not(.alt) .steps li::before{box-shadow:0 0 0 6px var(--bg)}
