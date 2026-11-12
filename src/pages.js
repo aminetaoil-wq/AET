@@ -55,7 +55,7 @@ ${o.body}
   /* ---------- Homepage ---------- */
   const trust = [
     cfg.erkendLeerbedrijf ? ["user", "Erkend leerbedrijf", "Erkend door SBB"] : ["doc", "KvK-ingeschreven", "Nummer " + esc(cfg.kvk)],
-    ["cap", "Mbo niveau 4", "Elektrotechniek"],
+    ["cap", "Gediplomeerd technicus", "Opgeleid en ervaren"],
     ["shield", "NEN 3140 VP", "Vakbekwaam Persoon"],
     ["tag", "Prijs vooraf", "In een offerte per post"]
   ];
@@ -73,7 +73,7 @@ ${o.body}
     ["Wat kost een elektricien?", `Dat hangt af van het werk. De prijs bestaat uit materiaal, arbeid en eventuele reiskosten. Het aantal groepen of aansluitpunten, de lengte van de kabels en eventuele aanpassingen aan uw meterkast maken het grootste verschil. U ontvangt vooraf een vrijblijvende offerte waarin deze posten apart staan.`],
     ["Met wie heb ik contact?", `Met de vakman zelf. Wie uw aanvraag behandelt, maakt de offerte, voert het werk uit en levert het op. U heeft dus van begin tot eind één aanspreekpunt.`],
     ["In welke plaatsen werkt u?", `Als elektricien werken wij voor particulieren in ${cfg.steden.map(esc).join(", ")} en omliggende plaatsen. Zakelijke opdrachten voeren wij in heel Nederland uit.`],
-    ["Welke opleiding en certificering heeft u?", `Een afgeronde mbo-opleiding elektrotechniek op niveau 4 (crebo 25309) en een certificaat Vakbekwaam Persoon (VP) volgens NEN 3140. Wij werken volgens NEN 1010.${cfg.erkendLeerbedrijf ? " " + naam + " is daarnaast een erkend leerbedrijf: wij mogen mbo-studenten elektrotechniek opleiden in de praktijk." : ""}`],
+    ["Welke kwalificaties heeft u?", `Wij zijn gediplomeerd elektrotechnicus en hebben een certificaat Vakbekwaam Persoon (VP) volgens NEN 3140. Wij werken volgens NEN 1010.${cfg.erkendLeerbedrijf ? " " + naam + " is daarnaast een erkend leerbedrijf: wij mogen studenten elektrotechniek in de praktijk opleiden." : ""}`],
     ["Sluit u ook een laadpaal aan die ik zelf heb gekocht?", `Ja. Geef het merk en type door, dan beoordelen wij welke beveiliging en bekabeling erbij horen. Lees meer over de <a href="/laadpaal/">laadpaal</a>.`],
     ["Werkt u ook voor bedrijven?", `Ja. ${naam} werkt als elektricien voor bedrijven en als onderaannemer voor installatiebedrijven en leveranciers, per klus of per project. Op de pagina <a href="/zakelijk/">Zakelijk</a> leest u waarvoor u ons kunt inzetten en welke documenten u kunt opvragen.`]
   ].concat(cfg.garantieArbeid ? [["Welke garantie krijg ik?", `Op ons installatiewerk geldt ${esc(cfg.garantieArbeid)} garantie. Op materialen geldt de garantie van de fabrikant. De volledige regeling staat in de algemene voorwaarden die u bij de offerte ontvangt.`]] : []);
@@ -361,7 +361,7 @@ ${faq([
   const zakelijk = svc({ key: "zakelijk", crumb: "Zakelijk",
     h1: "Elektromonteur als onderaannemer, per klus of per project",
     lead: `${naam} ondersteunt installatiebedrijven, leveranciers en andere zakelijke opdrachtgevers met elektrotechnisch werk. U zet een zelfstandige, gediplomeerde vakman in die volgens afspraak werkt en zelf communiceert over voortgang en meerwerk. Inzetbaar in heel Nederland.`,
-    kort: ["Inzet per klus of per project", "Inzetbaar in heel Nederland", "Mbo niveau 4 en NEN 3140 VP", "Eén contactpersoon: de monteur zelf"],
+    kort: ["Inzet per klus of per project", "Inzetbaar in heel Nederland", "Gediplomeerd en NEN 3140 VP", "Eén contactpersoon: de monteur zelf"],
     body: `<h2>Waarvoor u ons inzet</h2>
 ${icards([
       ["meterkast", "Groepenkasten en verdeelinrichtingen", "Vervangen en uitbreiden in woningen en bedrijfspanden."],
@@ -436,7 +436,7 @@ ${related("")}`;
       desc: `Thuisbatterij laten installeren in Utrecht, Amersfoort of omgeving? Lees wat er na 1 januari 2027 verandert, voor wie het past en wat de prijs bepaalt.` },
     { path: "zakelijk/", form: true, dienst: "Zakelijke inhuur", type: "Bedrijf", service: "Elektromonteur inhuren als onderaannemer", crumb: "Zakelijk", body: zakelijk,
       title: `Elektromonteur inhuren als onderaannemer | ${H}`,
-      desc: `Elektromonteur als onderaannemer en elektricien voor bedrijven. Mbo 4 elektrotechniek en NEN 3140 VP. Per klus of project, in heel Nederland.` },
+      desc: `Elektromonteur als onderaannemer en elektricien voor bedrijven. Gediplomeerd technicus met NEN 3140 VP. Per klus of project, in heel Nederland.` },
     { path: "privacyverklaring/", crumb: "Privacyverklaring", body: privacy,
       title: `Privacyverklaring | ${H}`,
       desc: `Privacyverklaring van ${H}: welke gegevens wij verwerken, waarvoor, hoe lang wij ze bewaren en wat uw rechten zijn.` },
