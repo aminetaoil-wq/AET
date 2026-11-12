@@ -12,6 +12,7 @@ Statische site op GitHub Pages. De pagina's worden gegenereerd; pas de HTML-best
 Een leeg veld in `site.config.json` betekent dat het onderdeel niet op de site verschijnt. Vul `telefoon` in en de belknop, WhatsApp-knop en mobiele balk verschijnen op elke pagina.
 
 ## Bewust weggelaten
+- `telefoon` is leeg: op verzoek van de eigenaar staat er geen telefoonnummer op de site, alleen het e-mailadres. Vul het veld in en de belknop, WhatsApp en de mobiele belbalk verschijnen weer.
 - `kvk` is leeg: het KvK-nummer staat niet op de site, omdat zoekmachines het koppelen aan het vestigingsadres in het Handelsregister. Het nummer hoort wel op offertes en facturen.
 
 ## Nog open
