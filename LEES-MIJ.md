@@ -22,6 +22,7 @@ Een leeg veld in `site.config.json` betekent dat het onderdeel niet op de site v
 - Google Search Console: sitemap `https://aet-solutions.nl/sitemap.xml` indienen.
 - Google Bedrijfsprofiel aanmaken.
 - Mailsjablonen staan in `docs/mailsjablonen.md`.
+- Lettertype: Inter (`assets/inter.woff2`), SIL Open Font License 1.1.
 
 ## Niet mogelijk op GitHub Pages
 Eigen redirects, security headers en cache-headers. GitHub Pages regelt https en www zelf; een tweede domein stuurt u door bij de domeinregistratie.
