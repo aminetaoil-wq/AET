@@ -55,7 +55,7 @@ ${o.body}
 
   /* ---------- Homepage ---------- */
   const trust = [
-    cfg.erkendLeerbedrijf ? ["user", "Erkend leerbedrijf", "Erkend door SBB"] : ["doc", "KvK-ingeschreven", "Nummer " + esc(cfg.kvk)],
+    cfg.erkendLeerbedrijf ? ["user", "Erkend leerbedrijf", "Erkend door SBB"] : ["doc", "KvK-ingeschreven", "Handelsregister"],
     ["cap", "Gediplomeerd technicus", "Opgeleid en ervaren"],
     ["shield", "NEN 3140 VP", "Vakbekwaam Persoon"],
     ["tag", "Prijs vooraf", "Duidelijke offerte, geen verrassingen"]
@@ -385,7 +385,7 @@ ${icards([
   const privacy = tekst({ crumb: "Privacyverklaring", h1: "Privacyverklaring",
     lead: `Laatst bijgewerkt: november 2026. Hier leest u hoe ${naam} met uw gegevens omgaat.`,
     body: `<h2>Wie is verantwoordelijk?</h2>
-<p>${naam} (KvK ${esc(cfg.kvk)})${cfg.vestigingsplaats ? ", gevestigd in " + esc(cfg.vestigingsplaats) + "," : ""} is verantwoordelijk voor de verwerking van uw gegevens. U bereikt ons via ${mail}.</p>
+<p>${naam}${cfg.kvk ? " (KvK " + esc(cfg.kvk) + ")" : ""}${cfg.vestigingsplaats ? ", gevestigd in " + esc(cfg.vestigingsplaats) + "," : ""} is verantwoordelijk voor de verwerking van uw gegevens. U bereikt ons via ${mail}.</p>
 <h2>Welke gegevens verwerken wij?</h2>
 <ul class="checks"><li>Uw naam, e-mailadres, telefoonnummer en postcode.</li><li>Bij zakelijke aanvragen uw bedrijfsnaam.</li><li>Gegevens over uw installatie: het type aansluiting, of u zonnepanelen heeft en wat u in de toelichting vermeldt.</li><li>Foto's die u ons stuurt, bijvoorbeeld van uw meterkast.</li></ul>
 <h2>Waarvoor en op welke grondslag?</h2>
@@ -413,7 +413,7 @@ ${icards([
 <h2>Bedenktijd voor particulieren</h2>
 <p>Sluit u als particulier een overeenkomst op afstand of bij u thuis, dan heeft u in veel gevallen 14 dagen bedenktijd. Bij een spoedreparatie op uw eigen verzoek geldt dit niet. De details staan in de voorwaarden en in de offerte.</p>
 ${cfg.garantieArbeid ? `<h2>Garantie</h2><p>Op ons installatiewerk krijgt u ${esc(cfg.garantieArbeid)} garantie. Voor materialen geldt de garantie van de fabrikant.</p>\n` : ""}<h2>Bedrijfsgegevens</h2>
-<ul class="checks"><li>${naam}, eenmanszaak${cfg.vestigingsplaats ? " in " + esc(cfg.vestigingsplaats) : ""}</li><li>KvK-nummer: ${esc(cfg.kvk)}</li>${cfg.btw ? `<li>Btw-id: ${esc(cfg.btw)}</li>` : ""}<li>E-mail: ${mail}</li></ul>` });
+<ul class="checks"><li>${naam}, eenmanszaak${cfg.vestigingsplaats ? " in " + esc(cfg.vestigingsplaats) : ""}</li>${cfg.kvk ? `<li>KvK-nummer: ${esc(cfg.kvk)}</li>` : `<li>Ingeschreven in het Handelsregister; het KvK-nummer staat op uw offerte en factuur</li>`}${cfg.btw ? `<li>Btw-id: ${esc(cfg.btw)}</li>` : ""}<li>E-mail: ${mail}</li></ul>` });
 
   const kaal = (h1, lead, extra, knop) => `<div class="phead" id="top"><div class="wrap"><h1>${h1}</h1><p class="lead">${lead}</p>${extra ? `<p class="lead">${extra}</p>` : ""}<div class="cta"><a class="btn" href="/">${knop}</a></div></div></div>
 ${related("")}`;
