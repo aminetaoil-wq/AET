@@ -4,7 +4,7 @@ module.exports = function (c) {
   const { cfg, esc, mail, tel, wa, reviews, projecten, stedenTekst, stedenOmg, ico } = c;
   const regio = esc(cfg.regio);
   const naam = esc(cfg.handelsnaam);
-  const kwal = cfg.kwalificaties.map(esc);
+  const kwal = cfg.kwalificaties.map(esc).concat(cfg.erkendLeerbedrijf ? ["Erkend leerbedrijf (SBB)"] : []);
 
   /* ---------- Bouwstenen ---------- */
   const faq = items => items.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join("\n");
@@ -19,7 +19,7 @@ module.exports = function (c) {
 ${knop ? `<div class="cta"><a class="btn" href="#offerte">Offerte aanvragen</a>${tel ? `<a class="btn ghost" href="${tel.href}">Bel ${esc(tel.label)}</a>` : ""}</div>` : ""}
 </div></div>`;
   const diensten = {
-    meterkast: ["meterkast", "Meterkast", "/meterkast/", "Groepenkast vervangen of uitbreiden"],
+    meterkast: ["meterkast", "Meterkast / verdeelinrichting", "/meterkast/", "Vervangen of uitbreiden"],
     laadpaal: ["laadpaal", "Laadpaal", "/laadpaal/", "Thuis of op de zaak laden"],
     overige: ["elektra", "Elektra en storingen", "/overige-elektrotechniek/", "Extra groepen, verbouwing, storing"],
     thuisbatterij: ["batterij", "Thuisbatterij", "/thuisbatterij/", "Zonnestroom zelf gebruiken"]
@@ -54,7 +54,7 @@ ${o.body}
 
   /* ---------- Homepage ---------- */
   const trust = [
-    ["doc", "KvK-ingeschreven", "Nummer " + esc(cfg.kvk)],
+    cfg.erkendLeerbedrijf ? ["user", "Erkend leerbedrijf", "Erkend door SBB"] : ["doc", "KvK-ingeschreven", "Nummer " + esc(cfg.kvk)],
     ["cap", "Mbo niveau 4", "Elektrotechniek"],
     ["shield", "NEN 3140 VP", "Vakbekwaam Persoon"],
     ["tag", "Prijs vooraf", "In een offerte per post"]
@@ -72,7 +72,7 @@ ${o.body}
     ["Kan mijn meterkast een laadpaal, inductieplaat of warmtepomp aan?", `Dat hangt af van uw aansluiting (1-fase of 3-fase), de waarde van uw hoofdzekering en de vrije ruimte in uw groepenkast. Zware apparaten krijgen elk een eigen groep. Stuur een foto van uw meterkast mee, dan krijgt u een eerste inschatting. Meer uitleg staat op de pagina over de <a href="/meterkast/">meterkast</a>.`],
     ["Wat kost een elektricien?", `De prijs bestaat uit materiaal, arbeid en eventuele reiskosten. Wat het meeste verschil maakt: het aantal groepen of aansluitpunten, de lengte van de kabel en of uw meterkast moet worden aangepast. U krijgt vooraf een offerte waarin deze posten apart staan. De offerte is vrijblijvend.`],
     ["In welke plaatsen werkt u?", `Voor particulieren in ${regio}: ${cfg.steden.map(esc).join(", ")} en omliggende plaatsen. Voor bedrijven werken wij op projectbasis ook daarbuiten.`],
-    ["Welke opleiding en certificering heeft u?", `Een afgeronde mbo-opleiding elektrotechniek op niveau 4 (crebo 25309) en een certificaat Vakbekwaam Persoon (VP) volgens NEN 3140. Wij werken volgens NEN 1010.`],
+    ["Welke opleiding en certificering heeft u?", `Een afgeronde mbo-opleiding elektrotechniek op niveau 4 (crebo 25309) en een certificaat Vakbekwaam Persoon (VP) volgens NEN 3140. Wij werken volgens NEN 1010.${cfg.erkendLeerbedrijf ? " " + naam + " is daarnaast een erkend leerbedrijf: wij mogen mbo-studenten elektrotechniek opleiden in de praktijk." : ""}`],
     ["Sluit u ook een laadpaal aan die ik zelf heb gekocht?", `Ja. Geef het merk en type door, dan beoordelen wij welke beveiliging en bekabeling erbij horen. Lees meer over de <a href="/laadpaal/">laadpaal</a>.`],
     ["Werkt u ook voor bedrijven en installatiebedrijven?", `Ja. U kunt ons inhuren als onderaannemer of op projectbasis. Op de pagina <a href="/zakelijk/">Zakelijk</a> staat wat u kunt inhuren en welke documenten u kunt opvragen.`]
   ].concat(cfg.garantieArbeid ? [["Welke garantie krijg ik?", `Op ons installatiewerk geldt ${esc(cfg.garantieArbeid)} garantie. Op materialen geldt de garantie van de fabrikant. De volledige regeling staat in de algemene voorwaarden die u bij de offerte ontvangt.`]] : []);
@@ -89,9 +89,9 @@ ${o.body}
   const home = `
 <div class="hero" id="top"><div class="wrap">
 <div>
-<div class="eyebrow">Elektricien in ${stedenOmg(2)}</div>
-<h1>Elektricien voor meterkast, laadpaal en elektra in <em>${regio}</em></h1>
-<p class="lead">Een groepenkast vervangen, een laadpaal aansluiten, extra groepen of een storing: één vakman uit de regio beoordeelt uw installatie, maakt de offerte en voert het werk uit. U weet de prijs vooraf.${cfg.reactietijd ? " U krijgt " + esc(cfg.reactietijd) + " een reactie." : ""}</p>
+<div class="eyebrow">Meterkast · Laadpaal · Elektra · Storingen</div>
+<h1>Uw elektricien van <em>Utrecht tot Amsterdam</em></h1>
+<p class="lead">Een meterkast vervangen, een laadpaal aansluiten, extra groepen of een storing verhelpen. U heeft één vast aanspreekpunt: de vakman die uw offerte maakt, voert het werk ook uit. De prijs weet u vooraf.${cfg.reactietijd ? " U krijgt " + esc(cfg.reactietijd) + " een reactie." : ""}</p>
 <div class="cta"><a class="btn" href="#offerte">Offerte aanvragen</a>${tel ? `<a class="btn ghost" href="${tel.href}">Bel ${esc(tel.label)}</a>` : `<a class="btn ghost" href="#diensten">Bekijk de diensten</a>`}</div>
 </div>
 <div class="quick"><p class="quick-t">Direct naar</p>
@@ -107,7 +107,7 @@ ${trust.map(t => `<li><span class="ic">${ico(t[0])}</span><span><b>${t[1]}</b><s
 <div class="shead"><span class="kicker">Diensten</span><h2>Waar kunnen wij u mee helpen?</h2>
 <p class="sub">Op elke pagina leest u wat wij controleren, hoe de klus verloopt en wat de prijs bepaalt.</p></div>
 <div class="grid two">
-${kaart("meterkast", "Een verouderde of volle groepenkast vervangen of uitbreiden, zodat er ruimte is voor nieuwe apparaten.", ["Groepenkast vervangen", "Extra groepen bijplaatsen", "Voorbereiden op 3-fase"], "Meterkast vervangen of uitbreiden")}
+${kaart("meterkast", "Een verouderde of volle groepenkast of verdeelinrichting vervangen of uitbreiden, in woningen en bedrijfspanden.", ["Groepenkast vervangen", "Extra groepen bijplaatsen", "Voorbereiden op 3-fase"], "Meterkast of verdeelinrichting vervangen")}
 ${kaart("laadpaal", "Thuis of op uw bedrijfsterrein laden, op een eigen groep met de juiste beveiliging.", ["Eigen groep en aardlekbeveiliging", "Load balancing", "Ook voor uw zelf gekochte laadpaal"], "Laadpaal laten installeren")}
 ${kaart("overige", "Voor al het andere elektrotechnische werk in en om uw woning of bedrijfspand.", ["Storing opsporen en verhelpen", "Wandcontactdozen en extra groepen", "Elektra bij een verbouwing"], "Elektra en storingen")}
 ${kaart("thuisbatterij", "Zonnestroom opslaan en later zelf gebruiken. Wij beoordelen eerst of het bij uw verbruik past.", ["Controle van meterkast en omvormer", "Installatie en instellen", "Advies op basis van uw verbruik"], "Thuisbatterij laten installeren")}
@@ -132,13 +132,13 @@ ${cfg.portret ? `<img class="portret" src="${esc(cfg.portret)}" alt="${esc(cfg.e
 <ul class="points">
 <li><span class="ic">${ico("home")}</span><div><b>Voor particulieren</b><p>Uitleg in gewone taal, een offerte met prijs vooraf en vaste afspraken over de planning.</p></div></li>
 <li><span class="ic">${ico("grid")}</span><div><b>Voor installateurs en bedrijven</b><p>Inhuur als onderaannemer of op projectbasis. <a href="/zakelijk/">Bekijk de zakelijke pagina</a>.</p></div></li>
-<li><span class="ic">${ico("pin")}</span><div><b>Uit de regio</b><p>Wij werken in ${regio}, rond ${stedenTekst(2)}. Eventuele reiskosten staan vooraf in de offerte.</p></div></li>
+<li><span class="ic">${ico("pin")}</span><div><b>Uit de regio</b><p>Wij werken in ${regio}, van ${stedenTekst(2)} tot Amsterdam. Eventuele reiskosten staan vooraf in de offerte.</p></div></li>
 <li><span class="ic">${ico("chat")}</span><div><b>Meerwerk in overleg</b><p>Komt er tijdens het werk iets onverwachts naar voren, dan bespreken wij dat eerst met u.</p></div></li>
 </ul></div></section>
 
 <section class="alt" id="werkgebied"><div class="wrap">
-<div class="shead"><span class="kicker">Werkgebied</span><h2>Elektricien in ${regio}</h2>
-<p class="sub">Voor particulieren werken wij in de provincie Utrecht en de directe omgeving. Woont u net buiten deze regio? Neem contact op, dan bekijken wij of het past. Zakelijke projecten voeren wij ook elders in Nederland uit.</p></div>
+<div class="shead"><span class="kicker">Werkgebied</span><h2>Elektricien in ${regio} en regio Amsterdam</h2>
+<p class="sub">Voor particulieren werken wij in de provincie Utrecht, het Gooi en tot en met Amsterdam. Woont u net buiten deze regio? Neem contact op, dan bekijken wij of het past. Zakelijke projecten voeren wij ook elders in Nederland uit.</p></div>
 <ul class="tags">${cfg.steden.map(s => `<li>${ico("pin")}${esc(s)}</li>`).join("")}<li>En omliggende plaatsen</li></ul>
 </div></section>
 
@@ -149,10 +149,10 @@ ${faq(homeFaq)}
 `;
 
   /* ---------- Meterkast ---------- */
-  const meterkast = svc({ key: "meterkast", crumb: "Meterkast",
-    h1: `Meterkast of groepenkast vervangen in ${regio}`,
-    lead: `Een laadpaal, inductieplaat, warmtepomp of thuisbatterij vraagt om een eigen groep. Is uw meterkast vol of verouderd, dan past dat er niet bij. ${naam} vervangt en breidt groepenkasten uit in ${stedenOmg(4)}.`,
-    kort: ["Groepenkast vervangen of uitbreiden", "Werk volgens NEN 1010", "Meestal binnen één werkdag klaar", "Prijs vooraf in de offerte"],
+  const meterkast = svc({ key: "meterkast", crumb: "Meterkast / verdeelinrichting",
+    h1: `Meterkast of verdeelinrichting vervangen of uitbreiden`,
+    lead: `Een laadpaal, inductieplaat, warmtepomp of thuisbatterij vraagt om een eigen groep. Is uw meterkast vol of verouderd, dan past dat er niet bij. ${naam} vervangt en breidt groepenkasten in woningen en verdeelinrichtingen in bedrijfspanden uit, in ${stedenOmg(4)}.`,
+    kort: ["Groepenkast of verdeelinrichting vervangen of uitbreiden", "Werk volgens NEN 1010", "Meestal binnen één werkdag klaar", "Prijs vooraf in de offerte"],
     body: `<h2>Wat doen wij?</h2>
 ${icards([
       ["meterkast", "Groepenkast vervangen", "Een nieuwe kast met installatieautomaten en aardlekschakelaars, opgebouwd volgens NEN 1010."],
@@ -161,7 +161,10 @@ ${icards([
       ["gauge", "Doormeten en testen", "Na afloop meten wij de installatie door en testen wij de aardlekschakelaars."]
     ])}
 
-<h2>Groepenkast vervangen of uitbreiden?</h2>
+<h2>Meterkast, groepenkast of verdeelinrichting?</h2>
+<p>In een woning spreken de meeste mensen van de meterkast of groepenkast. In een bedrijfspand heet hetzelfde onderdeel meestal de verdeelinrichting of verdeler: groter, vaak 3-fase en met meer eindgroepen. Wij vervangen en breiden beide uit.</p>
+
+<h2>Vervangen of uitbreiden?</h2>
 <p><strong>Uitbreiden</strong> kan als uw kast in goede staat is en er ruimte is voor extra groepen. Dat is het minste werk.</p>
 <p><strong>Vervangen</strong> is nodig als de kast te klein is, als onderdelen verouderd zijn of als de opbouw niet meer voldoet. In één keer vervangen is dan verstandiger dan een oude kast oplappen.</p>
 
@@ -351,7 +354,7 @@ ${faq([
     kort: ["Inhuur per klus of per project", "In heel Nederland", "Mbo niveau 4 en NEN 3140 VP", "Documenten op aanvraag"],
     body: `<h2>Wat kunt u inhuren?</h2>
 ${icards([
-      ["meterkast", "Groepenkasten", "Vervangen en uitbreiden van groepenkasten in woningen en bedrijfspanden."],
+      ["meterkast", "Groepenkasten en verdeelinrichtingen", "Vervangen en uitbreiden in woningen en bedrijfspanden."],
       ["laadpaal", "Laadpalen", "Montage en aansluiting, inclusief load balancing."],
       ["tool", "Elektrotechnisch werk", "Ondersteuning bij installatiewerk in woningbouw en utiliteit."],
       ["batterij", "Thuisbatterijen", "Installatie en aansluiting van batterijsystemen."]
@@ -407,11 +410,11 @@ ${related("")}`;
   const H = cfg.handelsnaam;
   return [
     { path: "", form: true, body: home,
-      title: `Elektricien Utrecht en Amersfoort | ${H}`,
-      desc: `Elektricien in Utrecht, Amersfoort en omgeving voor meterkast, laadpaal, extra groepen en storingen. Eén vakman, prijs vooraf. Vraag een offerte aan.` },
-    { path: "meterkast/", form: true, dienst: "Meterkast", service: "Meterkast en groepenkast vervangen of uitbreiden", crumb: "Meterkast", body: meterkast,
+      title: `Elektricien Utrecht, Amersfoort en Amsterdam | ${H}`,
+      desc: `Elektricien van Utrecht en Amersfoort tot Amsterdam voor meterkast, laadpaal, extra groepen en storingen. Eén vakman, prijs vooraf en erkend leerbedrijf.` },
+    { path: "meterkast/", form: true, dienst: "Meterkast / verdeelinrichting", service: "Meterkast, groepenkast of verdeelinrichting vervangen of uitbreiden", crumb: "Meterkast / verdeelinrichting", body: meterkast,
       title: `Meterkast vervangen Utrecht en Amersfoort | ${H}`,
-      desc: `Meterkast of groepenkast vervangen of uitbreiden in Utrecht, Amersfoort en omgeving. Lees wanneer vervangen nodig is en wat de prijs bepaalt.` },
+      desc: `Meterkast, groepenkast of verdeelinrichting vervangen of uitbreiden in Utrecht, Amersfoort en Amsterdam. Lees wat de prijs bepaalt.` },
     { path: "laadpaal/", form: true, dienst: "Laadpaal", service: "Laadpaal installeren", crumb: "Laadpaal", body: laadpaal,
       title: `Laadpaal installateur Utrecht en Amersfoort | ${H}`,
       desc: `Laadpaal laten installeren in Utrecht, Amersfoort of omgeving? Eigen groep, juiste beveiliging en load balancing. Lees wat de prijs bepaalt.` },

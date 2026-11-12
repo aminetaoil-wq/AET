@@ -11,7 +11,17 @@
   "whatsapp": true,
   "email": "AET-Works@hotmail.com",
   "regio": "Midden-Nederland",
-  "steden": ["Utrecht", "Amersfoort", "Nieuwegein", "Zeist", "Houten", "Veenendaal", "Hilversum", "Woerden"],
+  "steden": [
+    "Utrecht",
+    "Amersfoort",
+    "Amsterdam",
+    "Nieuwegein",
+    "Zeist",
+    "Houten",
+    "Veenendaal",
+    "Hilversum",
+    "Woerden"
+  ],
   "reactietijd": "",
   "kwalificaties": [
     "Mbo-diploma elektrotechniek niveau 4 (crebo 25309)",
@@ -19,11 +29,19 @@
   ],
   "vca": "",
   "verzekerd": false,
-  "partner": { "naam": "", "tonen": false },
+  "partner": {
+    "naam": "",
+    "tonen": false
+  },
   "garantieArbeid": "",
   "beschikbaarheidZakelijk": "",
-  "vanafPrijs": { "thuisbatterij": "", "laadpaal": "", "meterkast": "" },
+  "vanafPrijs": {
+    "thuisbatterij": "",
+    "laadpaal": "",
+    "meterkast": ""
+  },
   "bewaartermijn": "12 maanden",
   "formulierEndpoint": "",
-  "formulierdienst": ""
+  "formulierdienst": "",
+  "erkendLeerbedrijf": true
 }
