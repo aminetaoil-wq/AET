@@ -112,11 +112,11 @@ function form(p) {
   return `<section class="band" id="offerte"><div class="wrap two">
 <div><span class="eyebrow">Offerte</span>
 <h2>Vraag een vrijblijvende offerte aan</h2>
-<p class="lead">Vertel kort wat u wilt laten doen. ${ctx.reactie}</p>
+<p class="lead">Beschrijf kort wat u wilt laten doen. U ontvangt een offerte met de werkzaamheden, de materialen en de prijs.${cfg.reactietijd ? ` Wij reageren ${esc(cfg.reactietijd)}.` : ""}</p>
 <ul class="contact-list">
 <li><span class="ic">${ico("mail")}</span>${mail}</li>
 ${tel ? `<li><span class="ic">${ico("phone")}</span><a href="${tel.href}">${esc(tel.label)}</a></li>\n` : ""}${wa ? `<li><span class="ic">${ico("chat")}</span><a href="${wa}">WhatsApp</a></li>\n` : ""}</ul>
-<ul class="checks"><li>Vrijblijvend en met de prijs vooraf</li><li>U krijgt antwoord van de vakman zelf</li><li>${ctx.fotoRoute}</li></ul></div>
+<ul class="checks"><li>Vrijblijvend, met de prijs vooraf</li><li>Eén aanspreekpunt: u krijgt antwoord van de vakman zelf</li><li>${ctx.fotoRoute}</li></ul></div>
 <form id="f" novalidate>
 <div class="hp" aria-hidden="true"><label>Laat dit veld leeg<input name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
 <div class="row"><label>Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>
@@ -140,7 +140,7 @@ function footer(p) {
   return `<div class="mbar">${tel ? `<a href="${tel.href}">Bel</a>` : ""}${wa ? `<a href="${wa}">WhatsApp</a>` : ""}${tel ? "" : `<a href="mailto:${esc(cfg.email)}">E-mail</a>`}<a class="btn" href="${off}">Offerte</a></div>
 <footer><div class="wrap">
 <div class="fgrid">
-<div><a class="flogo" href="/" aria-label="${esc(cfg.handelsnaam)}"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>Elektricien voor particulieren en bedrijven in ${esc(cfg.regio)}: ${stedenOmg(3)}.</p></div>
+<div><a class="flogo" href="/" aria-label="${esc(cfg.handelsnaam)}"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>Elektrotechnisch installatiebedrijf voor particulieren en bedrijven. Elektricien in ${stedenOmg(3)}.</p></div>
 <div><h2 class="fh">Diensten</h2><ul><li><a href="/meterkast/">Meterkast / verdeelinrichting</a></li><li><a href="/laadpaal/">Laadpaal</a></li><li><a href="/overige-elektrotechniek/">Elektra en storingen</a></li><li><a href="/thuisbatterij/">Thuisbatterij</a></li><li><a href="/zakelijk/">Zakelijke inhuur</a></li></ul></div>
 <div><h2 class="fh">Informatie</h2><ul><li><a href="${h}#werkwijze">Werkwijze</a></li><li><a href="${h}#werkgebied">Werkgebied</a></li><li><a href="${h}#faq">Veelgestelde vragen</a></li><li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
 <div><h2 class="fh">Contact</h2><ul><li>${mail}</li>${tel ? `<li><a href="${tel.href}">Bel ${esc(tel.label)}</a></li>` : ""}${wa ? `<li><a href="${wa}">WhatsApp</a></li>` : ""}<li><a href="${off}">Offerte aanvragen</a></li>${cfg.vestigingsplaats ? `<li>${esc(cfg.adres ? cfg.adres + ", " : "")}${esc(cfg.vestigingsplaats)}</li>` : ""}<li>KvK ${esc(cfg.kvk)}</li>${cfg.btw ? `<li>Btw ${esc(cfg.btw)}</li>` : ""}</ul></div>
