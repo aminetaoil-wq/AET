@@ -57,7 +57,7 @@ ${o.body}
     cfg.erkendLeerbedrijf ? ["user", "Erkend leerbedrijf", "Erkend door SBB"] : ["doc", "KvK-ingeschreven", "Nummer " + esc(cfg.kvk)],
     ["cap", "Gediplomeerd technicus", "Opgeleid en ervaren"],
     ["shield", "NEN 3140 VP", "Vakbekwaam Persoon"],
-    ["tag", "Prijs vooraf", "In een offerte per post"]
+    ["tag", "Prijs vooraf", "Duidelijke offerte, geen verrassingen"]
   ];
 
   const kaart = (key, tekstje, punten, link) => { const d = diensten[key]; return `<a class="svc" href="${d[2]}"><span class="ic">${ico(d[0])}</span><h3>${d[1]}</h3><p>${tekstje}</p><ul>${punten.map(p => `<li>${ico("check")}${p}</li>`).join("")}</ul><span class="more">${link}${ico("arrow")}</span></a>`; };
