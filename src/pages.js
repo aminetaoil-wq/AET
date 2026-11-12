@@ -85,7 +85,7 @@ ${o.body}
 
   const waarom = [
     ["doc", "Werk volgens de norm", "Wij werken volgens NEN 1010 en zijn gecertificeerd als Vakbekwaam Persoon (VP) volgens NEN 3140."],
-    ["batterij", "Ervaring met kritische stroomvoorziening", "Achtergrond in UPS-systemen, batterijsystemen en noodstroomvoorzieningen, onder meer in zorginstellingen en bij energiebedrijven."]
+    ["elektra", "Ruime en brede ervaring", "Ruime en brede ervaring binnen de elektrotechniek, met uitgebreide kennis van verdeelinrichtingen, laadpaalinstallaties, UPS-systemen, thuisbatterijen, verlichting en schakelmateriaal. Daarnaast ruime ervaring met diverse elektrotechnische installaties, componenten en toepassingen."]
   ].concat(cfg.partner.tonen && cfg.partner.naam ? [["shield", "Installatiepartner", "Officieel installatiepartner van " + esc(cfg.partner.naam) + "."]] : [])
    .concat([["tag", "Vaste prijs vooraf", "U ontvangt een offerte met een vaste scope en een vaste prijs. Meerwerk voeren wij alleen uit na overleg en akkoord."]])
    .concat(cfg.erkendLeerbedrijf ? [["cap", "Erkend leerbedrijf", "Erkend door SBB. Wij leiden studenten elektrotechniek op in de praktijk. <a href=\"/stage/\">Meer over stage lopen</a>."]] : []);
