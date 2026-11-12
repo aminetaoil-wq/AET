@@ -108,7 +108,7 @@ function header(p) {
 }
 
 function form(p) {
-  const opts = ["Meterkast", "Laadpaal", "Overige elektrotechniek", "Thuisbatterij", "Zakelijke inhuur"];
+  const opts = ["Meterkast / verdeelinrichting", "Laadpaal", "Overige elektrotechniek", "Thuisbatterij", "Zakelijke inhuur"];
   return `<section class="band" id="offerte"><div class="wrap two">
 <div><span class="eyebrow">Offerte</span>
 <h2>Vraag een vrijblijvende offerte aan</h2>
@@ -140,8 +140,8 @@ function footer(p) {
   return `<div class="mbar">${tel ? `<a href="${tel.href}">Bel</a>` : ""}${wa ? `<a href="${wa}">WhatsApp</a>` : ""}${tel ? "" : `<a href="mailto:${esc(cfg.email)}">E-mail</a>`}<a class="btn" href="${off}">Offerte</a></div>
 <footer><div class="wrap">
 <div class="fgrid">
-<div><a class="flogo" href="/" aria-label="${esc(cfg.handelsnaam)}"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>Elektricien voor particulieren en bedrijven in ${esc(cfg.regio)}: ${stedenOmg(2)}.</p></div>
-<div><h2 class="fh">Diensten</h2><ul><li><a href="/meterkast/">Meterkast</a></li><li><a href="/laadpaal/">Laadpaal</a></li><li><a href="/overige-elektrotechniek/">Elektra en storingen</a></li><li><a href="/thuisbatterij/">Thuisbatterij</a></li><li><a href="/zakelijk/">Zakelijke inhuur</a></li></ul></div>
+<div><a class="flogo" href="/" aria-label="${esc(cfg.handelsnaam)}"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>Elektricien voor particulieren en bedrijven in ${esc(cfg.regio)}: ${stedenOmg(3)}.</p></div>
+<div><h2 class="fh">Diensten</h2><ul><li><a href="/meterkast/">Meterkast / verdeelinrichting</a></li><li><a href="/laadpaal/">Laadpaal</a></li><li><a href="/overige-elektrotechniek/">Elektra en storingen</a></li><li><a href="/thuisbatterij/">Thuisbatterij</a></li><li><a href="/zakelijk/">Zakelijke inhuur</a></li></ul></div>
 <div><h2 class="fh">Informatie</h2><ul><li><a href="${h}#werkwijze">Werkwijze</a></li><li><a href="${h}#werkgebied">Werkgebied</a></li><li><a href="${h}#faq">Veelgestelde vragen</a></li><li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
 <div><h2 class="fh">Contact</h2><ul><li>${mail}</li>${tel ? `<li><a href="${tel.href}">Bel ${esc(tel.label)}</a></li>` : ""}${wa ? `<li><a href="${wa}">WhatsApp</a></li>` : ""}<li><a href="${off}">Offerte aanvragen</a></li>${cfg.vestigingsplaats ? `<li>${esc(cfg.adres ? cfg.adres + ", " : "")}${esc(cfg.vestigingsplaats)}</li>` : ""}<li>KvK ${esc(cfg.kvk)}</li>${cfg.btw ? `<li>Btw ${esc(cfg.btw)}</li>` : ""}</ul></div>
 </div>
