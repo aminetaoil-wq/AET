@@ -85,14 +85,14 @@
 <ul class="checks"><li>Vrijblijvend: u zit nergens aan vast</li><li>U weet de prijs voordat u beslist</li><li>U krijgt antwoord van de vakman zelf</li><li>Foto's van uw meterkast stuurt u via <a href="https://wa.me/31638435849?text=Goedendag%2C%20ik%20heb%20een%20vraag%20over%20">WhatsApp</a> of per e-mail.</li></ul></div>
 <form id="f" novalidate>
 <div class="hp" aria-hidden="true"><label>Laat dit veld leeg<input name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
-<div class="row"><label>Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>
-<label>Onderwerp<select id="dienst"><option>Meterkast / verdeelinrichting</option><option>Laadpaal</option><option>Overige elektrotechniek</option><option>Thuisbatterij</option><option>Zakelijke inhuur</option></select></label></div>
+<div class="row"><label id="typewrap">Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>
+<label>Onderwerp<select id="dienst"><option>Meterkast / verdeelinrichting</option><option>Laadpaal</option><option>Overige elektrotechniek</option><option>Thuisbatterij</option><option>Zakelijke inhuur</option><option>Stage</option></select></label></div>
 <label id="bedr" hidden>Bedrijfsnaam<input id="bedrijf" autocomplete="organization"></label>
 <label>Uw naam<input id="naam" autocomplete="name" required><span class="err" id="e-naam" role="alert"></span></label>
 <div class="row"><label>Uw e-mailadres<input id="mail" type="email" autocomplete="email"></label><label>Uw telefoonnummer<input id="tel2" type="tel" autocomplete="tel"></label></div>
 <span class="err" id="e-contact" role="alert"></span>
 <label>Uw postcode<input id="pc" autocomplete="postal-code" placeholder="1234 AB"></label>
-<div class="row"><label>Uw aansluiting<select id="aansl"><option>Weet ik niet</option><option>1-fase</option><option>3-fase</option></select></label><label>Heeft u zonnepanelen?<select id="zon"><option>Nee</option><option>Ja</option></select></label></div>
+<div class="row" id="inst"><label>Uw aansluiting<select id="aansl"><option>Weet ik niet</option><option>1-fase</option><option>3-fase</option></select></label><label>Heeft u zonnepanelen?<select id="zon"><option>Nee</option><option>Ja</option></select></label></div>
 <label>Toelichting<textarea id="msg" rows="4" placeholder="Bijvoorbeeld: wat u wilt laten aansluiten, welke auto u heeft of wat er niet werkt."></textarea></label>
 <button class="btn" type="submit">Aanvraag versturen</button>
 <p class="small">Wij gebruiken uw gegevens alleen om op uw aanvraag te reageren. Meer leest u in de <a href="/privacyverklaring/">privacyverklaring</a>.</p>
@@ -104,7 +104,7 @@
 <div class="fgrid">
 <div><a class="flogo" href="/" aria-label="AET Solutions"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>AET Solutions is een elektrotechnisch installatiebedrijf voor particulieren en bedrijven. Elektricien in Utrecht, Amersfoort, Amsterdam en omgeving.</p></div>
 <div><h2 class="fh">Diensten</h2><ul><li><a href="/meterkast/">Meterkast / verdeelinrichting</a></li><li><a href="/laadpaal/">Laadpaal</a></li><li><a href="/overige-elektrotechniek/">Elektra en storingen</a></li><li><a href="/thuisbatterij/">Thuisbatterij</a></li><li><a href="/zakelijk/">Zakelijke inhuur</a></li></ul></div>
-<div><h2 class="fh">Informatie</h2><ul><li><a href="/#werkwijze">Werkwijze</a></li><li><a href="/#werkgebied">Werkgebied</a></li><li><a href="/#faq">Veelgestelde vragen</a></li><li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
+<div><h2 class="fh">Informatie</h2><ul><li><a href="/#werkwijze">Werkwijze</a></li><li><a href="/#werkgebied">Werkgebied</a></li><li><a href="/#faq">Veelgestelde vragen</a></li><li><a href="/stage/">Stage</a></li><li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
 <div><h2 class="fh">Contact</h2><ul><li><a href="mailto:info@aet-solutions.nl">info@aet-solutions.nl</a></li><li><a href="tel:+31638435849">Bel 06 38 43 58 49</a></li><li><a href="https://wa.me/31638435849?text=Goedendag%2C%20ik%20heb%20een%20vraag%20over%20">WhatsApp</a></li><li><a href="#offerte">Offerte aanvragen</a></li></ul></div>
 </div>
 <div class="legal"><span>© <span id="y">2026</span> AET Solutions</span><a href="#top">Naar boven ↑</a></div>

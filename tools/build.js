@@ -97,7 +97,7 @@ ${p.noindex ? "" : `<script type="application/ld+json">${JSON.stringify({ "@cont
 
 function header(p) {
   const h = p.path || p.file ? "/" : "";
-  const off = p.form ? "#offerte" : "/#offerte";
+  const off = p.form && !p.stage ? "#offerte" : "/#offerte";
   return `<a class="skip" href="#main">Naar de inhoud</a>
 <header><div class="wrap bar">
 <a class="logo" href="/" aria-label="${esc(cfg.handelsnaam)}, naar de homepage"><img src="/assets/logo.jpg" alt="${esc(cfg.handelsnaam)}" width="420" height="194"></a>
@@ -108,41 +108,42 @@ function header(p) {
 }
 
 function form(p) {
-  const opts = ["Meterkast / verdeelinrichting", "Laadpaal", "Overige elektrotechniek", "Thuisbatterij", "Zakelijke inhuur"];
+  const opts = ["Meterkast / verdeelinrichting", "Laadpaal", "Overige elektrotechniek", "Thuisbatterij", "Zakelijke inhuur"].concat(cfg.erkendLeerbedrijf ? ["Stage"] : []);
+  const st = !!p.stage, U = st ? "Je" : "Uw";
   return `<section class="band" id="offerte"><div class="wrap two">
-<div><span class="eyebrow">Offerte</span>
-<h2>Vraag vrijblijvend een offerte aan</h2>
-<p class="lead">Vertel in een paar zinnen wat u wilt laten doen. De vakman zelf bekijkt uw aanvraag en stuurt u een offerte met de werkzaamheden, de materialen en de prijs.${cfg.reactietijd ? ` Wij reageren ${esc(cfg.reactietijd)}.` : ""}</p>
+<div><span class="eyebrow">${st ? "Stage" : "Offerte"}</span>
+<h2>${st ? "Meld je aan voor een stage" : "Vraag vrijblijvend een offerte aan"}</h2>
+<p class="lead">${st ? "Vertel kort welke opleiding je volgt en wanneer je stage wilt lopen. Je krijgt antwoord van de vakman zelf." : `Vertel in een paar zinnen wat u wilt laten doen. De vakman zelf bekijkt uw aanvraag en stuurt u een offerte met de werkzaamheden, de materialen en de prijs.${cfg.reactietijd ? ` Wij reageren ${esc(cfg.reactietijd)}.` : ""}`}</p>
 <ul class="contact-list">
 <li><span class="ic">${ico("mail")}</span>${mail}</li>
 ${tel ? `<li><span class="ic">${ico("phone")}</span><a href="${tel.href}">${esc(tel.label)}</a></li>\n` : ""}${wa ? `<li><span class="ic">${ico("chat")}</span><a href="${wa}">WhatsApp</a></li>\n` : ""}</ul>
-<ul class="checks"><li>Vrijblijvend: u zit nergens aan vast</li><li>U weet de prijs voordat u beslist</li><li>U krijgt antwoord van de vakman zelf</li><li>${ctx.fotoRoute}</li></ul></div>
+<ul class="checks">${st ? "<li>Noem je opleiding, niveau en leerjaar</li><li>Geef aan of je BOL of BBL volgt</li><li>Vermeld de periode en het aantal dagen per week</li><li>Je cv stuur je mee per e-mail</li>" : `<li>Vrijblijvend: u zit nergens aan vast</li><li>U weet de prijs voordat u beslist</li><li>U krijgt antwoord van de vakman zelf</li><li>${ctx.fotoRoute}</li>`}</ul></div>
 <form id="f" novalidate>
 <div class="hp" aria-hidden="true"><label>Laat dit veld leeg<input name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
-<div class="row"><label>Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>
+<div class="row"><label id="typewrap">Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>
 <label>Onderwerp<select id="dienst">${opts.map(o => `<option>${o}</option>`).join("")}</select></label></div>
 <label id="bedr" hidden>Bedrijfsnaam<input id="bedrijf" autocomplete="organization"></label>
-<label>Uw naam<input id="naam" autocomplete="name" required><span class="err" id="e-naam" role="alert"></span></label>
-<div class="row"><label>Uw e-mailadres<input id="mail" type="email" autocomplete="email"></label><label>Uw telefoonnummer<input id="tel2" type="tel" autocomplete="tel"></label></div>
+<label>${U} naam<input id="naam" autocomplete="name" required><span class="err" id="e-naam" role="alert"></span></label>
+<div class="row"><label>${U} e-mailadres<input id="mail" type="email" autocomplete="email"></label><label>${U} telefoonnummer<input id="tel2" type="tel" autocomplete="tel"></label></div>
 <span class="err" id="e-contact" role="alert"></span>
-<label>Uw postcode<input id="pc" autocomplete="postal-code" placeholder="1234 AB"></label>
-<div class="row"><label>Uw aansluiting<select id="aansl"><option>Weet ik niet</option><option>1-fase</option><option>3-fase</option></select></label><label>Heeft u zonnepanelen?<select id="zon"><option>Nee</option><option>Ja</option></select></label></div>
-<label>Toelichting<textarea id="msg" rows="4" placeholder="Bijvoorbeeld: wat u wilt laten aansluiten, welke auto u heeft of wat er niet werkt."></textarea></label>
-<button class="btn" type="submit">Aanvraag versturen</button>
-<p class="small">Wij gebruiken uw gegevens alleen om op uw aanvraag te reageren. Meer leest u in de <a href="/privacyverklaring/">privacyverklaring</a>.</p>
+<label>${U} postcode<input id="pc" autocomplete="postal-code" placeholder="1234 AB"></label>
+<div class="row" id="inst"><label>Uw aansluiting<select id="aansl"><option>Weet ik niet</option><option>1-fase</option><option>3-fase</option></select></label><label>Heeft u zonnepanelen?<select id="zon"><option>Nee</option><option>Ja</option></select></label></div>
+<label>Toelichting<textarea id="msg" rows="4" placeholder="${st ? "Bijvoorbeeld: je opleiding en leerjaar, BOL of BBL, de periode en waarom je bij ons stage wilt lopen." : "Bijvoorbeeld: wat u wilt laten aansluiten, welke auto u heeft of wat er niet werkt."}"></textarea></label>
+<button class="btn" type="submit">${st ? "Aanmelding versturen" : "Aanvraag versturen"}</button>
+<p class="small">${st ? "Wij gebruiken je gegevens alleen om op je aanmelding te reageren. Meer lees je in de" : "Wij gebruiken uw gegevens alleen om op uw aanvraag te reageren. Meer leest u in de"} <a href="/privacyverklaring/">privacyverklaring</a>.</p>
 <p class="ok" id="ok" role="status"></p><p class="err" id="fail" role="alert"></p>
 </form></div></section>`;
 }
 
 function footer(p) {
   const h = p.path || p.file ? "/" : "";
-  const off = p.form ? "#offerte" : "/#offerte";
-  return `<div class="mbar">${tel ? `<a href="${tel.href}">Bel</a>` : ""}${wa ? `<a href="${wa}">WhatsApp</a>` : ""}${tel ? "" : `<a href="mailto:${esc(cfg.email)}">E-mail</a>`}<a class="btn" href="${off}">Offerte</a></div>
+  const off = p.form && !p.stage ? "#offerte" : "/#offerte";
+  return `<div class="mbar">${tel ? `<a href="${tel.href}">Bel</a>` : ""}${wa ? `<a href="${wa}">WhatsApp</a>` : ""}${tel ? "" : `<a href="mailto:${esc(cfg.email)}">E-mail</a>`}<a class="btn" href="${p.stage ? "#offerte" : off}">${p.stage ? "Aanmelden" : "Offerte"}</a></div>
 <footer><div class="wrap">
 <div class="fgrid">
 <div><a class="flogo" href="/" aria-label="${esc(cfg.handelsnaam)}"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>${esc(cfg.handelsnaam)} is een elektrotechnisch installatiebedrijf voor particulieren en bedrijven. Elektricien in ${stedenOmg(3)}.</p></div>
 <div><h2 class="fh">Diensten</h2><ul><li><a href="/meterkast/">Meterkast / verdeelinrichting</a></li><li><a href="/laadpaal/">Laadpaal</a></li><li><a href="/overige-elektrotechniek/">Elektra en storingen</a></li><li><a href="/thuisbatterij/">Thuisbatterij</a></li><li><a href="/zakelijk/">Zakelijke inhuur</a></li></ul></div>
-<div><h2 class="fh">Informatie</h2><ul><li><a href="${h}#werkwijze">Werkwijze</a></li><li><a href="${h}#werkgebied">Werkgebied</a></li><li><a href="${h}#faq">Veelgestelde vragen</a></li><li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
+<div><h2 class="fh">Informatie</h2><ul><li><a href="${h}#werkwijze">Werkwijze</a></li><li><a href="${h}#werkgebied">Werkgebied</a></li><li><a href="${h}#faq">Veelgestelde vragen</a></li>${cfg.erkendLeerbedrijf ? `<li><a href="/stage/">Stage</a></li>` : ""}<li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
 <div><h2 class="fh">Contact</h2><ul><li>${mail}</li>${tel ? `<li><a href="${tel.href}">Bel ${esc(tel.label)}</a></li>` : ""}${wa ? `<li><a href="${wa}">WhatsApp</a></li>` : ""}<li><a href="${off}">Offerte aanvragen</a></li>${cfg.vestigingsplaats ? `<li>${esc(cfg.adres ? cfg.adres + ", " : "")}${esc(cfg.vestigingsplaats)}</li>` : ""}${cfg.kvk ? `<li>KvK ${esc(cfg.kvk)}</li>` : ""}${cfg.btw ? `<li>Btw ${esc(cfg.btw)}</li>` : ""}</ul></div>
 </div>
 <div class="legal"><span>© <span id="y">${new Date().getFullYear()}</span> ${esc(cfg.handelsnaam)}</span><a href="#top">Naar boven ↑</a></div>
