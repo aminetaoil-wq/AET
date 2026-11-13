@@ -1,3 +1,11 @@
+// Favicon: de streep loopt één keer door het teken (bij laden en als het tabblad weer zichtbaar wordt).
+(function(){var l=document.querySelector('link[rel=icon][type="image/svg+xml"]'),d=document;if(!l||!d.createElement("canvas").getContext||matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+var h=l.href,c=d.createElement("canvas"),x=c.getContext("2d"),A=new Path2D("M31.7,9H34.6L58.3,55.4H48.9L32.9,23.6L15.5,55.4H6Z"),T=new Path2D("M3,48C12,33 36,24 61,23C40,28 22,37 9,53Z"),t=0;c.width=c.height=32;
+function f(i){x.setTransform(.5,0,0,.5,0,0);x.clearRect(0,0,64,64);x.fillStyle="#154169";x.beginPath();x.roundRect?x.roundRect(0,0,64,64,12):x.rect(0,0,64,64);x.fill();x.fillStyle="#fff";x.fill(A);
+x.save();x.beginPath();x.rect(0,0,64*i/12,64);x.clip();x.strokeStyle="#154169";x.lineWidth=3;x.stroke(T);x.fillStyle="#5fb0ff";x.fill(T);x.restore();
+try{l.href=i<12?c.toDataURL():h}catch(e){l.href=h;return}if(i<12)t=setTimeout(f,60,i+1);else t=0}
+function go(){if(!t&&d.visibilityState==="visible")f(0)}
+d.addEventListener("visibilitychange",go);go()})();
 (function(){
 // Contactgegevens en formulieradres komen uit site.config.json (via tools/build.js), niet uit dit bestand.
 var B=document.body,ENDPOINT=B.getAttribute("data-endpoint")||"",EMAIL=B.getAttribute("data-email")||"";
