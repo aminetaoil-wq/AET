@@ -19,7 +19,7 @@ p{margin:0 0 14px}
 /* Header */
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--card);border-bottom:1px solid var(--line)}
 .bar{display:flex;align-items:center;gap:20px;height:76px}
-.logo{background:#fff;border-radius:10px;padding:4px 8px;display:flex}.logo img,.logo svg{height:52px;width:auto;display:block}
+.logo{background:#fff;border-radius:10px;padding:4px 8px;display:flex}.logo img{height:52px;width:auto;display:block}.logo svg{height:52px;width:113px;display:block;flex:none}
 nav{margin-left:auto;display:flex;gap:2px;align-items:center}
 nav a{color:var(--text);text-decoration:none;padding:10px 13px;border-radius:9px;font-weight:600;font-size:15px;transition:background .15s}
 nav a:hover{background:var(--tint)}
@@ -199,7 +199,7 @@ body{padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
 .wrap{padding:0 18px}
 section,.band{padding:60px 0}.layout,.solo{padding-top:40px;padding-bottom:60px}
 .grid.two,.row,.steps,.fgrid{grid-template-columns:1fr}
-.bar{height:68px}.logo img,.logo svg{height:44px}
+.bar{height:68px}.logo img{height:44px}.logo svg{height:44px;width:95px}
 .svc{padding:24px}form{padding:22px}
 .lead{font-size:17.500px}.sub{font-size:17px}
 .trust li{padding:14px 16px}
