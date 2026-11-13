@@ -19,7 +19,10 @@ const stedenTekst = n => { const s = cfg.steden.slice(0, n); return s.slice(0, -
 const stedenOmg = n => cfg.steden.slice(0, n).join(", ") + " en omgeving";
 
 // Logo als inline SVG, zodat de streep met CSS kan bewegen (zie .streep in style.css).
-const logoSvg = fs.readFileSync(path.join(root, "assets/logo.svg"), "utf8").replace(/\n/g, "").replace(' role="img" aria-label="AET Solutions"', ' width="420" height="194" aria-hidden="true" focusable="false"');
+const logoSvg = fs.readFileSync(path.join(root, "assets/logo.svg"), "utf8").replace(/\n/g, "").replace(' role="img" aria-label="AET Solutions"', ' width="113" height="52" aria-hidden="true" focusable="false"');
+
+const ver = f => require("crypto").createHash("md5").update(fs.readFileSync(path.join(root, f))).digest("hex").slice(0, 8);
+const cssV = ver("assets/style.css"), jsV = ver("assets/site.js");
 
 const ICONS = {
   meterkast: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h3M8 12h3M8 16h3M14 8h2M14 12h2M14 16h2"/>',
@@ -97,7 +100,7 @@ function head(p, url) {
 <meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.desc)}"><meta property="og:url" content="${url}">
 <meta property="og:image" content="${base}/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=${cssV}">
 ${p.noindex ? "" : `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>\n`}</head>`;
 }
 
@@ -155,7 +158,7 @@ function footer(p) {
 </div>
 <div class="legal"><span>© <span id="y">${new Date().getFullYear()}</span> ${esc(cfg.handelsnaam)}</span><a href="#top">Naar boven ↑</a></div>
 </div></footer>
-<script src="/assets/site.js" defer></script>
+<script src="/assets/site.js?v=${jsV}" defer></script>
 </body>
 </html>
 `;

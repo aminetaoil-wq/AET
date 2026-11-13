@@ -8,7 +8,7 @@ for(const p of pages){const h=html[p];
  const heads=[...h.matchAll(/<h([1-6])/g)].map(m=>m[1]).join("");
  console.log(p.padEnd(36),"h1:",h1,"| koppen:",heads,"| title",title.length,"| desc",desc.length,"|",robots,"| ld+json:",/ld\+json/.test(h),"|",canon);
  for(const m of h.matchAll(/(?:href|src)="([^"]+)"/g)){const u=m[1];if(/^(mailto:|tel:|https?:|#$)/.test(u))continue;n++;
-  let [f,a]=u.split("#");let tp=p;
+  let [f,a]=u.split("#");f=f.split("?")[0];let tp=p;
   if(f){if(!f.startsWith("/")){console.log("  RELATIEF",p,u);}tp=f.replace(/^\//,"");if(tp===""||tp.endsWith("/"))tp+="index.html";
    if(!fs.existsSync(path.join(root,tp))){bad++;console.log("  KAPOT",p,u);continue}}
   if(a&&ids[tp]&&!ids[tp].has(a)){bad++;console.log("  ANKER ONTBREEKT",p,u)}}}
