@@ -18,6 +18,9 @@ const mail = `<a href="mailto:${esc(cfg.email)}">${esc(cfg.email)}</a>`;
 const stedenTekst = n => { const s = cfg.steden.slice(0, n); return s.slice(0, -1).join(", ") + " en " + s[s.length - 1]; };
 const stedenOmg = n => cfg.steden.slice(0, n).join(", ") + " en omgeving";
 
+// Logo als inline SVG, zodat de streep met CSS kan bewegen (zie .streep in style.css).
+const logoSvg = fs.readFileSync(path.join(root, "assets/logo.svg"), "utf8").replace(/\n/g, "").replace(' role="img" aria-label="AET Solutions"', ' width="420" height="194" aria-hidden="true" focusable="false"');
+
 const ICONS = {
   meterkast: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h3M8 12h3M8 16h3M14 8h2M14 12h2M14 16h2"/>',
   laadpaal: '<path d="M5 20V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14M3 20h14M15 9h2a2 2 0 0 1 2 2v4a1.5 1.5 0 0 0 3 0V8l-3-3"/><path d="M9 8l-2 4h4l-2 4"/>',
@@ -85,7 +88,10 @@ function head(p, url) {
 <link rel="canonical" href="${url}">
 <meta name="robots" content="${p.noindex ? "noindex,follow" : "index,follow"}">
 <meta name="theme-color" content="#0d2c47">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/assets/inter.woff2" as="font" type="font/woff2" crossorigin>
 <meta property="og:type" content="website"><meta property="og:locale" content="nl_NL"><meta property="og:site_name" content="${esc(cfg.handelsnaam)}">
 <meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.desc)}"><meta property="og:url" content="${url}">
@@ -100,7 +106,7 @@ function header(p) {
   const off = p.form && !p.stage ? "#offerte" : "/#offerte";
   return `<a class="skip" href="#main">Naar de inhoud</a>
 <header><div class="wrap bar">
-<a class="logo" href="/" aria-label="${esc(cfg.handelsnaam)}, naar de homepage"><img src="/assets/logo.jpg" alt="${esc(cfg.handelsnaam)}" width="420" height="194"></a>
+<a class="logo" href="/" aria-label="${esc(cfg.handelsnaam)}, naar de homepage">${logoSvg}</a>
 <button class="menu" id="menu" aria-expanded="false" aria-controls="nav">Menu</button>
 <nav id="nav" aria-label="Hoofdmenu">
 <a href="${h}#diensten">Diensten</a><a href="${h}#werkwijze">Werkwijze</a><a href="${h}#over">Over ons</a><a href="/zakelijk/">Zakelijk</a><a href="/kennisbank/">Kennisbank</a><a href="${h}#faq">Vragen</a>${tel ? `<a class="navtel" href="${tel.href}">${esc(tel.label)}</a>` : ""}<a class="btn" href="${off}">Offerte aanvragen</a>
