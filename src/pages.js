@@ -6,6 +6,7 @@ module.exports = function (c) {
   const naam = esc(cfg.handelsnaam);
   const kwal = cfg.kwalificaties.map(esc).concat(cfg.erkendLeerbedrijf ? ["Erkend leerbedrijf (SBB)"] : []);
   const werkgebied = `Wij werken in ${regio}: ${stedenOmg(4)}.`;
+  const kb = require("./kennisbank.js")(c);
 
   /* ---------- Bouwstenen ---------- */
   const faq = items => items.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join("\n");
@@ -14,7 +15,7 @@ module.exports = function (c) {
   const callout = t => `<div class="callout">${ico("alert")}<p>${t}</p></div>`;
   const vanaf = k => cfg.vanafPrijs[k] ? `<p><strong>Richtprijs:</strong> vanaf ${esc(cfg.vanafPrijs[k])}. De exacte prijs staat in uw offerte.</p>` : "";
   const phead = (o, knop) => `<div class="phead" id="top"><div class="wrap">
-<ol class="crumbs"><li><a href="/">Home</a></li><li>${o.crumb}</li></ol>
+<ol class="crumbs"><li><a href="/">Home</a></li>${(o.crumbs || [[o.crumb]]).map(k => k[1] ? `<li><a href="${k[1]}">${k[0]}</a></li>` : `<li>${k[0]}</li>`).join("")}</ol>
 <h1>${o.h1}</h1>
 <p class="lead">${o.lead}</p>
 ${knop ? `<div class="cta"><a class="btn" href="#offerte">${o.knop || "Offerte aanvragen"}</a>${tel ? `<a class="btn ghost" href="${tel.href}">Bel ${esc(tel.label)}</a>` : ""}</div>` : ""}
@@ -35,9 +36,10 @@ ${knop ? `<div class="cta"><a class="btn" href="#offerte">${o.knop || "Offerte a
 <a class="btn" href="#offerte">${knop || "Offerte aanvragen"}</a>
 <div class="sidec">${tel ? `<a href="${tel.href}">${ico("phone")}${esc(tel.label)}</a>` : ""}${wa ? `<a href="${wa}">${ico("chat")}WhatsApp</a>` : ""}<a href="mailto:${esc(cfg.email)}">${ico("mail")}${esc(cfg.email)}</a></div>
 </aside>`;
+  const meerLezen = slugs => `\n<h2>Meer lezen in de kennisbank</h2>\n<ul class="checks">${slugs.map(x => `<li><a href="${kb.bySlug[x].url}">${kb.bySlug[x].h1}</a></li>`).join("")}</ul>`;
   const svc = o => `${phead(o, true)}
 <div class="wrap layout"><div class="prose">
-${o.body}
+${o.body}${o.lezen ? meerLezen(o.lezen) : ""}
 </div>
 ${side(o.kort, o.knop)}</div>
 ${o.geenRelated ? "" : related(o.key)}`;
@@ -163,7 +165,7 @@ ${faq(homeFaq)}
 `;
 
   /* ---------- Meterkast ---------- */
-  const meterkast = svc({ key: "meterkast", crumb: "Meterkast / verdeelinrichting",
+  const meterkast = svc({ key: "meterkast", lezen: ["meterkast-geschikt-laadpaal-thuisbatterij", "wat-zit-er-in-mijn-meterkast", "1-fase-of-3-fase"], crumb: "Meterkast / verdeelinrichting",
     h1: `Meterkast of verdeelinrichting vervangen: veilig en klaar voor uitbreiding`,
     lead: `Wilt u een laadpaal, inductieplaat of warmtepomp aansluiten? Dan heeft elk van die apparaten een eigen groep nodig. In een volle of verouderde meterkast is daar geen ruimte voor. ${naam} vervangt uw groepenkast of breidt hem uit, in woningen en in bedrijfspanden. U weet vooraf wat er gebeurt en wat het kost. ${werkgebied}`,
     kort: ["Groepenkast of verdeelinrichting vervangen of uitbreiden", "Opgebouwd en getest volgens NEN 1010", "Meestal binnen één werkdag klaar", "Offerte met arbeid en materiaal apart"],
@@ -207,7 +209,7 @@ ${vanaf("meterkast")}<p>In uw offerte staan deze onderdelen apart. Zo ziet u pre
 
 <h2>Veelgestelde vragen over de meterkast</h2>
 ${faq([
-      ["Hoe weet ik of ik 1-fase of 3-fase heb?", "Dat staat op uw meter, bijvoorbeeld als 1x35 A of 3x25 A, en u ziet het aan de hoofdschakelaar. Stuurt u een foto mee met uw aanvraag, dan zien wij het direct."],
+      ["Hoe weet ik of ik 1-fase of 3-fase heb?", "Dat ziet u aan het opschrift op uw meter en aan de breedte van de hoofdschakelaar. Uw netbeheerder kent de precieze aansluitwaarde, bijvoorbeeld 1x35 A of 3x25 A. Stuurt u een foto mee met uw aanvraag, dan zien wij het direct. Meer uitleg staat in <a href=\"/kennisbank/1-fase-of-3-fase/\">1-fase of 3-fase</a>."],
       ["Heb ik 3-fase nodig voor inductie, een laadpaal of een warmtepomp?", "Niet altijd. Het hangt af van het vermogen van de apparaten en van wat er tegelijk aanstaat. Veel inductieplaten werken op twee groepen van één fase. Voor <a href=\"/laadpaal/\">laden op 11 kW</a> heeft u wel 3-fase nodig."],
       ["Betaal ik meer vastrecht voor een 3-fase aansluiting?", "Tot en met 3x25 A valt u in dezelfde tariefgroep als bij de gangbare 1-fase aansluiting. Voor het ombouwen brengt de netbeheerder wel eenmalige kosten in rekening. De actuele bedragen vindt u op de website van uw netbeheerder."],
       ["Moet de hele kast worden vervangen als ik één groep extra wil?", "Nee. Is er ruimte en is de kast in goede staat, dan plaatsen wij alleen een groep bij."]
@@ -219,7 +221,7 @@ ${faq([
 <p>U hoort wat er nodig is en ontvangt een vrijblijvende offerte. <a href="#offerte">Vraag uw offerte aan</a>.</p>` });
 
   /* ---------- Laadpaal ---------- */
-  const laadpaal = svc({ key: "laadpaal", crumb: "Laadpaal",
+  const laadpaal = svc({ key: "laadpaal", lezen: ["meterkast-geschikt-laadpaal-thuisbatterij", "1-fase-of-3-fase"], crumb: "Laadpaal",
     h1: `Laadpaal laten installeren, veilig aangesloten op uw meterkast`,
     lead: `Een laadpaal belast uw elektrische installatie urenlang achter elkaar. Daarom sluiten wij hem aan op een eigen groep met de juiste beveiliging, en waar nodig met load balancing. U ontvangt vooraf een offerte met een vaste scope en een vaste prijs. ${werkgebied}`,
     kort: ["Aangesloten op een eigen groep met de juiste beveiliging", "1-fase of 3-fase, afgestemd op uw auto en aansluiting", "Load balancing voorkomt een overbelaste hoofdzekering", "Ook voor een laadpaal die u zelf heeft gekocht"],
@@ -273,7 +275,7 @@ ${faq([
 <p><a href="#offerte">Vul het formulier in</a>, dan hoort u wat er bij u mogelijk is.</p>` });
 
   /* ---------- Elektra en storingen ---------- */
-  const overige = svc({ key: "overige", crumb: "Elektra en storingen",
+  const overige = svc({ key: "overige", lezen: ["aardlekschakelaar-valt-uit", "inductie-koken-aparte-groep"], crumb: "Elektra en storingen",
     h1: `Elektrotechnische werkzaamheden: storingen, uitbreidingen en verbouwingen`,
     lead: `Een groep die steeds uitvalt, te weinig stopcontacten of een verbouwing waarbij de elektra opnieuw moet worden aangelegd. ${naam} spoort de oorzaak op, legt aan wat u nodig heeft en levert het werk getest op. De prijs hoort u vooraf. Wij werken als elektricien in ${regio}: ${stedenOmg(4)}.`,
     kort: ["Storingen opsporen en verhelpen", "Extra groepen en aansluitpunten", "Apparaten veilig op een eigen groep", "Elektra bij een verbouwing, afgestemd met uw aannemer"],
@@ -318,7 +320,7 @@ ${faq([
 <p><a href="#offerte">Beschrijf uw klus in het formulier</a>.</p>` });
 
   /* ---------- Thuisbatterij ---------- */
-  const thuisbatterij = svc({ key: "thuisbatterij", crumb: "Thuisbatterij",
+  const thuisbatterij = svc({ key: "thuisbatterij", lezen: ["meterkast-geschikt-laadpaal-thuisbatterij", "1-fase-of-3-fase"], crumb: "Thuisbatterij",
     h1: `Thuisbatterij laten installeren? Eerst weten of het bij u past.`,
     lead: `Een thuisbatterij slaat de zonnestroom op die u overdag niet gebruikt, zodat u die 's avonds zelf kunt verbruiken. ${naam} rekent eerst met uw eigen verbruikscijfers door of dat voor u zinvol is. Is dat zo, dan installeren wij de batterij en stellen wij hem voor u in. ${werkgebied}`,
     kort: ["Advies op basis van uw eigen verbruik", "Beoordeling van meterkast en omvormer", "Installatie, instellen en uitleg", "Geen beloftes over terugverdientijd"],
@@ -429,6 +431,37 @@ ${icards([
 <ul class="checks"><li>Je opleiding, niveau en leerjaar.</li><li>Of je BOL of BBL volgt.</li><li>De periode en het aantal dagen per week.</li><li>In een paar zinnen waarom je bij ons stage wilt lopen.</li></ul>
 <p>Je cv stuur je per e-mail naar ${mail}. Wij reageren op je aanmelding. Of er op dat moment een stageplek vrij is, hoor je na je aanmelding. <a href="#offerte">Meld je aan</a>.</p>` });
 
+
+  /* ---------- Kennisbank ---------- */
+  const maanden = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
+  const nlDatum = d => { const [j, m, dag] = d.split("-").map(Number); return `${dag} ${maanden[m - 1]} ${j}`; };
+  const fotoMail = `mailto:${esc(cfg.email)}?subject=${encodeURIComponent("Foto van mijn meterkast")}`;
+  const artikel = a => `${phead({ crumbs: [["Kennisbank", "/kennisbank/"], [a.kort_titel]], h1: a.h1, lead: a.lead }, false)}
+<div class="wrap layout"><div class="prose">
+<div class="kort"><h2>In het kort</h2><ul class="checks">${a.kort.map(k => `<li>${k}</li>`).join("")}</ul></div>
+<p class="meta">${naam} · Bijgewerkt op <time datetime="${a.datum}">${nlDatum(a.datum)}</time></p>
+<div class="toc" role="navigation" aria-label="Inhoud"><b>Op deze pagina</b><ol>${a.secties.map(x => `<li><a href="#${x[0]}">${x[1]}</a></li>`).join("")}</ol></div>
+${a.secties.map(x => `<h2 id="${x[0]}">${x[1]}</h2>\n${x[2]}`).join("\n\n")}
+
+<div class="bel"><h2 id="bellen">Wanneer een elektricien inschakelen?</h2><ul>${a.bellen.map(b => `<li>${b}</li>`).join("")}</ul></div>
+</div>
+<aside class="side" aria-label="Hulp nodig">
+<h2>Hulp nodig?</h2>
+<p>${a.zin}</p>
+<a class="btn" href="${a.dienst.href}">${a.dienst.label}</a>
+<a class="btn line" href="${fotoMail}">Mail een foto van uw meterkast</a>
+${a.dienst2 ? `<div class="sidec"><a href="${a.dienst2.href}">${ico("arrow")}${a.dienst2.label}</a></div>` : ""}
+</aside></div>
+<div class="related"><div class="wrap">
+<h2>Verwante artikelen</h2>
+<div class="grid">${a.verwant.map(x => `<a class="rel" href="${kb.bySlug[x].url}"><span class="ic">${ico("doc")}</span>${kb.bySlug[x].kort_titel}<span class="arr">${ico("arrow")}</span></a>`).join("")}</div>
+</div></div>`;
+
+  const kbOverzicht = `${phead({ crumb: "Kennisbank", h1: "Kennisbank: uw meterkast en installatie uitgelegd", lead: "Antwoorden op vragen over de meterkast, storingen, inductie, laadpalen en thuisbatterijen. Geschreven voor wie geen elektricien is en wil weten wat er aan de hand is." }, false)}
+<div class="wrap solo kbover">
+${kb.clusters.map(([key, titel]) => { const lijst = kb.artikelen.filter(a => a.cluster === key); return lijst.length ? `<h2>${titel}</h2>\n<div class="grid two">${lijst.map(a => `<a class="svc" href="${a.url}"><h3>${a.h1}</h3><p>${a.desc}</p><span class="more">Lees het artikel${ico("arrow")}</span></a>`).join("")}</div>` : ""; }).join("\n")}
+</div>`;
+
   /* ---------- Privacy ---------- */
   const privacy = tekst({ crumb: "Privacyverklaring", h1: "Privacyverklaring",
     lead: `Laatst bijgewerkt: november 2026. Hier leest u hoe ${naam} met uw gegevens omgaat.`,
@@ -493,6 +526,10 @@ ${related("")}`;
       title: `Stage elektrotechniek regio Utrecht | ${H}`,
       desc: `Stage lopen in de elektrotechniek? ${H} is erkend leerbedrijf (SBB) in de regio Utrecht, Amersfoort en Amsterdam. Meld je aan via het formulier.` }
   ] : []).concat([
+    { path: "kennisbank/", crumb: "Kennisbank", body: kbOverzicht,
+      title: `Kennisbank meterkast en elektra | ${H}`,
+      desc: `Uitleg over de meterkast, 1-fase en 3-fase, de aardlekschakelaar, inductie, laadpalen en thuisbatterijen. Voor wie geen elektricien is.` }
+  ]).concat(kb.artikelen.map(a => ({ path: `kennisbank/${a.slug}/`, crumb: a.kort_titel, kb: true, article: a, body: artikel(a), title: a.title, desc: a.desc }))).concat([
     { path: "privacyverklaring/", crumb: "Privacyverklaring", body: privacy,
       title: `Privacyverklaring | ${H}`,
       desc: `Privacyverklaring van ${H}: welke gegevens wij verwerken, waarvoor, hoe lang wij ze bewaren en wat uw rechten zijn.` },

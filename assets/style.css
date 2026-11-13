@@ -215,3 +215,19 @@ section,.band{padding:60px 0}.layout,.solo{padding-top:40px;padding-bottom:60px}
 .prose .checks+p{margin-top:14px}
 .card>.ic{margin-bottom:14px}.card .checks+p{margin-top:14px}.card .tags{margin-top:16px}
 section:not(.alt) .steps li::before{box-shadow:0 0 0 6px var(--bg)}
+/* Kennisbank */
+.kort{background:var(--tint);border-radius:var(--r);padding:20px 22px;margin-bottom:16px}
+.prose .kort h2{font-size:18px;margin:0 0 2px}.kort .checks{margin-top:10px}
+.meta{font-size:14px;color:var(--muted)}
+.toc{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:16px 20px;margin:0 0 8px;font-size:15.5px}
+.toc ol{margin:8px 0 0;padding-left:20px;display:grid;gap:4px}.toc a{font-weight:500}
+.bel{background:var(--cta-tint);border-left:5px solid var(--cta);border-radius:12px;padding:20px 22px;margin-top:44px}
+.prose .bel h2{font-size:20px;margin:0 0 8px}.bel ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.tablewrap{overflow-x:auto;margin:16px 0}
+.prose table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--r);font-size:15.5px}
+.prose th,.prose td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+.prose th{background:var(--tint);font-weight:700}.prose tr:last-child td{border-bottom:0}
+.side p{font-size:15.5px;color:var(--muted);margin:6px 0 16px}.side .btn+.btn{margin-top:10px}
+.kbover h2{font-size:24px;margin:40px 0 18px}.kbover h2:first-child{margin-top:0}
+.kbover .svc h3{font-size:20px}
+.crumbs{flex-wrap:wrap}

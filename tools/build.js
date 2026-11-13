@@ -69,9 +69,12 @@ function head(p, url) {
   const graph = [business()];
   if (p.service) graph.push({ "@type": "Service", name: p.service, description: p.desc, url, provider: { "@id": base + "/#bedrijf" },
     areaServed: cfg.steden.map(c => ({ "@type": "City", name: c })) });
-  if (p.path) graph.push({ "@type": "BreadcrumbList", itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: base + "/" },
-    { "@type": "ListItem", position: 2, name: p.crumb || p.title.split(" | ")[0], item: url }] });
+  if (p.path) graph.push({ "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: base + "/" }]
+    .concat(p.kb ? [{ "@type": "ListItem", position: 2, name: "Kennisbank", item: base + "/kennisbank/" }] : [])
+    .concat([{ "@type": "ListItem", position: p.kb ? 3 : 2, name: p.crumb || p.title.split(" | ")[0], item: url }]) });
+  if (p.article) graph.push({ "@type": "Article", headline: p.article.h1, description: p.desc, datePublished: p.article.datum, dateModified: p.article.datum,
+    inLanguage: "nl", mainEntityOfPage: url, image: base + "/assets/og.png",
+    author: { "@type": "Organization", "@id": base + "/#bedrijf", name: cfg.handelsnaam }, publisher: { "@id": base + "/#bedrijf" } });
   return `<!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -100,7 +103,7 @@ function header(p) {
 <a class="logo" href="/" aria-label="${esc(cfg.handelsnaam)}, naar de homepage"><img src="/assets/logo.jpg" alt="${esc(cfg.handelsnaam)}" width="420" height="194"></a>
 <button class="menu" id="menu" aria-expanded="false" aria-controls="nav">Menu</button>
 <nav id="nav" aria-label="Hoofdmenu">
-<a href="${h}#diensten">Diensten</a><a href="${h}#werkwijze">Werkwijze</a><a href="${h}#over">Over ons</a><a href="/zakelijk/">Zakelijk</a><a href="${h}#faq">Vragen</a>${tel ? `<a class="navtel" href="${tel.href}">${esc(tel.label)}</a>` : ""}<a class="btn" href="${off}">Offerte aanvragen</a>
+<a href="${h}#diensten">Diensten</a><a href="${h}#werkwijze">Werkwijze</a><a href="${h}#over">Over ons</a><a href="/zakelijk/">Zakelijk</a><a href="/kennisbank/">Kennisbank</a><a href="${h}#faq">Vragen</a>${tel ? `<a class="navtel" href="${tel.href}">${esc(tel.label)}</a>` : ""}<a class="btn" href="${off}">Offerte aanvragen</a>
 </nav></div></header>`;
 }
 
@@ -141,7 +144,7 @@ function footer(p) {
 <div class="fgrid">
 <div><a class="flogo" href="/" aria-label="${esc(cfg.handelsnaam)}"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>${esc(cfg.handelsnaam)} is een elektrotechnisch installatiebedrijf voor particulieren en bedrijven. Elektricien in ${stedenOmg(3)}.</p></div>
 <div><h2 class="fh">Diensten</h2><ul><li><a href="/meterkast/">Meterkast / verdeelinrichting</a></li><li><a href="/laadpaal/">Laadpaal</a></li><li><a href="/overige-elektrotechniek/">Elektra en storingen</a></li><li><a href="/thuisbatterij/">Thuisbatterij</a></li><li><a href="/zakelijk/">Zakelijke inhuur</a></li></ul></div>
-<div><h2 class="fh">Informatie</h2><ul><li><a href="${h}#werkwijze">Werkwijze</a></li><li><a href="${h}#werkgebied">Werkgebied</a></li><li><a href="${h}#faq">Veelgestelde vragen</a></li>${cfg.erkendLeerbedrijf ? `<li><a href="/stage/">Stage</a></li>` : ""}<li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
+<div><h2 class="fh">Informatie</h2><ul><li><a href="${h}#werkwijze">Werkwijze</a></li><li><a href="${h}#werkgebied">Werkgebied</a></li><li><a href="${h}#faq">Veelgestelde vragen</a></li><li><a href="/kennisbank/">Kennisbank</a></li>${cfg.erkendLeerbedrijf ? `<li><a href="/stage/">Stage</a></li>` : ""}<li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
 <div><h2 class="fh">Contact</h2><ul><li>${mail}</li>${tel ? `<li><a href="${tel.href}">Bel ${esc(tel.label)}</a></li>` : ""}${wa ? `<li><a href="${wa}">WhatsApp</a></li>` : ""}<li><a href="${off}">Offerte aanvragen</a></li>${cfg.vestigingsplaats ? `<li>${esc(cfg.adres ? cfg.adres + ", " : "")}${esc(cfg.vestigingsplaats)}</li>` : ""}${cfg.kvk ? `<li>KvK ${esc(cfg.kvk)}</li>` : ""}${cfg.btw ? `<li>Btw ${esc(cfg.btw)}</li>` : ""}</ul></div>
 </div>
 <div class="legal"><span>© <span id="y">${new Date().getFullYear()}</span> ${esc(cfg.handelsnaam)}</span><a href="#top">Naar boven ↑</a></div>
