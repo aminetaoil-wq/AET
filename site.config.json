@@ -36,6 +36,7 @@
   },
   "garantieArbeid": "",
   "beschikbaarheidZakelijk": "",
+  "eigenGereedschap": false,
   "vanafPrijs": {
     "thuisbatterij": "",
     "laadpaal": "",
