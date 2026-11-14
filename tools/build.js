@@ -118,28 +118,37 @@ function header(p) {
 
 function form(p) {
   const opts = ["Meterkast / verdeelinrichting", "Laadpaal", "Overige elektrotechniek", "Thuisbatterij", "Zakelijke inhuur"].concat(cfg.erkendLeerbedrijf ? ["Stage"] : []);
-  const st = !!p.stage, U = st ? "Je" : "Uw";
+  const st = !!p.stage, zk = !!p.zakelijk, U = st ? "Je" : "Uw", up = !!cfg.formulierEndpoint;
+  const kop = st ? ["Stage", "Meld je aan voor een stage", "Vertel kort welke opleiding je volgt en wanneer je stage wilt lopen. Wij reageren op je aanmelding."]
+    : zk ? ["Zakelijke aanvraag", "Leg uw project of opdracht voor", "Beschrijf de werkzaamheden, de locatie en de gewenste periode. U ontvangt een reactie met beschikbaarheid en tarief."]
+    : ["Offerte", "Vraag vrijblijvend een offerte aan", "Vertel in een paar zinnen wat u wilt laten doen. Wij beoordelen uw aanvraag en sturen u een offerte met de werkzaamheden, de materialen en een vaste prijs."];
+  const punten = st ? ["Noem je opleiding, niveau en leerjaar", "Geef aan of je BOL of BBL volgt", "Vermeld de periode en het aantal dagen per week", "Je cv stuur je mee per e-mail"]
+    : zk ? ["Inzet per klus of per project", "Zelfstandige uitvoering volgens afspraak", "Oplevering met meet- en opleverdocumentatie", up ? "Tekeningen en projectdocumentatie voegt u toe als bijlage" : "Tekeningen en projectdocumentatie stuurt u per e-mail"]
+    : ["Vrijblijvend: u zit nergens aan vast", "U weet de prijs voordat u beslist", "Offerte met een vaste scope en een vaste prijs", up ? "Foto's van uw meterkast voegt u toe aan het formulier" : ctx.fotoRoute];
   return `<section class="band" id="offerte"><div class="wrap two">
-<div><span class="eyebrow">${st ? "Stage" : "Offerte"}</span>
-<h2>${st ? "Meld je aan voor een stage" : "Vraag vrijblijvend een offerte aan"}</h2>
-<p class="lead">${st ? "Vertel kort welke opleiding je volgt en wanneer je stage wilt lopen. Wij reageren op je aanmelding." : `Vertel in een paar zinnen wat u wilt laten doen. Wij beoordelen uw aanvraag en sturen u een offerte met de werkzaamheden, de materialen en een vaste prijs.${cfg.reactietijd ? ` Wij reageren ${esc(cfg.reactietijd)}.` : ""}`}</p>
+<div><span class="eyebrow">${kop[0]}</span>
+<h2>${kop[1]}</h2>
+<p class="lead">${kop[2]}${cfg.reactietijd && !st ? ` Wij reageren ${esc(cfg.reactietijd)}.` : ""}</p>
 <ul class="contact-list">
 <li><span class="ic">${ico("mail")}</span>${mail}</li>
 ${tel ? `<li><span class="ic">${ico("phone")}</span><a href="${tel.href}">${esc(tel.label)}</a></li>\n` : ""}${wa ? `<li><span class="ic">${ico("chat")}</span><a href="${wa}">WhatsApp</a></li>\n` : ""}</ul>
-<ul class="checks">${st ? "<li>Noem je opleiding, niveau en leerjaar</li><li>Geef aan of je BOL of BBL volgt</li><li>Vermeld de periode en het aantal dagen per week</li><li>Je cv stuur je mee per e-mail</li>" : `<li>Vrijblijvend: u zit nergens aan vast</li><li>U weet de prijs voordat u beslist</li><li>Offerte met een vaste scope en een vaste prijs</li><li>${ctx.fotoRoute}</li>`}</ul>
-${wa && !st ? `<div class="cta"><a class="btn ghost" href="https://wa.me/${intl}?text=${encodeURIComponent("Goedendag, hierbij foto's van mijn meterkast voor een offerte.")}">Stuur foto's via WhatsApp</a></div>` : ""}</div>
-<form id="f" novalidate>
+<ul class="checks">${punten.map(x => `<li>${x}</li>`).join("")}</ul>
+${wa && !st && !zk ? `<div class="cta"><a class="btn ghost" href="https://wa.me/${intl}?text=${encodeURIComponent("Goedendag, hierbij foto's van mijn meterkast voor een offerte.")}">Stuur foto's via WhatsApp</a></div>` : ""}</div>
+<form id="f" novalidate${zk ? ' data-zakelijk="1"' : ""}>
 <div class="hp" aria-hidden="true"><label>Laat dit veld leeg<input name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
-<div class="row"><label id="typewrap">Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>
+<div class="row"${zk ? " hidden" : ""}><label id="typewrap">Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>
 <label>Onderwerp<select id="dienst">${opts.map(o => `<option>${o}</option>`).join("")}</select></label></div>
-<label id="bedr" hidden>Bedrijfsnaam<input id="bedrijf" autocomplete="organization"></label>
-<label>${U} naam<input id="naam" autocomplete="name" required><span class="err" id="e-naam" role="alert"></span></label>
+<label id="bedr" hidden>Bedrijfsnaam<input id="bedrijf" autocomplete="organization"><span class="err" id="e-bedr" role="alert"></span></label>
+<label>${zk ? "Contactpersoon" : U + " naam"}<input id="naam" autocomplete="name" required><span class="err" id="e-naam" role="alert"></span></label>
 <div class="row"><label>${U} e-mailadres<input id="mail" type="email" autocomplete="email"></label><label>${U} telefoonnummer<input id="tel2" type="tel" autocomplete="tel"></label></div>
 <span class="err" id="e-contact" role="alert"></span>
-<label>${U} postcode<input id="pc" autocomplete="postal-code" placeholder="1234 AB"></label>
-<div class="row" id="inst"><label>Uw aansluiting<select id="aansl"><option>Weet ik niet</option><option>1-fase</option><option>3-fase</option></select></label><label>Heeft u zonnepanelen?<select id="zon"><option>Nee</option><option>Ja</option></select></label></div>
-<label>Toelichting<textarea id="msg" rows="4" placeholder="${st ? "Bijvoorbeeld: je opleiding en leerjaar, BOL of BBL, de periode en waarom je bij ons stage wilt lopen." : "Bijvoorbeeld: wat u wilt laten aansluiten, welke auto u heeft of wat er niet werkt."}"></textarea></label>
-<button class="btn" type="submit">${st ? "Aanmelding versturen" : "Aanvraag versturen"}</button>
+${zk ? `<label>Type werkzaamheden<select id="zwerk"><option>Groepenkasten en verdeelinrichtingen</option><option>Laadpalen</option><option>Thuisbatterijen</option><option>Elektrotechnisch installatiewerk</option><option>Anders</option></select></label>
+<div class="row"><label>Projectlocatie<input id="zloc" autocomplete="address-level2" placeholder="Plaats of regio"></label><label>Gewenste periode en inzet<input id="zper" placeholder="Bijv. week 3-6, drie dagen per week"></label></div>` : ""}
+<label id="l-pc"${zk ? " hidden" : ""}>${U} postcode<input id="pc" autocomplete="postal-code" placeholder="1234 AB"></label>
+<div class="row" id="inst"><label id="l-aansl">Uw aansluiting<select id="aansl"><option>Weet ik niet</option><option>1-fase</option><option>3-fase</option></select></label><label id="l-zon">Heeft u zonnepanelen?<select id="zon"><option>Nee</option><option>Ja</option></select></label></div>
+<label>${zk ? "Technische toelichting" : "Toelichting"}<textarea id="msg" rows="4" placeholder="${st ? "Bijvoorbeeld: je opleiding en leerjaar, BOL of BBL, de periode en waarom je bij ons stage wilt lopen." : zk ? "Bijvoorbeeld: aantallen, type installatie, wie het materiaal levert en bijzonderheden op locatie." : "Bijvoorbeeld: wat u wilt laten aansluiten, welke auto u heeft of wat er niet werkt."}"></textarea></label>
+${up && !st ? `<label>${zk ? "Bijlagen" : "Foto's"} (optioneel, maximaal 3 bestanden van 10 MB)<input id="files" type="file" multiple accept="image/jpeg,image/png,image/heic,.heic,.pdf"><span class="err" id="e-files" role="alert"></span></label>` : ""}
+<button class="btn" type="submit">${st ? "Aanmelding versturen" : zk ? "Zakelijke aanvraag versturen" : "Aanvraag versturen"}</button>
 <p class="small">${st ? "Wij gebruiken je gegevens alleen om op je aanmelding te reageren. Meer lees je in de" : "Wij gebruiken uw gegevens alleen om op uw aanvraag te reageren. Meer leest u in de"} <a href="/privacyverklaring/">privacyverklaring</a>.</p>
 <p class="ok" id="ok" role="status"></p><p class="err" id="fail" role="alert"></p>
 </form></div></section>`;

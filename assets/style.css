@@ -234,3 +234,10 @@ section:not(.alt) .steps li::before{box-shadow:0 0 0 6px var(--bg)}
 /* Logo: de streep tekent zich één keer van links naar rechts */
 .streep{animation:streep .8s ease-out .15s both}
 @keyframes streep{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.grid.three{grid-template-columns:repeat(3,1fr)}
+@media(max-width:1000px){.grid.three{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.grid.three{grid-template-columns:1fr}}
+.lead strong{color:#fff}
+.card .cta{margin-top:22px}
+.quick{-webkit-backdrop-filter:blur(6px)}
+.menu{min-height:44px;min-width:64px}
