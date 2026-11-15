@@ -241,3 +241,6 @@ section:not(.alt) .steps li::before{box-shadow:0 0 0 6px var(--bg)}
 .card .cta{margin-top:22px}
 .quick{-webkit-backdrop-filter:blur(6px)}
 .menu{min-height:44px;min-width:64px}
+.trust ul{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.trust li{padding:16px 14px}
+.prose h3{font-size:18px;margin:22px 0 4px}.prose h2+h3{margin-top:10px}.prose h3+p{margin-bottom:0}

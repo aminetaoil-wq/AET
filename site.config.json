@@ -45,5 +45,7 @@
   "bewaartermijn": "12 maanden",
   "formulierEndpoint": "",
   "formulierdienst": "",
-  "erkendLeerbedrijf": true
+  "erkendLeerbedrijf": true,
+  "googleProfiel": "",
+  "profielen": []
 }
