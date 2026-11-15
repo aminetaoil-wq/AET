@@ -68,6 +68,8 @@ const business = () => {
     knowsAbout: ["Meterkast en groepenkast vervangen", "Verdeelinrichtingen", "Laadpalen en laadinfrastructuur", "Thuisbatterijen en energieopslag", "NEN 1010", "NEN 3140", "Storingen in elektrische installaties"] };
   if (tel) b.telephone = "+" + intl;
   if (cfg.btw) b.vatID = cfg.btw;
+  const sameAs = [cfg.googleProfiel].concat(cfg.profielen || []).filter(Boolean);
+  if (sameAs.length) b.sameAs = sameAs;
   return b;
 };
 
@@ -112,7 +114,7 @@ function header(p) {
 <a class="logo" href="/" aria-label="${esc(cfg.handelsnaam)}, naar de homepage">${logoSvg}</a>
 <button class="menu" id="menu" aria-expanded="false" aria-controls="nav">Menu</button>
 <nav id="nav" aria-label="Hoofdmenu">
-<a href="${h}#diensten">Diensten</a><a href="${h}#werkwijze">Werkwijze</a><a href="${h}#over">Over ons</a><a href="/zakelijk/">Zakelijk</a><a href="/kennisbank/">Kennisbank</a><a href="${h}#faq">Vragen</a>${tel ? `<a class="navtel" href="${tel.href}">${esc(tel.label)}</a>` : ""}<a class="btn" href="${off}">Offerte aanvragen</a>
+<a href="${h}#diensten">Diensten</a><a href="${h}#werkwijze">Werkwijze</a><a href="/over/">Over ons</a>${projecten.length ? `<a href="/projecten/">Projecten</a>` : ""}<a href="/zakelijk/">Zakelijk</a><a href="/kennisbank/">Kennisbank</a><a href="${h}#faq">Vragen</a>${tel ? `<a class="navtel" href="${tel.href}">${esc(tel.label)}</a>` : ""}<a class="btn" href="${off}">Offerte aanvragen</a>
 </nav></div></header>`;
 }
 
@@ -135,7 +137,7 @@ ${tel ? `<li><span class="ic">${ico("phone")}</span><a href="${tel.href}">${esc(
 <ul class="checks">${punten.map(x => `<li>${x}</li>`).join("")}</ul>
 ${wa && !st && !zk ? `<div class="cta"><a class="btn ghost" href="https://wa.me/${intl}?text=${encodeURIComponent("Goedendag, hierbij foto's van mijn meterkast voor een offerte.")}">Stuur foto's via WhatsApp</a></div>` : ""}</div>
 <form id="f" novalidate${zk ? ' data-zakelijk="1"' : ""}>
-<div class="hp" aria-hidden="true"><label>Laat dit veld leeg<input name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
+<div class="hp" aria-hidden="true"><input name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
 <div class="row"${zk ? " hidden" : ""}><label id="typewrap">Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>
 <label>Onderwerp<select id="dienst">${opts.map(o => `<option>${o}</option>`).join("")}</select></label></div>
 <label id="bedr" hidden>Bedrijfsnaam<input id="bedrijf" autocomplete="organization"><span class="err" id="e-bedr" role="alert"></span></label>
@@ -160,7 +162,7 @@ function footer(p) {
   return `<div class="mbar">${tel ? `<a href="${tel.href}">Bel</a>` : ""}${wa ? `<a href="${wa}">WhatsApp</a>` : ""}${tel ? "" : `<a href="mailto:${esc(cfg.email)}">E-mail</a>`}<a class="btn" href="${p.stage ? "#offerte" : off}">${p.stage ? "Aanmelden" : "Offerte"}</a></div>
 <footer><div class="wrap">
 <div class="fgrid">
-<div><a class="flogo" href="/" aria-label="${esc(cfg.handelsnaam)}"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>${esc(cfg.handelsnaam)} is een elektrotechnisch installatiebedrijf voor particulieren en bedrijven. Elektricien in ${stedenOmg(3)}.</p></div>
+<div><a class="flogo" href="/" aria-label="${esc(cfg.handelsnaam)}"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>${esc(cfg.handelsnaam)} verzorgt elektrotechnische installaties voor particulieren en levert capaciteit in onderaanneming. Particulier: ${stedenOmg(3)}. Zakelijk: landelijk op projectbasis.</p></div>
 <div><h2 class="fh">Diensten</h2><ul><li><a href="/meterkast/">Meterkast / verdeelinrichting</a></li><li><a href="/laadpaal/">Laadpaal</a></li><li><a href="/overige-elektrotechniek/">Elektra en storingen</a></li><li><a href="/thuisbatterij/">Thuisbatterij</a></li><li><a href="/zakelijk/">Zakelijke inhuur</a></li></ul></div>
 <div><h2 class="fh">Informatie</h2><ul><li><a href="${h}#werkwijze">Werkwijze</a></li><li><a href="${h}#werkgebied">Werkgebied</a></li><li><a href="${h}#faq">Veelgestelde vragen</a></li><li><a href="/kennisbank/">Kennisbank</a></li>${cfg.erkendLeerbedrijf ? `<li><a href="/stage/">Stage</a></li>` : ""}<li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
 <div><h2 class="fh">Contact</h2><ul><li>${mail}</li>${tel ? `<li><a href="${tel.href}">Bel ${esc(tel.label)}</a></li>` : ""}${wa ? `<li><a href="${wa}">WhatsApp</a></li>` : ""}<li><a href="${off}">Offerte aanvragen</a></li>${cfg.vestigingsplaats ? `<li>${esc(cfg.adres ? cfg.adres + ", " : "")}${esc(cfg.vestigingsplaats)}</li>` : ""}${cfg.kvk ? `<li>KvK ${esc(cfg.kvk)}</li>` : ""}${cfg.btw ? `<li>Btw ${esc(cfg.btw)}</li>` : ""}</ul></div>
