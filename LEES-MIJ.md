@@ -15,8 +15,12 @@ Een leeg veld in `site.config.json` betekent dat het onderdeel niet op de site v
 - `telefoon` is leeg: op verzoek van de eigenaar staat er geen telefoonnummer op de site, alleen het e-mailadres. Vul het veld in en de belknop, WhatsApp en de mobiele belbalk verschijnen weer.
 - `kvk` is leeg: het KvK-nummer staat niet op de site, omdat zoekmachines het koppelen aan het vestigingsadres in het Handelsregister. Het nummer hoort wel op offertes en facturen.
 
+## Verbeterplan
+Het actuele verbeterplan met de besluiten van de eigenaar staat in `VERBETERPLAN.md` (niet gepubliceerd).
+
 ## Nog open
 - `startTermijn`: antwoord op de vraag "Hoe snel kunnen jullie starten?"; de vraag verschijnt pas als dit is ingevuld.
+- `googleProfiel` en `profielen`: links naar het Google Bedrijfsprofiel en bijv. LinkedIn; verschijnen op /over/ en in de structured data.
 - `partner`: naam van het merk en `tonen: true` zodra de leverancier akkoord is.
 - Projectfoto's en reviews: zie `content/LEES-MIJ.md`.
 - `eigenaar`, `portret`, `vestigingsplaats`, `btw`, `reactietijd`, `garantieArbeid`.
