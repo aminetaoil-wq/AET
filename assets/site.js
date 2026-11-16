@@ -10,16 +10,36 @@ d.addEventListener("visibilitychange",go);go()})();
 // Contactgegevens en formulieradres komen uit site.config.json (via tools/build.js), niet uit dit bestand.
 var B=document.body,ENDPOINT=B.getAttribute("data-endpoint")||"",EMAIL=B.getAttribute("data-email")||"";
 var $=function(i){return document.getElementById(i)};
-var mb=$("menu"),n=$("nav");
-if(mb&&n){mb.onclick=function(){var o=n.classList.toggle("open");mb.setAttribute("aria-expanded",o)};
-n.addEventListener("click",function(e){if(e.target.tagName==="A"){n.classList.remove("open");mb.setAttribute("aria-expanded",false)}})}
+var mb=$("menu"),n=$("nav"),dds=[].slice.call(document.querySelectorAll(".ddb"));
+function dicht(x){dds.forEach(function(b){if(b!==x){b.setAttribute("aria-expanded","false");b.parentNode.classList.remove("open")}})}
+dds.forEach(function(b){b.onclick=function(){var o=b.getAttribute("aria-expanded")!=="true";dicht(b);b.setAttribute("aria-expanded",o);b.parentNode.classList.toggle("open",o)}});
+document.addEventListener("keydown",function(e){if(e.key!=="Escape")return;var b=dds.filter(function(x){return x.getAttribute("aria-expanded")==="true"})[0];
+ if(b){dicht();b.focus()}else if(n&&n.classList.contains("open")){n.classList.remove("open");mb.setAttribute("aria-expanded",false);mb.focus()}});
+document.addEventListener("click",function(e){if(!e.target.closest||!e.target.closest(".dd"))dicht()});
+if(n)n.addEventListener("focusout",function(e){var d=e.target.closest(".dd");if(d&&!d.contains(e.relatedTarget)&&matchMedia("(min-width:1260px)").matches)dicht()});
+if(mb&&n){mb.onclick=function(){var o=n.classList.toggle("open");mb.setAttribute("aria-expanded",o);if(!o)dicht()};
+n.addEventListener("click",function(e){if(e.target.tagName==="A"){n.classList.remove("open");mb.setAttribute("aria-expanded",false);dicht()}})}
+// Terugbelverzoek (alleen op /contact/)
+var tb=$("tb");if(tb)tb.addEventListener("submit",function(e){e.preventDefault();
+ var v=function(i){return $(i).value.trim()},nm=v("tbnaam"),tl=v("tbtel"),ok=true,first=null;
+ ["e-tbnaam","e-tbtel","tbok","tbfail"].forEach(function(i){$(i).textContent=""});
+ if(tb.elements["_gotcha"].value)return;
+ if(!nm){$("e-tbnaam").textContent="Vul uw naam in.";ok=false;first=$("tbnaam")}
+ if(!/^[+0-9 ()-]{10,}$/.test(tl)){$("e-tbtel").textContent="Vul een geldig telefoonnummer in.";ok=false;first=first||$("tbtel")}
+ if(!ok){first.focus();return}
+ var o={_subject:"Terugbelverzoek",naam:nm,telefoon:tl,voorkeurstijd:v("tbtijd"),onderwerp:v("tbwaar")};
+ if(ENDPOINT){var b=tb.querySelector("button[type=submit]");b.disabled=true;
+  fetch(ENDPOINT,{method:"POST",headers:{"Accept":"application/json","Content-Type":"application/json"},body:JSON.stringify(o)}).then(function(r){if(r.ok)location.href="/bedankt/";else throw 0}).catch(function(){b.disabled=false;$("tbfail").textContent="Het versturen is niet gelukt. Probeer het opnieuw of stuur een e-mail naar "+EMAIL+"."});
+ }else{$("tbok").textContent="Uw e-mailprogramma opent nu. Druk daar op verzenden om uw terugbelverzoek te versturen.";
+  location.href="mailto:"+EMAIL+"?subject="+encodeURIComponent("Terugbelverzoek")+"&body="+encodeURIComponent("Naam: "+nm+"\nTelefoon: "+tl+"\nVoorkeurstijd: "+o.voorkeurstijd+"\nWaar gaat het over: "+o.onderwerp)}
+});
 var f=$("f");if(!f)return;
 var ZK=!!f.getAttribute("data-zakelijk"),q=new URLSearchParams(location.search).get("dienst"),pre=B.getAttribute("data-dienst")||q;
-if(pre)$("dienst").value=pre;
+if(pre&&[].some.call($("dienst").options,function(o){return o.value===pre}))$("dienst").value=pre;
 if(B.getAttribute("data-type"))$("type").value=B.getAttribute("data-type");
 // Velden volgen het gekozen onderwerp: alleen vragen wat voor die dienst nodig is.
 var auto=0;
-function sync(){var d=$("dienst").value,st=d==="Stage",a=/^(Meterkast|Laadpaal|Thuisbatterij)/.test(d),z=/^(Laadpaal|Thuisbatterij)/.test(d);
+function sync(){var sel=$("dienst"),op=sel.options[sel.selectedIndex]||{},d=sel.value,st=d==="Stage",a=!!(op.getAttribute&&op.getAttribute("data-a")),z=!!(op.getAttribute&&op.getAttribute("data-z"));
  $("l-aansl").hidden=!a;$("l-zon").hidden=!z;$("inst").hidden=!a&&!z;$("typewrap").hidden=st;
  if(d==="Zakelijke inhuur"){if($("type").value!=="Bedrijf"){$("type").value="Bedrijf";auto=1}}else if(auto){$("type").value="Particulier";auto=0}
  $("bedr").hidden=st||$("type").value!=="Bedrijf"}
@@ -46,7 +66,7 @@ f.addEventListener("submit",function(e){
  if(ZK)rows.push(["Type werkzaamheden",v("zwerk")],["Projectlocatie",v("zloc")],["Periode en inzet",v("zper")]);else rows.push(["Postcode",v("pc")]);
  if(vis("inst")&&vis("l-aansl"))rows.push(["Aansluiting",v("aansl")]);
  if(vis("inst")&&vis("l-zon"))rows.push(["Zonnepanelen",v("zon")]);
- var msg=v("msg"),subj=st?"Stage-aanmelding":ZK?"Zakelijke aanvraag":"Offerteaanvraag "+d;
+ var msg=v("msg"),subj=st?"Stage-aanmelding":ZK?"Zakelijke aanvraag":"Aanvraag afspraak/offerte: "+d;
  if(ENDPOINT){
   var b=f.querySelector("button[type=submit]"),lbl=b.textContent;b.disabled=true;b.textContent="Bezig met versturen…";
   var fail=function(){b.disabled=false;b.textContent=lbl;$("fail").textContent="Het versturen is niet gelukt. Probeer het opnieuw of stuur een e-mail naar "+EMAIL+"."};

@@ -2,6 +2,7 @@ exclude:
   - LEES-MIJ.md
   - README.md
   - VERBETERPLAN.md
+  - RONDE3.md
   - site.config.json
   - src
   - tools
