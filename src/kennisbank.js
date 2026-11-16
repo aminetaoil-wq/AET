@@ -10,7 +10,8 @@ module.exports = function (c) {
   const D = {
     meterkast: { href: "/meterkast/", label: "Meterkast laten vervangen of uitbreiden" },
     laadpaal: { href: "/laadpaal/", label: "Laadpaal laten installeren" },
-    overige: { href: "/overige-elektrotechniek/", label: "Storing laten verhelpen" },
+    groepenkast: { href: "/meterkast/groepenkast-vervangen/", label: "Groepenkast laten vervangen" },
+    inductie: { href: "/elektra/inductiekookplaat/", label: "Inductiekookplaat laten aansluiten" },
     thuisbatterij: { href: "/thuisbatterij/", label: "Thuisbatterij laten installeren" }
   };
   const datum = "2026-11-13";
@@ -117,8 +118,8 @@ module.exports = function (c) {
       desc: "De aardlekschakelaar blijft uitvallen. Met dit stappenplan vindt u veilig welke groep of welk apparaat de oorzaak is, en wanneer u een elektricien belt.",
       lead: "Blijft de aardlekschakelaar uitvallen, dan lekt er ergens stroom weg. Meestal komt dat door een defect apparaat of door vocht. Met het stappenplan hieronder vindt u veilig uit welke groep en welk apparaat de oorzaak is. U hoeft daarvoor niets open te maken.",
       kort: ["De oorzaak is meestal een defect apparaat of vocht.", "Met vijf stappen vindt u zelf de groep en het apparaat.", "Valt hij ook uit met alle groepen uit, dan is een elektricien nodig."],
-      dienst: D.overige,
-      zin: "Vindt u de oorzaak niet, of zit de fout in de installatie? Beschrijf wat er gebeurt en sinds wanneer.",
+      dienst: D.groepenkast, geenStoring: true,
+      zin: "Valt de aardlekschakelaar steeds uit door een verouderde of overvolle groepenkast? Dan kunt u de kast laten vervangen.",
       verwant: ["wat-zit-er-in-mijn-meterkast", "inductie-koken-aparte-groep"],
       secties: [
         ["watdoet", "Wat doet een aardlekschakelaar?", `<p>Een aardlekschakelaar vergelijkt de stroom die uw woning in gaat met de stroom die terugkomt. Is er verschil, dan lekt er stroom weg, bijvoorbeeld via een defect apparaat of via een persoon. De schakelaar zet de stroom dan binnen een fractie van een seconde uit.</p>`],
@@ -147,7 +148,7 @@ module.exports = function (c) {
       desc: "Van gas naar inductie? In bijna alle gevallen is een eigen kookgroep nodig. Zo ziet u of die er al is en wat er anders moet gebeuren.",
       lead: "Ja, in bijna alle gevallen. Een inductiekookplaat vraagt meer vermogen dan een gewone groep kan leveren en krijgt daarom een eigen kookgroep in de meterkast. Heeft u die al, dan hoeft er vaak weinig te gebeuren.",
       kort: ["Een inductiekookplaat hoort op een eigen kookgroep, niet op een gewone groep.", "Een groot stopcontact met vijf gaten achter het fornuis wijst op een kookgroep.", "Is de kast vol, dan moet die eerst worden uitgebreid."],
-      dienst: D.meterkast,
+      dienst: D.inductie, dienst2: D.meterkast,
       zin: "Stapt u over op inductie? Stuur een foto van uw meterkast en het type kookplaat mee.",
       verwant: ["1-fase-of-3-fase", "wat-zit-er-in-mijn-meterkast"],
       secties: [

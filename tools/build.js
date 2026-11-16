@@ -58,6 +58,11 @@ const ctx = { cfg, esc, tel, wa, mail, reviews, projecten, stedenTekst, stedenOm
   reactie: cfg.reactietijd ? `Wij reageren ${esc(cfg.reactietijd)}.` : "Wij nemen daarna contact met u op.",
   fotoRoute: wa ? `Foto's van uw meterkast stuurt u via <a href="${wa}">WhatsApp</a> of per e-mail.` : "Foto's van uw meterkast stuurt u per e-mail."
 };
+ctx.partner = cfg.partner.tonen && cfg.partner.naam
+  ? `<p>Wij leveren en installeren batterijen van ${esc(cfg.partner.naam)}. Heeft u zelf al een batterij gekocht? Laat het ons weten bij uw aanvraag.</p>`
+  : `<p>Heeft u al een batterij gekocht of een model op het oog? Geef dan het merk en type door bij uw aanvraag. Wij beoordelen of uw installatie er geschikt voor is en sluiten de batterij aan volgens de voorschriften van de fabrikant.</p>`;
+ctx.dd = require(path.join(root, "src/diensten.js"))(ctx, { naam: esc(cfg.handelsnaam), stedenOmg, partner: ctx.partner });
+const { groepen, diensten } = ctx.dd;
 const pages = require(path.join(root, "src/pages.js"))(ctx);
 const homeDesc = pages[0].desc;
 
@@ -65,7 +70,7 @@ const business = () => {
   const b = { "@type": "Electrician", "@id": base + "/#bedrijf", name: cfg.handelsnaam, url: base + "/", description: homeDesc,
     logo: base + "/assets/logo.jpg", image: base + "/assets/og.png", email: cfg.email,
     areaServed: [{ "@type": "AdministrativeArea", name: "Provincie Utrecht" }].concat(cfg.steden.map(c => ({ "@type": "City", name: c }))),
-    knowsAbout: ["Meterkast en groepenkast vervangen", "Verdeelinrichtingen", "Laadpalen en laadinfrastructuur", "Thuisbatterijen en energieopslag", "NEN 1010", "NEN 3140", "Storingen in elektrische installaties"] };
+    knowsAbout: diensten.map(d => d.service).concat(["Verdeelinrichtingen", "Utiliteitsbouw", "NEN 1010", "NEN 3140"]) };
   if (tel) b.telephone = "+" + intl;
   if (cfg.btw) b.vatID = cfg.btw;
   const sameAs = [cfg.googleProfiel].concat(cfg.profielen || []).filter(Boolean);
@@ -77,9 +82,8 @@ function head(p, url) {
   const graph = [business()];
   if (p.service) graph.push({ "@type": "Service", name: p.service, description: p.desc, url, provider: { "@id": base + "/#bedrijf" },
     areaServed: cfg.steden.map(c => ({ "@type": "City", name: c })) });
-  if (p.path) graph.push({ "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: base + "/" }]
-    .concat(p.kb ? [{ "@type": "ListItem", position: 2, name: "Kennisbank", item: base + "/kennisbank/" }] : [])
-    .concat([{ "@type": "ListItem", position: p.kb ? 3 : 2, name: p.crumb || p.title.split(" | ")[0], item: url }]) });
+  if (p.path) { const trail = (p.trail || (p.kb ? [["Kennisbank", "/kennisbank/"]] : [])).concat([[p.crumb || p.title.split(" | ")[0], "/" + p.path]]);
+    graph.push({ "@type": "BreadcrumbList", itemListElement: [["Home", "/"]].concat(trail).map(([n, u], i) => ({ "@type": "ListItem", position: i + 1, name: n, item: base + u })) }); }
   if (p.article) graph.push({ "@type": "Article", headline: p.article.h1, description: p.desc, datePublished: p.article.datum, dateModified: p.article.datum,
     inLanguage: "nl", mainEntityOfPage: url, image: base + "/assets/og.png",
     author: { "@type": "Organization", "@id": base + "/#bedrijf", name: cfg.handelsnaam }, publisher: { "@id": base + "/#bedrijf" } });
@@ -107,23 +111,27 @@ ${p.noindex ? "" : `<script type="application/ld+json">${JSON.stringify({ "@cont
 }
 
 function header(p) {
-  const h = p.path || p.file ? "/" : "";
-  const off = p.form && !p.stage ? "#offerte" : "/#offerte";
+  const afs = p.path === "contact/" ? "#offerte" : "/contact/";
+  const groep = g => `<div class="dd"><button type="button" class="ddb" aria-expanded="false" aria-controls="dd-${g.key}">${esc(g.label)}<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+<ul class="ddm" id="dd-${g.key}">${g.overzicht ? `<li><a href="${g.url}">Alles over ${esc(g.label.toLowerCase())}</a></li>` : ""}${g.items.map(d => `<li><a href="${d.url}">${esc(d.menu)}</a></li>`).join("")}${g.key === "elektra" ? `<li><a href="/zakelijk/#utiliteitsbouw">Utiliteitsbouw</a></li>` : ""}</ul></div>`;
   return `<a class="skip" href="#main">Naar de inhoud</a>
 <header><div class="wrap bar">
 <a class="logo" href="/" aria-label="${esc(cfg.handelsnaam)}, naar de homepage">${logoSvg}</a>
 <button class="menu" id="menu" aria-expanded="false" aria-controls="nav">Menu</button>
 <nav id="nav" aria-label="Hoofdmenu">
-<a href="${h}#diensten">Diensten</a><a href="${h}#werkwijze">Werkwijze</a><a href="/over/">Over ons</a>${projecten.length ? `<a href="/projecten/">Projecten</a>` : ""}<a href="/zakelijk/">Zakelijk</a><a href="/kennisbank/">Kennisbank</a><a href="${h}#faq">Vragen</a>${tel ? `<a class="navtel" href="${tel.href}">${esc(tel.label)}</a>` : ""}<a class="btn" href="${off}">Offerte aanvragen</a>
+<a href="/keurmerk/">Keurmerk</a>
+${groepen.map(groep).join("\n")}
+${projecten.length ? `<a href="/projecten/">Projecten</a>` : ""}<a href="/zakelijk/">Zakelijk</a><a href="/kennisbank/">Kennisbank</a><a href="/contact/">Contact</a><a class="btn" href="${afs}">Maak een afspraak</a>
 </nav></div></header>`;
 }
 
 function form(p) {
-  const opts = ["Meterkast / verdeelinrichting", "Laadpaal", "Overige elektrotechniek", "Thuisbatterij", "Zakelijke inhuur"].concat(cfg.erkendLeerbedrijf ? ["Stage"] : []);
+  const opts = groepen.map(g => `<optgroup label="${esc(g.label)}">${g.items.map(d => `<option${d.a ? ' data-a="1"' : ""}${d.z ? ' data-z="1"' : ""}>${esc(d.formOptie)}</option>`).join("")}</optgroup>`).join("")
+    + `<optgroup label="Overig"><option>Elektra aanleggen of renovatie, overig</option><option>Zakelijke inhuur</option>${cfg.erkendLeerbedrijf ? "<option>Stage</option>" : ""}</optgroup>`;
   const st = !!p.stage, zk = !!p.zakelijk, U = st ? "Je" : "Uw", up = !!cfg.formulierEndpoint;
   const kop = st ? ["Stage", "Meld je aan voor een stage", "Vertel kort welke opleiding je volgt en wanneer je stage wilt lopen. Wij reageren op je aanmelding."]
     : zk ? ["Zakelijke aanvraag", "Leg uw project of opdracht voor", "Beschrijf de werkzaamheden, de locatie en de gewenste periode. U ontvangt een reactie met beschikbaarheid en tarief."]
-    : ["Offerte", "Vraag vrijblijvend een offerte aan", "Vertel in een paar zinnen wat u wilt laten doen. Wij beoordelen uw aanvraag en sturen u een offerte met de werkzaamheden, de materialen en een vaste prijs."];
+    : ["Afspraak maken", "Maak een afspraak of vraag een offerte aan", "Vertel in een paar zinnen wat u wilt laten doen. Wij nemen contact met u op voor een afspraak of sturen u een vrijblijvende offerte met de werkzaamheden, de materialen en een vaste prijs."];
   const punten = st ? ["Noem je opleiding, niveau en leerjaar", "Geef aan of je BOL of BBL volgt", "Vermeld de periode en het aantal dagen per week", "Je cv stuur je mee per e-mail"]
     : zk ? ["Inzet per klus of per project", "Zelfstandige uitvoering volgens afspraak", "Oplevering met meet- en opleverdocumentatie", up ? "Tekeningen en projectdocumentatie voegt u toe als bijlage" : "Tekeningen en projectdocumentatie stuurt u per e-mail"]
     : ["Vrijblijvend: u zit nergens aan vast", "U weet de prijs voordat u beslist", "Offerte met een vaste scope en een vaste prijs", up ? "Foto's van uw meterkast voegt u toe aan het formulier" : ctx.fotoRoute];
@@ -139,7 +147,7 @@ ${wa && !st && !zk ? `<div class="cta"><a class="btn ghost" href="https://wa.me/
 <form id="f" novalidate${zk ? ' data-zakelijk="1"' : ""}>
 <div class="hp" aria-hidden="true"><input name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
 <div class="row"${zk ? " hidden" : ""}><label id="typewrap">Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>
-<label>Onderwerp<select id="dienst">${opts.map(o => `<option>${o}</option>`).join("")}</select></label></div>
+<label>Onderwerp<select id="dienst">${opts}</select></label></div>
 <label id="bedr" hidden>Bedrijfsnaam<input id="bedrijf" autocomplete="organization"><span class="err" id="e-bedr" role="alert"></span></label>
 <label>${zk ? "Contactpersoon" : U + " naam"}<input id="naam" autocomplete="name" required><span class="err" id="e-naam" role="alert"></span></label>
 <div class="row"><label>${U} e-mailadres<input id="mail" type="email" autocomplete="email"></label><label>${U} telefoonnummer<input id="tel2" type="tel" autocomplete="tel"></label></div>
@@ -148,7 +156,7 @@ ${zk ? `<label>Type werkzaamheden<select id="zwerk"><option>Groepenkasten en ver
 <div class="row"><label>Projectlocatie<input id="zloc" autocomplete="address-level2" placeholder="Plaats of regio"></label><label>Gewenste periode en inzet<input id="zper" placeholder="Bijv. week 3-6, drie dagen per week"></label></div>` : ""}
 <label id="l-pc"${zk ? " hidden" : ""}>${U} postcode<input id="pc" autocomplete="postal-code" placeholder="1234 AB"></label>
 <div class="row" id="inst"><label id="l-aansl">Uw aansluiting<select id="aansl"><option>Weet ik niet</option><option>1-fase</option><option>3-fase</option></select></label><label id="l-zon">Heeft u zonnepanelen?<select id="zon"><option>Nee</option><option>Ja</option></select></label></div>
-<label>${zk ? "Technische toelichting" : "Toelichting"}<textarea id="msg" rows="4" placeholder="${st ? "Bijvoorbeeld: je opleiding en leerjaar, BOL of BBL, de periode en waarom je bij ons stage wilt lopen." : zk ? "Bijvoorbeeld: aantallen, type installatie, wie het materiaal levert en bijzonderheden op locatie." : "Bijvoorbeeld: wat u wilt laten aansluiten, welke auto u heeft of wat er niet werkt."}"></textarea></label>
+<label>${zk ? "Technische toelichting" : "Toelichting"}<textarea id="msg" rows="4" placeholder="${st ? "Bijvoorbeeld: je opleiding en leerjaar, BOL of BBL, de periode en waarom je bij ons stage wilt lopen." : zk ? "Bijvoorbeeld: aantallen, type installatie, wie het materiaal levert en bijzonderheden op locatie." : "Bijvoorbeeld: wat u wilt laten aanleggen of aansluiten, welke auto u heeft of wanneer het u uitkomt."}"></textarea></label>
 ${up && !st ? `<label>${zk ? "Bijlagen" : "Foto's"} (optioneel, maximaal 3 bestanden van 10 MB)<input id="files" type="file" multiple accept="image/jpeg,image/png,image/heic,.heic,.pdf"><span class="err" id="e-files" role="alert"></span></label>` : ""}
 <button class="btn" type="submit">${st ? "Aanmelding versturen" : zk ? "Zakelijke aanvraag versturen" : "Aanvraag versturen"}</button>
 <p class="small">${st ? "Wij gebruiken je gegevens alleen om op je aanmelding te reageren. Meer lees je in de" : "Wij gebruiken uw gegevens alleen om op uw aanvraag te reageren. Meer leest u in de"} <a href="/privacyverklaring/">privacyverklaring</a>.</p>
@@ -157,15 +165,14 @@ ${up && !st ? `<label>${zk ? "Bijlagen" : "Foto's"} (optioneel, maximaal 3 besta
 }
 
 function footer(p) {
-  const h = p.path || p.file ? "/" : "";
-  const off = p.form && !p.stage ? "#offerte" : "/#offerte";
-  return `<div class="mbar">${tel ? `<a href="${tel.href}">Bel</a>` : ""}${wa ? `<a href="${wa}">WhatsApp</a>` : ""}${tel ? "" : `<a href="mailto:${esc(cfg.email)}">E-mail</a>`}<a class="btn" href="${p.stage ? "#offerte" : off}">${p.stage ? "Aanmelden" : "Offerte"}</a></div>
+  const afs = p.form && !p.stage ? "#offerte" : "/contact/#offerte";
+  return `<div class="mbar"><a href="/contact/#terugbellen">Bel mij terug</a><a href="mailto:${esc(cfg.email)}">E-mail</a><a class="btn" href="${p.stage ? "#offerte" : afs}">${p.stage ? "Aanmelden" : "Afspraak"}</a></div>
 <footer><div class="wrap">
 <div class="fgrid">
 <div><a class="flogo" href="/" aria-label="${esc(cfg.handelsnaam)}"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>${esc(cfg.handelsnaam)} verzorgt elektrotechnische installaties voor particulieren en levert capaciteit in onderaanneming. Particulier: ${stedenOmg(3)}. Zakelijk: landelijk op projectbasis.</p></div>
-<div><h2 class="fh">Diensten</h2><ul><li><a href="/meterkast/">Meterkast / verdeelinrichting</a></li><li><a href="/laadpaal/">Laadpaal</a></li><li><a href="/overige-elektrotechniek/">Elektra en storingen</a></li><li><a href="/thuisbatterij/">Thuisbatterij</a></li><li><a href="/zakelijk/">Zakelijke inhuur</a></li></ul></div>
-<div><h2 class="fh">Informatie</h2><ul><li><a href="${h}#werkwijze">Werkwijze</a></li><li><a href="${h}#werkgebied">Werkgebied</a></li><li><a href="${h}#faq">Veelgestelde vragen</a></li><li><a href="/kennisbank/">Kennisbank</a></li>${cfg.erkendLeerbedrijf ? `<li><a href="/stage/">Stage</a></li>` : ""}<li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
-<div><h2 class="fh">Contact</h2><ul><li>${mail}</li>${tel ? `<li><a href="${tel.href}">Bel ${esc(tel.label)}</a></li>` : ""}${wa ? `<li><a href="${wa}">WhatsApp</a></li>` : ""}<li><a href="${off}">Offerte aanvragen</a></li>${cfg.vestigingsplaats ? `<li>${esc(cfg.adres ? cfg.adres + ", " : "")}${esc(cfg.vestigingsplaats)}</li>` : ""}${cfg.kvk ? `<li>KvK ${esc(cfg.kvk)}</li>` : ""}${cfg.btw ? `<li>Btw ${esc(cfg.btw)}</li>` : ""}</ul></div>
+<div><h2 class="fh">Diensten</h2><ul>${groepen.filter(g => g.overzicht).map(g => `<li><a href="${g.url}">${esc(g.label)}</a></li>`).join("")}<li><a href="/laadpaal/">Laadpaal installatie</a></li><li><a href="/thuisbatterij/">Thuisbatterij-installatie</a></li><li><a href="/zakelijk/">Zakelijk en utiliteitsbouw</a></li><li><a href="/keurmerk/">Keurmerk en normen</a></li></ul></div>
+<div><h2 class="fh">Informatie</h2><ul><li><a href="/over/">Over ons</a></li><li><a href="/#werkwijze">Werkwijze</a></li><li><a href="/#faq">Veelgestelde vragen</a></li><li><a href="/kennisbank/">Kennisbank</a></li>${cfg.erkendLeerbedrijf ? `<li><a href="/stage/">Stage</a></li>` : ""}<li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
+<div><h2 class="fh">Contact</h2><ul><li>${mail}</li><li><a href="/contact/#terugbellen">Bel mij terug</a></li><li><a href="/contact/">Maak een afspraak</a></li><li><a href="/#werkgebied">Werkgebied</a></li></ul></div>
 </div>
 <div class="legal"><span>© <span id="y">${new Date().getFullYear()}</span> ${esc(cfg.handelsnaam)}</span><a href="#top">Naar boven ↑</a></div>
 </div></footer>
@@ -188,6 +195,17 @@ for (const p of pages) {
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, html);
   if (!p.noindex) urls.push(url);
+}
+// GitHub Pages kent geen 301: oude adressen krijgen een doorverwijspagina (niet in de sitemap).
+const redirects = { "overige-elektrotechniek/": "/elektra/renovatie/" };
+for (const [van, naar] of Object.entries(redirects)) {
+  const out = path.join(root, van, "index.html");
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  fs.writeFileSync(out, `<!DOCTYPE html>
+<html lang="nl"><head><meta charset="utf-8"><title>Deze pagina is verplaatst</title>
+<meta http-equiv="refresh" content="0; url=${naar}"><link rel="canonical" href="${base}${naar}"><meta name="robots" content="noindex,follow">
+</head><body><p>Deze pagina is verplaatst naar <a href="${naar}">${base}${naar}</a>.</p></body></html>
+`);
 }
 fs.writeFileSync(path.join(root, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

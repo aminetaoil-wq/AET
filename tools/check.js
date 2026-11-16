@@ -1,5 +1,6 @@
 const fs=require("fs"),path=require("path");const root=process.argv[2];
-const pages=["index.html","404.html",...fs.readdirSync(root).filter(d=>fs.existsSync(path.join(root,d,"index.html"))).map(d=>d+"/index.html")];
+const walk=d=>fs.readdirSync(path.join(root,d),{withFileTypes:true}).filter(e=>e.isDirectory()&&!/^(\.|node_modules|assets|src|tools|content|docs)/.test(e.name)).flatMap(e=>{const s=d?d+"/"+e.name:e.name;return (fs.existsSync(path.join(root,s,"index.html"))?[s+"/index.html"]:[]).concat(walk(s))});
+const pages=["index.html","404.html",...walk("")];
 const ids={},html={};for(const p of pages){html[p]=fs.readFileSync(path.join(root,p),"utf8");ids[p]=new Set([...html[p].matchAll(/\sid="([^"]+)"/g)].map(m=>m[1]))}
 let bad=0,n=0;
 for(const p of pages){const h=html[p];
