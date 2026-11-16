@@ -147,7 +147,7 @@ ${wa && !st && !zk ? `<div class="cta"><a class="btn ghost" href="https://wa.me/
 <form id="f" novalidate${zk ? ' data-zakelijk="1"' : ""}>
 <div class="hp" aria-hidden="true"><input name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
 <div class="row"${zk ? " hidden" : ""}><label id="typewrap">Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>
-<label>Onderwerp<select id="dienst">${opts}</select></label></div>
+<label>Onderwerp<select id="dienst">${!p.dienst && !st && !zk ? '<option value="">Maak een keuze</option>' : ""}${opts}</select><span class="err" id="e-dienst" role="alert"></span></label></div>
 <label id="bedr" hidden>Bedrijfsnaam<input id="bedrijf" autocomplete="organization"><span class="err" id="e-bedr" role="alert"></span></label>
 <label>${zk ? "Contactpersoon" : U + " naam"}<input id="naam" autocomplete="name" required><span class="err" id="e-naam" role="alert"></span></label>
 <div class="row"><label>${U} e-mailadres<input id="mail" type="email" autocomplete="email"></label><label>${U} telefoonnummer<input id="tel2" type="tel" autocomplete="tel"></label></div>

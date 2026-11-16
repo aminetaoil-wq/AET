@@ -48,9 +48,10 @@ document.addEventListener("click",function(e){var a=e.target.closest&&e.target.c
 f.addEventListener("submit",function(e){
  e.preventDefault();
  var v=function(i){var el=$(i);return el?el.value.trim():""},ok=true,naam=v("naam"),mail=v("mail"),tel=v("tel2"),bedr=v("bedrijf"),d=$("dienst").value,st=d==="Stage",fi=$("files"),fl=fi?fi.files:[];
- ["e-naam","e-contact","e-bedr","e-files","ok","fail"].forEach(function(i){if($(i))$(i).textContent=""});
+ ["e-dienst","e-naam","e-contact","e-bedr","e-files","ok","fail"].forEach(function(i){if($(i))$(i).textContent=""});
  if(f.elements["_gotcha"]&&f.elements["_gotcha"].value)return;
  var first=null,err=function(id,msg,el){$(id).textContent=msg;ok=false;first=first||el};
+ if(!d)err("e-dienst","Kies een onderwerp.",$("dienst"));
  if(ZK&&!bedr)err("e-bedr","Vul uw bedrijfsnaam in.",$("bedrijf"));
  if(!naam)err("e-naam","Vul uw naam in.",$("naam"));
  if(!mail&&!tel)err("e-contact","Vul uw e-mailadres of telefoonnummer in.",$("mail"));

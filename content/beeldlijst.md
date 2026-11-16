@@ -1,7 +1,7 @@
 # Beeldlijst (Ronde 3, fase 2)
 
-Status: **wacht op keuze eigenaar.** Er staat nog geen enkele foto live.
-Bron: alleen Unsplash (Pexels is vanuit de bouwomgeving niet bereikbaar). Licentie per gekozen beeld vastleggen in `content/beeldlicenties.md`.
+Status: **wacht op foto's van de eigenaar.** Er staat nog geen enkele foto live.
+Zoeken op Unsplash en Pexels lukt niet vanuit de bouwomgeving (beide sites weren geautomatiseerde toegang). De eigenaar kiest zelf via de zoeklinks hieronder en stuurt per plek de link van de fotopagina of het gedownloade bestand; eigen foto's mogen ook. Licentie per gekozen beeld vastleggen in `content/beeldlicenties.md`.
 
 Regels
 - Alleen sfeerbeeld. Nooit presenteren als eigen werk; alt-tekst beschrijft wat er te zien is, zonder "ons project" of "door ons geïnstalleerd".
@@ -22,4 +22,15 @@ Regels
 | /elektra/tuinverlichting/ | Tuinpad met verlichting in de avond | 16:9 |
 | /keurmerk/ | Meetinstrument op installatie (zonder merknaam in beeld) | 16:9 |
 
-Volgende stap: per plek drie kandidaten met link en voorbeeld in één overzicht voor de eigenaar.
+Zoeklinks (open in de browser, kies per plek één foto):
+
+- Hero / meterkast: https://unsplash.com/s/photos/electrician · https://unsplash.com/s/photos/fuse-box · https://unsplash.com/s/photos/circuit-breaker
+- Elektra aanleggen: https://unsplash.com/s/photos/electrical-wiring · https://unsplash.com/s/photos/renovation
+- Laadpaal: https://unsplash.com/s/photos/ev-charger · https://unsplash.com/s/photos/wallbox
+- Thuisbatterij: https://unsplash.com/s/photos/home-battery · https://unsplash.com/s/photos/solar-panels-house
+- Keuken / inductie: https://unsplash.com/s/photos/induction-cooktop · https://unsplash.com/s/photos/kitchen-renovation
+- Verlichting: https://unsplash.com/s/photos/recessed-lighting
+- Tuinverlichting: https://unsplash.com/s/photos/garden-lights
+- Keurmerk: https://unsplash.com/s/photos/multimeter
+
+Let op bij het kiezen: geen foto's met het label "Unsplash+" (betaald), geen Amerikaanse stopcontacten of schakelkasten, geen herkenbare gezichten of merklogo's.
