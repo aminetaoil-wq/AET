@@ -102,7 +102,9 @@ const business = () => {
     areaServed: [{ "@type": "AdministrativeArea", name: "Provincie Utrecht" }].concat(cfg.steden.map(c => ({ "@type": "City", name: c }))),
     knowsAbout: diensten.map(d => d.service).concat(["Verdeelinrichtingen", "Utiliteitsbouw", "NEN 1010", "NEN 3140"]) };
   if (tel) b.telephone = "+" + intl;
-  if (cfg.btw) b.vatID = cfg.btw;
+  // FIX.md stap 3: KvK als identifier, btw-id als taxID; geen adres
+  if (cfg.kvk) b.identifier = { "@type": "PropertyValue", propertyID: "KvK", value: cfg.kvk };
+  if (cfg.btw) b.taxID = cfg.btw;
   const sameAs = [cfg.googleProfiel].concat(cfg.profielen || []).filter(Boolean);
   if (sameAs.length) b.sameAs = sameAs;
   return b;
@@ -204,7 +206,7 @@ function footer(p) {
 <div><h2 class="fh">Informatie</h2><ul><li><a href="/over/">Over ons</a></li><li><a href="/#werkwijze">Werkwijze</a></li><li><a href="/#faq">Veelgestelde vragen</a></li><li><a href="/kennisbank/">Kennisbank</a></li>${cfg.erkendLeerbedrijf ? `<li><a href="/stage/">Stage</a></li>` : ""}<li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
 <div><h2 class="fh">Contact</h2><ul><li>${mail}</li><li><a href="/contact/#terugbellen">Bel mij terug</a></li><li><a href="/contact/">Maak een afspraak</a></li><li><a href="/#werkgebied">Werkgebied</a></li></ul></div>
 </div>
-<div class="legal"><span>© <span id="y">${new Date().getFullYear()}</span> ${esc(cfg.handelsnaam)}</span><a href="#top">Naar boven ↑</a></div>
+<div class="legal"><span>© <span id="y">${new Date().getFullYear()}</span> ${esc(cfg.handelsnaam)}${cfg.kvk ? ` · KvK ${esc(cfg.kvk)}` : ""}${cfg.btw ? ` · Btw ${esc(cfg.btw)}` : ""} · ${mail}</span><a href="#top">Naar boven ↑</a></div>
 </div></footer>
 <script src="/assets/site.js?v=${jsV}" defer></script>
 </body>

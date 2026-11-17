@@ -320,3 +320,4 @@ nav>a,.ddb{padding:14px 12px;font-size:17px;border-bottom:1px solid var(--line);
 /* ABB-huisstijl: vrije ruimte rondom gelijk aan de logohoogte */
 .merkrij li:has(img[alt="ABB"]){padding:8px 40px}
 @media(max-width:640px){.merkrij li:has(img[alt="ABB"]){padding:6px 28px}}
+.phead .lead a,.legal a{color:#fff}

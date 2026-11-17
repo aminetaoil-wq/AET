@@ -298,7 +298,7 @@ ${cfg.erkendLeerbedrijf ? `
   /* ---------- Zakelijk ---------- */
   const zakelijk = svc({ key: "zakelijk", crumb: "Zakelijk", knop: "Project bespreken",
     h1: "Onderaanneming elektrotechniek, per klus of per project",
-    lead: `Elektrotechnische ondersteuning wanneer u extra vakbekwame capaciteit nodig heeft. ${naam} verzorgt elektrotechnische installaties voor particulieren en levert capaciteit in onderaanneming. Wij werken voor installatiebedrijven, projectorganisaties en leveranciers van laadpalen, zonnestroomsystemen en thuisbatterijen: zelfstandig, volgens afspraak en met meet- en opleverdocumentatie.`,
+    lead: `Elektrotechnische ondersteuning wanneer u extra vakbekwame capaciteit nodig heeft. ${naam} verzorgt elektrotechnische installaties voor particulieren en levert capaciteit in onderaanneming. Wij werken voor installatiebedrijven, projectorganisaties en leveranciers van laadpalen, zonnestroomsystemen en thuisbatterijen: zelfstandig, volgens afspraak en met meet- en opleverdocumentatie. E-mail: ${mail}.`,
     kort: ["Elektromonteur inhuren per klus of per project", "Landelijk op projectbasis", "Zelfstandige uitvoering volgens afspraak", "Meetrapport bij oplevering"],
     body: `<h2>Wat u kunt inhuren</h2>
 <h3>Groepenkasten en verdeelinrichtingen</h3>
