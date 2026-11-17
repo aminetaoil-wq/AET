@@ -147,13 +147,13 @@ ${normen}` });
   const homeFaq = [
     ["Is mijn meterkast geschikt voor een laadpaal, inductiekookplaat of thuisbatterij?", `Dat hangt af van uw aansluiting (1-fase of 3-fase), de waarde van uw hoofdzekering en de vrije ruimte in uw groepenkast. Apparaten met een hoog vermogen krijgen elk een eigen groep. Stuurt u een foto van uw meterkast mee, dan ontvangt u een eerste inschatting. Meer op de pagina <a href="/meterkast/">meterkast</a>.`],
     ["Wat kost een elektricien?", `Dat verschilt per opdracht. De prijs bestaat uit materiaal, arbeid en eventuele reiskosten. Het aantal groepen of aansluitpunten, de lengte van de leidingen en aanpassingen aan uw meterkast bepalen het grootste deel. U ontvangt vooraf een vrijblijvende offerte met een vaste prijs.`],
+    ["Geeft u garantie?", `Ja. Op het uitgevoerde werk geeft ${naam} 12 maanden garantie na oplevering: gebreken die door de uitvoering komen, lossen wij kosteloos op. Op materiaal zoals groepenkasten, automaten, laadpalen en thuisbatterijen geldt de garantie van de fabrikant; wij regelen die voor u als er iets mis is. De volledige voorwaarden staan in onze <a href="/algemene-voorwaarden/">algemene voorwaarden</a>.`],
     ["Wat gebeurt er als er meerwerk nodig is?", `Komt er tijdens het werk iets onverwachts naar voren, dan bespreken wij dat eerst met u. Meerwerk voeren wij alleen uit na uw akkoord.`],
     ["Kan ik gebeld worden in plaats van zelf te bellen?", `Ja. Laat via een <a href="/contact/#terugbellen">terugbelverzoek</a> uw naam, telefoonnummer en voorkeurstijd achter, dan bellen wij u terug.`],
     ["In welk gebied zijn jullie actief?", `Voor particulieren in ${cfg.steden.map(esc).join(", ")} en omliggende plaatsen. Zakelijk: landelijk op projectbasis.`],
-    [`Welke kwalificaties heeft ${naam}?`, `Wij werken volgens NEN 1010, de norm voor elektrische installaties, en zijn NEN 3140 Vakbekwaam Persoon (VP); het certificaat is op aanvraag in te zien.${cfg.erkendLeerbedrijf ? " " + naam + " is daarnaast erkend leerbedrijf (SBB)." : ""} Meer op de pagina <a href="/keurmerk/">keurmerk en normen</a>.`],
+    [`Welke kwalificaties heeft ${naam}?`, `De werkzaamheden van ${naam} worden uitgevoerd door een gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon. Elke installatie wordt aangelegd volgens NEN 1010, de norm voor elektrische installaties in Nederland. Bij oplevering meten en testen wij alles door. Diploma's en certificaten zijn op aanvraag in te zien.`],
     ["Werken jullie ook als onderaannemer?", `Ja, voor installatiebedrijven en voor leveranciers van thuisbatterijen en laadpalen, per klus of per project. Zie <a href="/zakelijk/">Zakelijk</a>.`]
-  ].concat(cfg.startTermijn ? [["Hoe snel kunnen jullie starten?", esc(cfg.startTermijn)]] : [])
-   .concat(cfg.garantieArbeid ? [["Welke garantie krijg ik?", `Op ons installatiewerk krijgt u ${esc(cfg.garantieArbeid)} garantie. Voor materialen geldt de garantie van de fabrikant. De volledige regeling staat in de algemene voorwaarden, die u bij de offerte ontvangt.`]] : []);
+  ].concat(cfg.startTermijn ? [["Hoe snel kunnen jullie starten?", esc(cfg.startTermijn)]] : []);
 
   const reviewsBlok = reviews.length ? `<section id="reviews"><div class="wrap">
 <div class="shead"><span class="kicker">Ervaringen</span><h2>Wat klanten zeggen</h2></div>
@@ -453,7 +453,7 @@ ${kb.clusters.map(([key, titel]) => { const lijst = kb.artikelen.filter(a => a.c
 <ul class="checks"><li>U ontvangt de volledige voorwaarden als bijlage bij de offerte, dus vóórdat u een overeenkomst met ons sluit.</li><li>Wilt u ze eerder inzien? Stuur een e-mail naar ${mail}, dan sturen wij ze kosteloos toe.</li></ul>
 <h2>Bedenktijd voor particulieren</h2>
 <p>Sluit u als particulier een overeenkomst op afstand of bij u thuis, dan heeft u in veel gevallen 14 dagen bedenktijd. Bij een spoedreparatie op uw eigen verzoek geldt dit niet. De details staan in de voorwaarden en in de offerte.</p>
-${cfg.garantieArbeid ? `<h2>Garantie</h2><p>Op ons installatiewerk krijgt u ${esc(cfg.garantieArbeid)} garantie. Voor materialen geldt de garantie van de fabrikant.</p>\n` : ""}<h2>Bedrijfsgegevens</h2>
+${cfg.garantieArbeid ? `<h2>Garantie</h2><p>Op het uitgevoerde werk geeft ${naam} ${esc(cfg.garantieArbeid)} garantie na oplevering. Op materiaal geldt de garantie van de fabrikant of leverancier. De volledige regeling staat in artikel 9 van de algemene voorwaarden.</p>\n` : ""}<h2>Bedrijfsgegevens</h2>
 <ul class="checks"><li>${naam}, eenmanszaak${cfg.vestigingsplaats ? " in " + esc(cfg.vestigingsplaats) : ""}</li>${cfg.kvk ? `<li>KvK-nummer: ${esc(cfg.kvk)}</li>` : `<li>Ingeschreven in het Handelsregister; het KvK-nummer staat op uw offerte en factuur</li>`}${cfg.btw ? `<li>Btw-id: ${esc(cfg.btw)}</li>` : ""}<li>E-mail: ${mail}</li></ul>` });
 
   const kaal = (h1, lead, extra, knop) => `<div class="phead" id="top"><div class="wrap"><h1>${h1}</h1><p class="lead">${lead}</p>${extra ? `<p class="lead">${extra}</p>` : ""}<div class="cta"><a class="btn" href="/">${knop}</a></div></div></div>
