@@ -40,3 +40,14 @@ Zolang deze leeg zijn in `site.config.json`, staat er niets over op de site:
 # Logo's van merken en normen (RONDE3 3a)
 
 Bestanden horen in `assets/merken/` (`hager-logo.png`, `abb-logo.png`, `schneider-electric-logo.png`) en `assets/normen/` (`nen-logo-transparant.png`). PNG met transparante achtergrond of SVG. Zolang een bestand ontbreekt of `tonen` in `content/logos.json` op `false` staat, toont de site de naam als tekst (merk) of het eigen icoon (norm). Een logo verwijderen: `"tonen": false` en opnieuw bouwen.
+
+# Twee talen (Nederlands en Engels)
+
+De site bestaat in het Nederlands (`/`) en het Engels (`/en/`). Elke pagina heeft een tegenstuk; de taalknop rechtsboven gaat altijd naar dezelfde pagina in de andere taal.
+
+- Nederlandse teksten: `src/pages.js`, `src/diensten.js`, `src/kennisbank.js`.
+- Engelse teksten: `src/en/pages.js`, `src/en/diensten.js`, `src/en/kennisbank.js`. Zelfde opbouw en dezelfde `key`s.
+- Menu, formulier, footer en onderbalk: `src/i18n.js` (beide talen).
+- Een Engelse pagina noemt in `id` het Nederlandse pad. `node tools/build.js` stopt als een pagina geen tegenstuk heeft.
+- Wijzig je een tekst, pas dan beide talen aan. `node tools/check.js .` controleert de taalparen, de taalknop en Nederlandse resten op Engelse pagina's.
+- Engelstalige aanvragen komen met een Engelse onderwerpregel binnen ("Appointment/quote request", "Callback request", "Business enquiry", "Internship application").

@@ -24,7 +24,7 @@ dds.forEach(function(b){b.onclick=function(){var o=b.getAttribute("aria-expanded
 document.addEventListener("keydown",function(e){if(e.key!=="Escape")return;var b=dds.filter(function(x){return x.getAttribute("aria-expanded")==="true"})[0];
  if(b){dicht();b.focus()}else if(n&&n.classList.contains("open")){n.classList.remove("open");mb.setAttribute("aria-expanded",false);mb.focus()}});
 document.addEventListener("click",function(e){if(!e.target.closest||!e.target.closest(".dd"))dicht()});
-if(n)n.addEventListener("focusout",function(e){var d=e.target.closest(".dd");if(d&&!d.contains(e.relatedTarget)&&matchMedia("(min-width:1260px)").matches)dicht()});
+if(n)n.addEventListener("focusout",function(e){var d=e.target.closest(".dd");if(d&&!d.contains(e.relatedTarget)&&matchMedia("(min-width:1300px)").matches)dicht()});
 if(mb&&n){mb.onclick=function(){var o=n.classList.toggle("open");mb.setAttribute("aria-expanded",o);if(!o)dicht()};
 n.addEventListener("click",function(e){if(e.target.tagName==="A"){n.classList.remove("open");mb.setAttribute("aria-expanded",false);dicht()}})}
 // Terugbelverzoek (alleen op /contact/)

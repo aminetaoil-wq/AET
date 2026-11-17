@@ -180,7 +180,7 @@ ${p.noindex ? "" : `<script type="application/ld+json">${JSON.stringify({ "@cont
 function taalknop(p, Lg) {
   if (!L.en) return "";
   const other = Lg.lang === "nl" ? T.en : T.nl, href = paar[p.href] || other.pre;
-  return `<a class="lang" href="${href}" hreflang="${other.lang}" lang="${other.lang}" aria-label="${other.langAria}">${ico("globe")}<span>${other.lang.toUpperCase()}</span></a>`;
+  return `<a class="lang" href="${href}" hreflang="${other.lang}" lang="${other.lang}" aria-label="${other.lang.toUpperCase()}, ${other.langAria}">${ico("globe")}<span>${other.lang.toUpperCase()}</span></a>`;
 }
 
 function header(p, Lg) {
