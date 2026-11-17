@@ -151,7 +151,7 @@ ${normen}` });
     ["Wat gebeurt er als er meerwerk nodig is?", `Komt er tijdens het werk iets onverwachts naar voren, dan bespreken wij dat eerst met u. Meerwerk voeren wij alleen uit na uw akkoord.`],
     ["Kan ik gebeld worden in plaats van zelf te bellen?", `Ja. Laat via een <a href="/contact/#terugbellen">terugbelverzoek</a> uw naam, telefoonnummer en voorkeurstijd achter, dan bellen wij u terug.`],
     ["In welk gebied zijn jullie actief?", `Voor particulieren in ${cfg.steden.map(esc).join(", ")} en omliggende plaatsen. Zakelijk: landelijk op projectbasis.`],
-    [`Welke kwalificaties heeft ${naam}?`, `De werkzaamheden van ${naam} worden uitgevoerd door een gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon. Elke installatie wordt aangelegd volgens NEN 1010, de norm voor elektrische installaties in Nederland. Bij oplevering meten en testen wij alles door. Diploma's en certificaten zijn op aanvraag in te zien.`],
+    [`Welke kwalificaties heeft ${naam}?`, `De werkzaamheden van ${naam} worden uitgevoerd door een gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon. Elke installatie wordt aangelegd volgens NEN 1010, de norm voor elektrische installaties in Nederland. Bij oplevering meten en testen wij alles door.`],
     ["Werken jullie ook als onderaannemer?", `Ja, voor installatiebedrijven en voor leveranciers van thuisbatterijen en laadpalen, per klus of per project. Zie <a href="/zakelijk/">Zakelijk</a>.`]
   ].concat(cfg.startTermijn ? [["Hoe snel kunnen jullie starten?", esc(cfg.startTermijn)]] : []);
 
@@ -198,7 +198,7 @@ ${kern.map(t => `<li>${(t[3] && normLogo(t[3], 40)) || `<span class="ic">${ico(t
 <div class="shead"><span class="kicker">Keurmerk en normen</span><h2>Veilig werk volgens de geldende normen</h2>
 <p class="sub">Twee normen bepalen hoe wij werken: hoe een installatie moet worden aangelegd, en hoe je er veilig aan werkt.</p></div>
 <div class="grid two">
-<article class="card">${normLogo("NEN 3140", 64) || `<span class="ic">${ico("shield")}</span>`}<h3>NEN 3140</h3><p>De norm voor het veilig werken aan en het beheer van elektrische installaties. De werkzaamheden van ${naam} worden uitgevoerd door een gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon. Diploma's en certificaten zijn op aanvraag in te zien.</p></article>
+<article class="card">${normLogo("NEN 3140", 64) || `<span class="ic">${ico("shield")}</span>`}<h3>NEN 3140</h3><p>De norm voor het veilig werken aan en het beheer van elektrische installaties. De werkzaamheden van ${naam} worden uitgevoerd door een gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon.</p></article>
 <article class="card">${normLogo("NEN 1010", 64) || `<span class="ic">${ico("doc")}</span>`}<h3>NEN 1010</h3><p>De norm met de veiligheidseisen voor het ontwerpen en aanleggen van laagspanningsinstallaties, zoals de elektra in uw woning of bedrijfspand. Elke installatie wordt aangelegd volgens NEN 1010 en doorgemeten opgeleverd.</p></article>
 </div>
 <div class="cta"><a class="btn line" href="/keurmerk/">Meer lezen</a></div>
@@ -262,12 +262,9 @@ ${faq(homeFaq)}
 <h2>Wat u terugziet bij de oplevering</h2>
 <ul class="checks"><li>De installatie is doorgemeten en elke aardlekschakelaar is getest.</li><li>Een bijgewerkt groepenoverzicht in de meterkast.</li><li>Uitleg over het gebruik van wat er is aangelegd.</li></ul>
 
-<h2>Wat dit niet is</h2>
-<p>NEN 3140 en NEN 1010 zijn normen, geen keurmerk voor een bedrijf. NEN 3140 VP is een persoonlijke vakbekwaamheid, NEN 1010 is de norm waarnaar wij werken. Wij noemen ze zodat u weet waaraan ons werk moet voldoen.</p>
 ${cfg.erkendLeerbedrijf ? `
 <h2>Erkend leerbedrijf (SBB)</h2>
 <p>${naam} is door SBB erkend als leerbedrijf. Wij leiden studenten elektrotechniek op in de praktijk. <a href="/stage/">Meer over stage lopen</a>.</p>` : ""}
-<p>Diploma's en certificaten zijn op aanvraag in te zien.</p>
 <div class="cta"><a class="btn" href="/contact/">Maak een afspraak</a><a class="btn line" href="/contact/#terugbellen">Bel mij terug</a></div>` });
 
   /* ---------- Contact ---------- */
@@ -353,7 +350,6 @@ ${cfg.erkendLeerbedrijf ? `
 
 <h2>Kwalificaties</h2>
 <ul class="checks"><li>Gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon.</li><li>Werkt volgens NEN 1010.</li>${cfg.erkendLeerbedrijf ? `<li>Erkend leerbedrijf (SBB). Wij leiden studenten elektrotechniek op in de praktijk. <a href="/stage/">Meer over stage lopen</a>.</li>` : ""}</ul>
-<p>Diploma's en certificaten zijn op aanvraag in te zien.</p>
 
 <h2>Ervaring</h2>
 <p>Ervaring met verdeelinrichtingen, laadpaalinstallaties, thuisbatterijen, verlichting en schakelmateriaal.</p>
