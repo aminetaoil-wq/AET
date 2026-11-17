@@ -475,7 +475,7 @@ ${groepRelated}`;
     { path: "contact/", form: true, crumb: "Contact", body: contact,
       title: `Contact: afspraak of terugbelverzoek | ${H}`,
       desc: `Maak een afspraak, vraag een offerte aan of laat u terugbellen door ${H}. Particulier in Utrecht, Amersfoort en Amsterdam, zakelijk landelijk.` },
-    { path: "zakelijk/", form: true, zakelijk: true, dienst: "Zakelijke inhuur", type: "Bedrijf", service: "Elektromonteur inhuren als onderaannemer", crumb: "Zakelijk", body: zakelijk,
+    { path: "zakelijk/", form: true, zakelijk: true, dienst: "Zakelijke inhuur", type: "bedrijf", service: "Elektromonteur inhuren als onderaannemer", crumb: "Zakelijk", body: zakelijk,
       title: `Elektromonteur inhuren en utiliteitsbouw | ${H}`,
       desc: `Elektromonteur inhuren of elektra in de utiliteitsbouw? Onderaanneming voor installatiebedrijven en leveranciers, per klus of project, landelijk.` },
   ].concat(cfg.erkendLeerbedrijf ? [

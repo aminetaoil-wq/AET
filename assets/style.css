@@ -326,3 +326,8 @@ nav>a,.ddb{padding:14px 12px;font-size:17px;border-bottom:1px solid var(--line);
 .legal span a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 @media(min-width:1001px){.trust ul.k4{grid-template-columns:.85fr 1.45fr 1.1fr 1fr}}
 .legal span a{white-space:nowrap}
+/* Taalknop rechtsboven (NL/EN); op mobiel naast de knop Menu, buiten het uitklapmenu */
+.lang{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 12px;margin-left:12px;border:1px solid var(--line);border-radius:9px;color:var(--text);text-decoration:none;font-weight:700;font-size:14px;letter-spacing:.04em;flex:none}
+.lang:hover{background:var(--tint);border-color:var(--brand)}.lang .i{width:18px;height:18px;color:var(--brand)}
+@media(max-width:1259px){.bar>.logo{order:1}.bar>.lang{order:2;margin-left:auto}.bar>.menu{order:3;margin-left:10px}}
+@media(max-width:360px){.lang{padding:8px 9px}.lang .i{display:none}}
