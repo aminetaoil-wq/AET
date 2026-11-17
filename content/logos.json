@@ -1,14 +1,42 @@
 [
-  { "naam": "Hager", "type": "merk", "bestand": "assets/merken/hager-logo.png", "tonen": true,
-    "bron": "Hager, pagina Branding guidelines (bestand aan te leveren door eigenaar)", "datum": "" },
-  { "naam": "ABB", "type": "merk", "bestand": "assets/merken/abb-logo.png", "tonen": false,
-    "bron": "ABB, downloadpagina logo's / Media Bank (nog niet aangeleverd; eigenaar beslist logo of tekst)", "datum": "" },
-  { "naam": "Schneider Electric", "type": "merk", "bestand": "assets/merken/schneider-electric-logo.png", "tonen": true,
-    "bron": "Wikimedia Commons, Schneider_Electric_2007 (geen officiële bron; vervangen zodra officieel bestand beschikbaar)", "datum": "" },
-  { "naam": "NEN 3140", "type": "norm", "bestand": "assets/normen/nen-logo-transparant.png", "tonen": true,
-    "bijschrift": "NEN 3140 Vakbekwaam Persoon: opleiding behaald (ROVC, januari 2026)",
-    "bron": "Aangeleverd door eigenaar (nog niet in de repository)", "datum": "" },
-  { "naam": "NEN 1010", "type": "norm", "bestand": "assets/normen/nen-logo-transparant.png", "tonen": true,
-    "bijschrift": "NEN 1010: installaties volgens de norm",
-    "bron": "Aangeleverd door eigenaar (nog niet in de repository)", "datum": "" }
+  {
+    "naam": "Hager",
+    "type": "merk",
+    "bestand": "assets/merken/hager-logo.png",
+    "tonen": true,
+    "bron": "Aangeleverd door eigenaar (RONDE3 3a: Hager, pagina Branding guidelines); verkleind naar 80 px hoog",
+    "datum": "2026-11-17"
+  },
+  {
+    "naam": "ABB",
+    "type": "merk",
+    "bestand": "assets/merken/abb-logo.png",
+    "tonen": false,
+    "bron": "Nog geen bruikbaar bestand: aangeleverde versie (17-11) afgekeurd wegens watermerk cleanpng, geen transparantie en geen officiële bron. Officieel logo via de ABB-downloadpagina",
+    "datum": ""
+  },
+  {
+    "naam": "Schneider Electric",
+    "type": "merk",
+    "bestand": "assets/merken/schneider-electric-logo.png",
+    "tonen": true,
+    "bron": "Aangeleverd door eigenaar; herkomst Wikimedia Commons (Schneider_Electric_2007), geen officiële bron van Schneider; verkleind naar 80 px hoog",
+    "datum": "2026-11-17"
+  },
+  {
+    "naam": "NEN 3140",
+    "type": "norm",
+    "bestand": "assets/normen/nen-logo-transparant.png",
+    "tonen": true,
+    "bron": "Aangeleverd door eigenaar (184 x 111 px, transparant)",
+    "datum": "2026-11-17"
+  },
+  {
+    "naam": "NEN 1010",
+    "type": "norm",
+    "bestand": "assets/normen/nen-logo-transparant.png",
+    "tonen": true,
+    "bron": "Aangeleverd door eigenaar (184 x 111 px, transparant)",
+    "datum": "2026-11-17"
+  }
 ]

@@ -16,8 +16,8 @@ Stockfoto's zijn sfeerbeeld (RONDE3 regel 3.4): nooit als eigen werk tonen, niet
 
 | Naam | Type | Bestand | Aanwezig | Getoond | Bron | Datum |
 |---|---|---|---|---|---|---|
-| Hager | merk | assets/merken/hager-logo.png | nee | naam als tekst | Hager, pagina Branding guidelines (bestand aan te leveren door eigenaar) | - |
-| ABB | merk | assets/merken/abb-logo.png | nee | naam als tekst | ABB, downloadpagina logo's / Media Bank (nog niet aangeleverd; eigenaar beslist logo of tekst) | - |
-| Schneider Electric | merk | assets/merken/schneider-electric-logo.png | nee | naam als tekst | Wikimedia Commons, Schneider_Electric_2007 (geen officiële bron; vervangen zodra officieel bestand beschikbaar) | - |
-| NEN 3140 | norm | assets/normen/nen-logo-transparant.png | nee | icoon | Aangeleverd door eigenaar (nog niet in de repository) | - |
-| NEN 1010 | norm | assets/normen/nen-logo-transparant.png | nee | icoon | Aangeleverd door eigenaar (nog niet in de repository) | - |
+| Hager | merk | assets/merken/hager-logo.png | ja | logo | Aangeleverd door eigenaar (RONDE3 3a: Hager, pagina Branding guidelines); verkleind naar 80 px hoog | 2026-11-17 |
+| ABB | merk | assets/merken/abb-logo.png | nee | naam als tekst | Nog geen bruikbaar bestand: aangeleverde versie (17-11) afgekeurd wegens watermerk cleanpng, geen transparantie en geen officiële bron. Officieel logo via de ABB-downloadpagina | - |
+| Schneider Electric | merk | assets/merken/schneider-electric-logo.png | ja | logo | Aangeleverd door eigenaar; herkomst Wikimedia Commons (Schneider_Electric_2007), geen officiële bron van Schneider; verkleind naar 80 px hoog | 2026-11-17 |
+| NEN 3140 | norm | assets/normen/nen-logo-transparant.png | ja | logo | Aangeleverd door eigenaar (184 x 111 px, transparant) | 2026-11-17 |
+| NEN 1010 | norm | assets/normen/nen-logo-transparant.png | ja | logo | Aangeleverd door eigenaar (184 x 111 px, transparant) | 2026-11-17 |
