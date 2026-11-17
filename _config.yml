@@ -3,6 +3,7 @@ exclude:
   - README.md
   - VERBETERPLAN.md
   - RONDE3.md
+  - FIX.md
   - site.config.json
   - src
   - tools

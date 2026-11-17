@@ -18,6 +18,8 @@ for(const p of pages){const h=html[p];
 for(const p of pages){const h=html[p],zicht=h.replace(/<script[\s\S]*?<\/script>/g," ").replace(/<[^>]+>/g," ");
  for(const m of h.matchAll(/(?:srcset|imagesrcset)="([^"]+)"/g))for(const part of m[1].split(",")){const u=part.trim().split(/\s+/)[0];n++;if(!fs.existsSync(path.join(root,u.replace(/^\//,"")))){bad++;console.log("  KAPOT (srcset)",p,u)}}
  if(/gecertificeerd/i.test(zicht)){bad++;console.log("  VERBODEN WOORD 'gecertificeerd'",p)}
+ // FIX.md: het bedrijf is niet zelf VP; geen opleiders of jaartallen op de site
+ for(const w of [/wij zijn NEN 3140/i,/is NEN 3140 Vakbekwaam/i,/ROVC/,/opleiding behaald/i])if(w.test(zicht)){bad++;console.log("  VERBODEN FORMULERING",w,p)}
  const mb=(h.match(/<section class="merken"[\s\S]*?<\/section>/)||[""])[0].replace(/<[^>]+>/g," ");
  if(/partner|erkend|officieel|dealer|geautoriseerd|in samenwerking met|aanbevolen door/i.test(mb)){bad++;console.log("  MERKENBLOK suggereert relatie",p)}}
 const lic=JSON.parse(fs.readFileSync(path.join(root,"content/fotos.json"),"utf8")),lg=JSON.parse(fs.readFileSync(path.join(root,"content/logos.json"),"utf8"));

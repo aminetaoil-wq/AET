@@ -3,12 +3,12 @@
   "domein": "aet-solutions.nl",
   "eigenaar": "",
   "portret": "",
-  "kvk": "",
+  "kvk": "42153046",
   "btw": "",
   "vestigingsplaats": "",
   "adres": "",
   "telefoon": "",
-  "whatsapp": true,
+  "whatsapp": false,
   "email": "info@aet-solutions.nl",
   "regio": "Midden-Nederland",
   "steden": [
@@ -25,8 +25,7 @@
   "reactietijd": "",
   "startTermijn": "",
   "kwalificaties": [
-    "Gediplomeerd elektrotechnicus",
-    "NEN 3140 Vakbekwaam Persoon (VP)"
+    "Gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon"
   ],
   "vca": "",
   "verzekerd": false,
@@ -34,7 +33,7 @@
     "naam": "",
     "tonen": false
   },
-  "garantieArbeid": "",
+  "garantieArbeid": "12 maanden",
   "beschikbaarheidZakelijk": "",
   "eigenGereedschap": false,
   "vanafPrijs": {

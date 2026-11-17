@@ -48,7 +48,7 @@ ${o.geenRelated ? "" : groepRelated}`;
 <div class="wrap solo prose">
 ${o.body}
 </div>`;
-  const normen = `<p>Wij werken volgens NEN 1010, de norm voor elektrische installaties, en zijn NEN 3140 Vakbekwaam Persoon (VP); het certificaat is op aanvraag in te zien. <a href="/keurmerk/">Meer over onze normen en werkwijze</a>.</p>`;
+  const normen = `<p>Elke installatie wordt aangelegd volgens NEN 1010 en doorgemeten opgeleverd. De werkzaamheden worden uitgevoerd door een gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon. <a href="/keurmerk/">Meer over onze normen en werkwijze</a>.</p>`;
   // Merkenblok volgens RONDE3 3a: alleen "Wij werken met", geen relatie met het merk suggereren.
   const merkenBlok = `<section class="merken" aria-labelledby="merken-h"><div class="wrap">
 <h2 id="merken-h">Wij werken met</h2>
@@ -140,21 +140,20 @@ ${callout("<strong>Worden onderdelen warm, zijn ze verkleurd of ruikt u een bran
 ${normen}` });
 
   /* ---------- Homepage ---------- */
-  const kern = [["tag", "Vaste prijs vooraf", "Vrijblijvende offerte"], ["doc", "NEN 1010", "Wij werken volgens de norm", "NEN 1010"], ["shield", "NEN 3140 VP", "Certificaat op aanvraag", "NEN 3140"]]
-    .concat(cfg.erkendLeerbedrijf ? [["cap", "Erkend leerbedrijf", "Erkend door SBB"]] : [])
-    .concat([["gauge", "Doorgemeten opgeleverd", "Gemeten en getest"]])
+  // Kernwaardenbalk (FIX.md stap 1): vier feiten, geen dubbele subregels; SBB staat los hiervan.
+  const kern = [["tag", "Vaste prijs vooraf", ""], ["shield", "Gediplomeerd, ervaren NEN&nbsp;3140 Vakbekwaam Persoon", "", "NEN 3140"], ["doc", "Werkt volgens NEN&nbsp;1010", "", "NEN 1010"], ["gauge", "Doorgemeten opgeleverd", ""]]
     .concat(cfg.reactietijd ? [["clock", "Reactie " + esc(cfg.reactietijd), "Op elke aanvraag"]] : []);
 
   const homeFaq = [
     ["Is mijn meterkast geschikt voor een laadpaal, inductiekookplaat of thuisbatterij?", `Dat hangt af van uw aansluiting (1-fase of 3-fase), de waarde van uw hoofdzekering en de vrije ruimte in uw groepenkast. Apparaten met een hoog vermogen krijgen elk een eigen groep. Stuurt u een foto van uw meterkast mee, dan ontvangt u een eerste inschatting. Meer op de pagina <a href="/meterkast/">meterkast</a>.`],
     ["Wat kost een elektricien?", `Dat verschilt per opdracht. De prijs bestaat uit materiaal, arbeid en eventuele reiskosten. Het aantal groepen of aansluitpunten, de lengte van de leidingen en aanpassingen aan uw meterkast bepalen het grootste deel. U ontvangt vooraf een vrijblijvende offerte met een vaste prijs.`],
+    ["Geeft u garantie?", `Ja. Op het uitgevoerde werk geeft ${naam} 12 maanden garantie na oplevering: gebreken die door de uitvoering komen, lossen wij kosteloos op. Op materiaal zoals groepenkasten, automaten, laadpalen en thuisbatterijen geldt de garantie van de fabrikant; wij regelen die voor u als er iets mis is. De volledige voorwaarden staan in onze <a href="/algemene-voorwaarden/">algemene voorwaarden</a>.`],
     ["Wat gebeurt er als er meerwerk nodig is?", `Komt er tijdens het werk iets onverwachts naar voren, dan bespreken wij dat eerst met u. Meerwerk voeren wij alleen uit na uw akkoord.`],
     ["Kan ik gebeld worden in plaats van zelf te bellen?", `Ja. Laat via een <a href="/contact/#terugbellen">terugbelverzoek</a> uw naam, telefoonnummer en voorkeurstijd achter, dan bellen wij u terug.`],
     ["In welk gebied zijn jullie actief?", `Voor particulieren in ${cfg.steden.map(esc).join(", ")} en omliggende plaatsen. Zakelijk: landelijk op projectbasis.`],
-    [`Welke kwalificaties heeft ${naam}?`, `Wij werken volgens NEN 1010, de norm voor elektrische installaties, en zijn NEN 3140 Vakbekwaam Persoon (VP); het certificaat is op aanvraag in te zien.${cfg.erkendLeerbedrijf ? " " + naam + " is daarnaast erkend leerbedrijf (SBB)." : ""} Meer op de pagina <a href="/keurmerk/">keurmerk en normen</a>.`],
+    [`Welke kwalificaties heeft ${naam}?`, `De werkzaamheden van ${naam} worden uitgevoerd door een gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon. Elke installatie wordt aangelegd volgens NEN 1010, de norm voor elektrische installaties in Nederland. Bij oplevering meten en testen wij alles door. Diploma's en certificaten zijn op aanvraag in te zien.`],
     ["Werken jullie ook als onderaannemer?", `Ja, voor installatiebedrijven en voor leveranciers van thuisbatterijen en laadpalen, per klus of per project. Zie <a href="/zakelijk/">Zakelijk</a>.`]
-  ].concat(cfg.startTermijn ? [["Hoe snel kunnen jullie starten?", esc(cfg.startTermijn)]] : [])
-   .concat(cfg.garantieArbeid ? [["Welke garantie krijg ik?", `Op ons installatiewerk krijgt u ${esc(cfg.garantieArbeid)} garantie. Voor materialen geldt de garantie van de fabrikant. De volledige regeling staat in de algemene voorwaarden, die u bij de offerte ontvangt.`]] : []);
+  ].concat(cfg.startTermijn ? [["Hoe snel kunnen jullie starten?", esc(cfg.startTermijn)]] : []);
 
   const reviewsBlok = reviews.length ? `<section id="reviews"><div class="wrap">
 <div class="shead"><span class="kicker">Ervaringen</span><h2>Wat klanten zeggen</h2></div>
@@ -181,8 +180,8 @@ ${projecten.length > 3 ? `<div class="cta"><a class="btn line" href="/projecten/
 </div>
 </div></div>
 
-<div class="trust"><div class="wrap"><ul>
-${kern.map(t => `<li>${(t[3] && normLogo(t[3], 40)) || `<span class="ic">${ico(t[0])}</span>`}<span><b>${t[1]}</b><span>${t[2]}</span></span></li>`).join("\n")}
+<div class="trust"><div class="wrap"><ul class="k${kern.length}">
+${kern.map(t => `<li>${(t[3] && normLogo(t[3], 40)) || `<span class="ic">${ico(t[0])}</span>`}<span><b>${t[1]}</b>${t[2] ? `<span>${t[2]}</span>` : ""}</span></li>`).join("\n")}
 </ul></div></div>
 
 <section id="over"><div class="wrap two">
@@ -192,15 +191,15 @@ ${kern.map(t => `<li>${(t[3] && normLogo(t[3], 40)) || `<span class="ic">${ico(t
 <div class="cta"><a class="btn" href="/contact/#terugbellen">Bel mij terug</a><a class="btn line" href="/over/">Meer over ${naam}</a></div>
 </div>
 <div class="card"><h3>Waarom ${naam}</h3>
-<ul class="checks"><li>Gediplomeerd elektrotechnicus</li><li>Werkt volgens NEN 1010</li><li>NEN 3140 Vakbekwaam Persoon (VP), certificaat op aanvraag</li>${cfg.erkendLeerbedrijf ? `<li>Erkend leerbedrijf (SBB), <a href="/stage/">stage lopen</a></li>` : ""}<li>Meerwerk alleen na uw akkoord</li></ul></div>
+<ul class="checks"><li>Gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon</li><li>Werkt volgens NEN 1010</li>${cfg.erkendLeerbedrijf ? `<li>Erkend leerbedrijf (SBB), <a href="/stage/">stage lopen</a></li>` : ""}<li>Meerwerk alleen na uw akkoord</li></ul></div>
 </div></section>
 
 <section class="alt" id="keurmerk"><div class="wrap">
 <div class="shead"><span class="kicker">Keurmerk en normen</span><h2>Veilig werk volgens de geldende normen</h2>
 <p class="sub">Twee normen bepalen hoe wij werken: hoe een installatie moet worden aangelegd, en hoe je er veilig aan werkt.</p></div>
 <div class="grid two">
-<article class="card">${normLogo("NEN 3140", 64) || `<span class="ic">${ico("shield")}</span>`}<h3>NEN 3140</h3><p>De norm voor het veilig werken aan en het beheer van elektrische installaties. Als Vakbekwaam Persoon (VP) hebben wij de kennis om zelfstandig en veilig aan installaties te werken. Het certificaat is op aanvraag in te zien.</p></article>
-<article class="card">${normLogo("NEN 1010", 64) || `<span class="ic">${ico("doc")}</span>`}<h3>NEN 1010</h3><p>De norm met de veiligheidseisen voor het ontwerpen en aanleggen van laagspanningsinstallaties, zoals de elektra in uw woning of bedrijfspand. Wij werken volgens NEN 1010 en meten elke installatie door bij de oplevering.</p></article>
+<article class="card">${normLogo("NEN 3140", 64) || `<span class="ic">${ico("shield")}</span>`}<h3>NEN 3140</h3><p>De norm voor het veilig werken aan en het beheer van elektrische installaties. De werkzaamheden van ${naam} worden uitgevoerd door een gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon. Diploma's en certificaten zijn op aanvraag in te zien.</p></article>
+<article class="card">${normLogo("NEN 1010", 64) || `<span class="ic">${ico("doc")}</span>`}<h3>NEN 1010</h3><p>De norm met de veiligheidseisen voor het ontwerpen en aanleggen van laagspanningsinstallaties, zoals de elektra in uw woning of bedrijfspand. Elke installatie wordt aangelegd volgens NEN 1010 en doorgemeten opgeleverd.</p></article>
 </div>
 <div class="cta"><a class="btn line" href="/keurmerk/">Meer lezen</a></div>
 </div></section>
@@ -252,11 +251,13 @@ ${faq(homeFaq)}
     lead: `Een elektrische installatie moet veilig zijn, nu en over twintig jaar. Op deze pagina leest u welke normen ${naam} volgt, wat ze betekenen en wat u daarvan terugziet bij de oplevering.`,
     body: `<h2 class="metlogo">${normLogo("NEN 3140", 64)}<span>NEN 3140: veilig werken aan elektrische installaties</span></h2>
 <p>NEN 3140 is de norm voor de bedrijfsvoering van elektrische installaties: hoe je veilig aan een installatie werkt, hoe je hem beheert en wie welk werk mag doen. De norm onderscheidt onder meer de Vakbekwaam Persoon (VP): iemand met de opleiding, kennis en ervaring om zelfstandig en veilig aan elektrische installaties te werken.</p>
-<ul class="checks"><li>Wij zijn NEN 3140 Vakbekwaam Persoon (VP).</li><li>Het certificaat is op aanvraag in te zien. Stuur een e-mail naar ${mail}.</li><li>Wij werken spanningsloos waar dat kan, en beveiligen tegen onbedoeld herinschakelen.</li></ul>
+<p><strong>Wat dit voor u betekent:</strong> aan uw installatie werkt iemand die weet hoe dat veilig moet, voor u en voor uw woning of bedrijfspand.</p>
+<ul class="checks"><li>De werkzaamheden worden uitgevoerd door een gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon.</li><li>Wij werken spanningsloos waar dat kan, en beveiligen tegen onbedoeld herinschakelen.</li></ul>
 
 <h2 class="metlogo">${normLogo("NEN 1010", 64)}<span>NEN 1010: eisen aan de aanleg van een installatie</span></h2>
 <p>NEN 1010 bevat de veiligheidseisen voor het ontwerpen en aanleggen van laagspanningsinstallaties: de elektra in woningen, bedrijfspanden en utiliteitsgebouwen. De norm beschrijft onder meer hoe groepen worden beveiligd, welke aardlekbeveiliging nodig is, hoe kabels worden gedimensioneerd en welke eisen gelden in badkamers en buiten.</p>
-<ul class="checks"><li>Wij werken volgens NEN 1010, van groepenkast tot laatste stopcontact.</li><li>Kabeldikte en beveiliging kiezen wij op elkaar afgestemd.</li><li>Na de aanleg meten en testen wij de installatie.</li></ul>
+<p><strong>Wat dit voor u betekent:</strong> uw installatie voldoet aan de geldende veiligheidseisen, en dat is bij de oplevering gemeten.</p>
+<ul class="checks"><li>Elke installatie wordt aangelegd volgens NEN 1010 en doorgemeten opgeleverd, van groepenkast tot laatste stopcontact.</li><li>Kabeldikte en beveiliging kiezen wij op elkaar afgestemd.</li></ul>
 
 <h2>Wat u terugziet bij de oplevering</h2>
 <ul class="checks"><li>De installatie is doorgemeten en elke aardlekschakelaar is getest.</li><li>Een bijgewerkt groepenoverzicht in de meterkast.</li><li>Uitleg over het gebruik van wat er is aangelegd.</li></ul>
@@ -266,6 +267,7 @@ ${faq(homeFaq)}
 ${cfg.erkendLeerbedrijf ? `
 <h2>Erkend leerbedrijf (SBB)</h2>
 <p>${naam} is door SBB erkend als leerbedrijf. Wij leiden studenten elektrotechniek op in de praktijk. <a href="/stage/">Meer over stage lopen</a>.</p>` : ""}
+<p>Diploma's en certificaten zijn op aanvraag in te zien.</p>
 <div class="cta"><a class="btn" href="/contact/">Maak een afspraak</a><a class="btn line" href="/contact/#terugbellen">Bel mij terug</a></div>` });
 
   /* ---------- Contact ---------- */
@@ -296,7 +298,7 @@ ${cfg.erkendLeerbedrijf ? `
   /* ---------- Zakelijk ---------- */
   const zakelijk = svc({ key: "zakelijk", crumb: "Zakelijk", knop: "Project bespreken",
     h1: "Onderaanneming elektrotechniek, per klus of per project",
-    lead: `Elektrotechnische ondersteuning wanneer u extra vakbekwame capaciteit nodig heeft. ${naam} verzorgt elektrotechnische installaties voor particulieren en levert capaciteit in onderaanneming. Wij werken voor installatiebedrijven, projectorganisaties en leveranciers van laadpalen, zonnestroomsystemen en thuisbatterijen: zelfstandig, volgens afspraak en met meet- en opleverdocumentatie.`,
+    lead: `Elektrotechnische ondersteuning wanneer u extra vakbekwame capaciteit nodig heeft. ${naam} verzorgt elektrotechnische installaties voor particulieren en levert capaciteit in onderaanneming. Wij werken voor installatiebedrijven, projectorganisaties en leveranciers van laadpalen, zonnestroomsystemen en thuisbatterijen: zelfstandig, volgens afspraak en met meet- en opleverdocumentatie. E-mail: ${mail}.`,
     kort: ["Elektromonteur inhuren per klus of per project", "Landelijk op projectbasis", "Zelfstandige uitvoering volgens afspraak", "Meetrapport bij oplevering"],
     body: `<h2>Wat u kunt inhuren</h2>
 <h3>Groepenkasten en verdeelinrichtingen</h3>
@@ -333,7 +335,7 @@ ${cfg.erkendLeerbedrijf ? `
 <p>Landelijk op projectbasis. ${cfg.beschikbaarheidZakelijk ? "Beschikbaarheid: " + esc(cfg.beschikbaarheidZakelijk) + "." : "Beschikbaarheid op aanvraag per project."}${cfg.verzekerd ? " Verzekerd voor bedrijfsaansprakelijkheid." : ""}${cfg.eigenGereedschap ? " Wij werken met eigen gereedschap en eigen meetapparatuur." : ""}</p>
 
 <h2>Kwalificaties</h2>
-<ul class="checks"><li>NEN 3140 Vakbekwaam Persoon (VP), certificaat op aanvraag</li>${cfg.erkendLeerbedrijf ? "<li>Erkend leerbedrijf (SBB)</li>" : ""}<li>Werkzaamheden volgens NEN 1010</li></ul>
+<ul class="checks"><li>Gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon</li><li>Werkt volgens NEN 1010</li>${cfg.erkendLeerbedrijf ? "<li>Erkend leerbedrijf (SBB)</li>" : ""}</ul>
 
 <h2>Documenten op aanvraag</h2>
 <ul class="checks">${docs.map(d => `<li>${d}</li>`).join("")}</ul>
@@ -350,7 +352,8 @@ ${cfg.erkendLeerbedrijf ? `
 <ul class="checks"><li>Vooraf een offerte met een vaste scope en een vaste prijs.</li><li>Meerwerk alleen na overleg en uw akkoord.</li><li>Eén vast aanspreekpunt van aanvraag tot oplevering.</li><li>Werkzaamheden volgens NEN 1010.</li><li>Elke installatie wordt bij de oplevering doorgemeten en getest, met uitleg over het gebruik.</li></ul>
 
 <h2>Kwalificaties</h2>
-<ul class="checks"><li>Gediplomeerd elektrotechnicus.</li><li>NEN 3140 Vakbekwaam Persoon (VP), certificaat op aanvraag.</li>${cfg.erkendLeerbedrijf ? `<li>Erkend leerbedrijf (SBB). Wij leiden studenten elektrotechniek op in de praktijk. <a href="/stage/">Meer over stage lopen</a>.</li>` : ""}</ul>
+<ul class="checks"><li>Gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon.</li><li>Werkt volgens NEN 1010.</li>${cfg.erkendLeerbedrijf ? `<li>Erkend leerbedrijf (SBB). Wij leiden studenten elektrotechniek op in de praktijk. <a href="/stage/">Meer over stage lopen</a>.</li>` : ""}</ul>
+<p>Diploma's en certificaten zijn op aanvraag in te zien.</p>
 
 <h2>Ervaring</h2>
 <p>Ervaring met verdeelinrichtingen, laadpaalinstallaties, thuisbatterijen, verlichting en schakelmateriaal.</p>
@@ -450,7 +453,7 @@ ${kb.clusters.map(([key, titel]) => { const lijst = kb.artikelen.filter(a => a.c
 <ul class="checks"><li>U ontvangt de volledige voorwaarden als bijlage bij de offerte, dus vóórdat u een overeenkomst met ons sluit.</li><li>Wilt u ze eerder inzien? Stuur een e-mail naar ${mail}, dan sturen wij ze kosteloos toe.</li></ul>
 <h2>Bedenktijd voor particulieren</h2>
 <p>Sluit u als particulier een overeenkomst op afstand of bij u thuis, dan heeft u in veel gevallen 14 dagen bedenktijd. Bij een spoedreparatie op uw eigen verzoek geldt dit niet. De details staan in de voorwaarden en in de offerte.</p>
-${cfg.garantieArbeid ? `<h2>Garantie</h2><p>Op ons installatiewerk krijgt u ${esc(cfg.garantieArbeid)} garantie. Voor materialen geldt de garantie van de fabrikant.</p>\n` : ""}<h2>Bedrijfsgegevens</h2>
+${cfg.garantieArbeid ? `<h2>Garantie</h2><p>Op het uitgevoerde werk geeft ${naam} ${esc(cfg.garantieArbeid)} garantie na oplevering. Op materiaal geldt de garantie van de fabrikant of leverancier. De volledige regeling staat in artikel 9 van de algemene voorwaarden.</p>\n` : ""}<h2>Bedrijfsgegevens</h2>
 <ul class="checks"><li>${naam}, eenmanszaak${cfg.vestigingsplaats ? " in " + esc(cfg.vestigingsplaats) : ""}</li>${cfg.kvk ? `<li>KvK-nummer: ${esc(cfg.kvk)}</li>` : `<li>Ingeschreven in het Handelsregister; het KvK-nummer staat op uw offerte en factuur</li>`}${cfg.btw ? `<li>Btw-id: ${esc(cfg.btw)}</li>` : ""}<li>E-mail: ${mail}</li></ul>` });
 
   const kaal = (h1, lead, extra, knop) => `<div class="phead" id="top"><div class="wrap"><h1>${h1}</h1><p class="lead">${lead}</p>${extra ? `<p class="lead">${extra}</p>` : ""}<div class="cta"><a class="btn" href="/">${knop}</a></div></div></div>
@@ -472,7 +475,7 @@ ${groepRelated}`;
   ].concat(DL.map(dienstPagina)).concat([
     { path: "keurmerk/", crumb: "Keurmerk", body: keurmerk,
       title: `Keurmerk en normen: NEN 3140 en NEN 1010 | ${H}`,
-      desc: `${H} werkt volgens NEN 1010 en is NEN 3140 Vakbekwaam Persoon (VP). Wat dat betekent en wat u terugziet bij de oplevering.` },
+      desc: `Elke installatie volgens NEN 1010, uitgevoerd door een gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon. Wat dat voor u betekent.` },
     { path: "contact/", form: true, crumb: "Contact", body: contact,
       title: `Contact: afspraak of terugbelverzoek | ${H}`,
       desc: `Maak een afspraak, vraag een offerte aan of laat u terugbellen door ${H}. Particulier in Utrecht, Amersfoort en Amsterdam, zakelijk landelijk.` },
