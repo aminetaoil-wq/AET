@@ -9,9 +9,20 @@
     "licentie": "Unsplash License",
     "datum": "2026-11-17",
     "uitsneden": {
-      "hero": { "ar": "16:9", "fpx": 0.5, "fpy": 0.3, "fpz": 1 },
-      "kaart": { "ar": "3:2", "fpx": 0.55, "fpy": 0.3, "fpz": 1.35 }
-    }
+      "hero": {
+        "ar": "16:9",
+        "fpx": 0.5,
+        "fpy": 0.3,
+        "fpz": 1
+      },
+      "kaart": {
+        "ar": "3:2",
+        "fpx": 0.55,
+        "fpy": 0.3,
+        "fpz": 1.35
+      }
+    },
+    "alt_en": "Fuse box under construction with circuit breakers and blue neutral bars"
   },
   {
     "naam": "laadpaal-auto",
@@ -23,9 +34,20 @@
     "licentie": "Unsplash License",
     "datum": "2026-11-17",
     "uitsneden": {
-      "hero": { "ar": "16:9", "fpx": 0.5, "fpy": 0.5, "fpz": 1 },
-      "kaart": { "ar": "3:2", "fpx": 0.5, "fpy": 0.5, "fpz": 1.2 }
-    }
+      "hero": {
+        "ar": "16:9",
+        "fpx": 0.5,
+        "fpy": 0.5,
+        "fpz": 1
+      },
+      "kaart": {
+        "ar": "3:2",
+        "fpx": 0.5,
+        "fpy": 0.5,
+        "fpz": 1.2
+      }
+    },
+    "alt_en": "Charging plug being inserted into an electric car"
   },
   {
     "naam": "elektra-lasdoos",
@@ -37,8 +59,19 @@
     "licentie": "Unsplash License",
     "datum": "2026-11-17",
     "uitsneden": {
-      "hero": { "ar": "16:9", "fpx": 0.5, "fpy": 0.45, "fpz": 1 },
-      "kaart": { "ar": "3:2", "fpx": 0.45, "fpy": 0.5, "fpz": 1.2 }
-    }
+      "hero": {
+        "ar": "16:9",
+        "fpx": 0.5,
+        "fpy": 0.45,
+        "fpz": 1
+      },
+      "kaart": {
+        "ar": "3:2",
+        "fpx": 0.45,
+        "fpy": 0.5,
+        "fpz": 1.2
+      }
+    },
+    "alt_en": "Connectors and wiring in a junction box during electrical installation work"
   }
 ]

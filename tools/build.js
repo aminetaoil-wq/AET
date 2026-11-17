@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Bouwt alle pagina's uit site.config.json, src/pages.js en content/*.json.
+// Bouwt alle pagina's (Nederlands en Engels) uit site.config.json, src/i18n.js, src/*.js, src/en/*.js en content/*.json.
 // Gebruik: node tools/build.js   (geen installatie nodig)
 const fs = require("fs"), path = require("path");
 const root = path.join(__dirname, "..");
@@ -13,10 +13,7 @@ const base = "https://" + cfg.domein;
 const digits = (cfg.telefoon || "").replace(/\D/g, "");
 const intl = digits ? (digits.startsWith("0") ? "31" + digits.slice(1) : digits) : "";
 const tel = intl ? { href: "tel:+" + intl, label: cfg.telefoon } : null;
-const wa = intl && cfg.whatsapp ? "https://wa.me/" + intl + "?text=" + encodeURIComponent("Goedendag, ik heb een vraag over ") : "";
 const mail = `<a href="mailto:${esc(cfg.email)}">${esc(cfg.email)}</a>`;
-const stedenTekst = n => { const s = cfg.steden.slice(0, n); return s.slice(0, -1).join(", ") + " en " + s[s.length - 1]; };
-const stedenOmg = n => cfg.steden.slice(0, n).join(", ") + " en omgeving";
 
 // Logo als inline SVG, zodat de streep met CSS kan bewegen (zie .streep in style.css).
 const logoSvg = fs.readFileSync(path.join(root, "assets/logo.svg"), "utf8").replace(/\n/g, "").replace(' role="img" aria-label="AET Solutions"', ' width="113" height="52" aria-hidden="true" focusable="false"');
@@ -50,17 +47,17 @@ const ICONS = {
   phone: '<path d="M5 3h4l2 5-2.500 1.500a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/>',
   chat: '<path d="M4 5h16v11H9l-5 4z"/>',
   car: '<path d="M5 16l1.500-5.500A2 2 0 0 1 8.400 9h7.200a2 2 0 0 1 1.900 1.500L19 16"/><rect x="3" y="14" width="18" height="5" rx="1.500"/><path d="M7 19v2M17 19v2"/>',
-  truck: '<path d="M2 6h12v10H2zM14 10h4l4 3v3h-8z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/>'
+  truck: '<path d="M2 6h12v10H2zM14 10h4l4 3v3h-8z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.500 2.700 3.700 5.700 3.700 9s-1.200 6.300-3.700 9c-2.500-2.700-3.700-5.700-3.700-9S9.500 5.700 12 3z"/>'
 };
 const ico = n => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]}</svg>`;
 
-const ctx = { cfg, esc, tel, wa, mail, reviews, projecten, stedenTekst, stedenOmg, ico,
-  reactie: cfg.reactietijd ? `Wij reageren ${esc(cfg.reactietijd)}.` : "Wij nemen daarna contact met u op.",
-  fotoRoute: wa ? `Foto's van uw meterkast stuurt u via <a href="${wa}">WhatsApp</a> of per e-mail.` : "Foto's van uw meterkast stuurt u per e-mail."
-};
-ctx.partner = cfg.partner.tonen && cfg.partner.naam
-  ? `<p>Wij leveren en installeren batterijen van ${esc(cfg.partner.naam)}. Heeft u zelf al een batterij gekocht? Laat het ons weten bij uw aanvraag.</p>`
-  : `<p>Heeft u al een batterij gekocht of een model op het oog? Geef dan het merk en type door bij uw aanvraag. Wij beoordelen of uw installatie er geschikt voor is en sluiten de batterij aan volgens de voorschriften van de fabrikant.</p>`;
+/* ---------- Talen (src/i18n.js) ---------- */
+// Nederlands is de hoofdtaal (x-default). Elke Nederlandse pagina heeft een Engels tegenstuk; de build stopt als er een ontbreekt.
+const T = require(path.join(root, "src/i18n.js"))(cfg);
+const TALEN = ["nl"].concat(fs.existsSync(path.join(root, "src/en/pages.js")) ? ["en"] : []);
+let S = null; // taal die op dit moment wordt opgebouwd
+
 /* ---------- Foto's (content/fotos.json, bestanden via tools/fotos.js) ---------- */
 const fotos = {}; read("content/fotos.json").forEach(f => fotos[f.naam] = f);
 const BREED = { hero: [480, 960, 1600], kaart: [480, 960] };
@@ -68,8 +65,9 @@ const srcset = (naam, u, ext) => BREED[u].map(w => `/assets/img/${naam}-${u}-${w
 const SIZES = { hero: "(max-width:1000px) 100vw, 58vw", kaart: "(max-width:640px) 100vw, (max-width:1000px) 50vw, 360px" };
 function foto(naam, u, o = {}) {
   const f = fotos[naam]; if (!f || !f.uitsneden[u]) return "";
+  const alt = S && S.lang === "en" ? (f.alt_en || f.alt) : f.alt;
   const [a, b] = f.uitsneden[u].ar.split(":").map(Number), w = 960, h = Math.round(w * b / a), sz = o.sizes || SIZES[u];
-  return `<picture${o.cls ? ` class="${o.cls}"` : ""}><source type="image/avif" srcset="${srcset(naam, u, "avif")}" sizes="${sz}"><source type="image/webp" srcset="${srcset(naam, u, "webp")}" sizes="${sz}"><img src="/assets/img/${naam}-${u}-960.jpg" srcset="${srcset(naam, u, "jpg")}" sizes="${sz}" alt="${esc(f.alt)}" width="${w}" height="${h}" ${o.eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></picture>`;
+  return `<picture${o.cls ? ` class="${o.cls}"` : ""}><source type="image/avif" srcset="${srcset(naam, u, "avif")}" sizes="${sz}"><source type="image/webp" srcset="${srcset(naam, u, "webp")}" sizes="${sz}"><img src="/assets/img/${naam}-${u}-960.jpg" srcset="${srcset(naam, u, "jpg")}" sizes="${sz}" alt="${esc(alt)}" width="${w}" height="${h}" ${o.eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></picture>`;
 }
 const preload = naam => fotos[naam] ? `<link rel="preload" as="image" type="image/avif" imagesrcset="${srcset(naam, "hero", "avif")}" imagesizes="${SIZES.hero}" fetchpriority="high">
 ` : "";
@@ -90,17 +88,49 @@ function logo(naam, hoogte, tekstTerug = true) {
   return `<img class="logo-img" src="/${esc(l.bestand)}" alt="${esc(naam)}" height="${hoogte}" width="${Math.round(hoogte * w / h)}" loading="lazy" decoding="async">`;
 }
 
-ctx.foto = foto; ctx.logo = logo; ctx.logos = logos;
-ctx.dd = require(path.join(root, "src/diensten.js"))(ctx, { naam: esc(cfg.handelsnaam), stedenOmg, partner: ctx.partner });
-const { groepen, diensten } = ctx.dd;
-const pages = require(path.join(root, "src/pages.js"))(ctx);
-const homeDesc = pages[0].desc;
+/* ---------- Inhoud per taal ---------- */
+const L = {};
+for (const lang of TALEN) {
+  const t = T[lang];
+  S = { lang, t };
+  const sT = n => { const s = cfg.steden.slice(0, n); return s.slice(0, -1).join(", ") + t.en + s[s.length - 1]; };
+  const sO = n => cfg.steden.slice(0, n).join(", ") + t.omgeving;
+  const wa = intl && cfg.whatsapp ? "https://wa.me/" + intl + "?text=" + encodeURIComponent(t.waTekst) : "";
+  const c = { cfg, esc, tel, wa, mail, reviews, projecten, stedenTekst: sT, stedenOmg: sO, ico, foto, logo, logos, lang, t,
+    fotoRoute: t.fotoRoute(wa), nl: L.nl };
+  const naam = esc(cfg.handelsnaam);
+  c.partner = lang === "en"
+    ? (cfg.partner.tonen && cfg.partner.naam
+      ? `<p>We supply and install batteries from ${esc(cfg.partner.naam)}. Have you already bought a battery? Let us know in your request.</p>`
+      : `<p>Have you already bought a battery or have a model in mind? Give us the brand and type in your request. We check whether your installation is suitable and connect the battery according to the manufacturer's instructions.</p>`)
+    : (cfg.partner.tonen && cfg.partner.naam
+      ? `<p>Wij leveren en installeren batterijen van ${esc(cfg.partner.naam)}. Heeft u zelf al een batterij gekocht? Laat het ons weten bij uw aanvraag.</p>`
+      : `<p>Heeft u al een batterij gekocht of een model op het oog? Geef dan het merk en type door bij uw aanvraag. Wij beoordelen of uw installatie er geschikt voor is en sluiten de batterij aan volgens de voorschriften van de fabrikant.</p>`);
+  const dir = lang === "nl" ? "src" : "src/en";
+  c.dd = require(path.join(root, dir, "diensten.js"))(c, { naam, stedenOmg: sO, partner: c.partner });
+  const pages = require(path.join(root, dir, "pages.js"))(c);
+  // id koppelt de talen: voor Nederlandse pagina's het pad, Engelse pagina's geven het Nederlandse pad als id op.
+  pages.forEach(p => { if (lang === "nl") p.id = p.file || p.path; p.lang = lang; p.href = (p.file ? "/" + p.file : t.pre + (lang === "nl" ? p.path : p.path.replace(/^en\//, ""))); });
+  L[lang] = { lang, t, wa, c, dd: c.dd, groepen: c.dd.groepen, diensten: c.dd.diensten, pages, homeDesc: pages[0].desc };
+}
 
-const business = () => {
-  const b = { "@type": "Electrician", "@id": base + "/#bedrijf", name: cfg.handelsnaam, url: base + "/", description: homeDesc,
+// Koppeling NL <-> EN. Elke pagina moet een tegenstuk hebben (behalve 404 en noindex-hulppagina's met een eigen 'alt').
+const paar = {};
+if (L.en) {
+  const nlIds = new Map(L.nl.pages.map(p => [p.id, p])), enIds = new Map(L.en.pages.map(p => [p.id, p]));
+  const fout = [];
+  for (const p of L.nl.pages) { if (p.file === "404.html") continue; if (!enIds.has(p.id)) fout.push("Geen Engelse versie van " + p.id); }
+  for (const p of L.en.pages) if (!nlIds.has(p.id)) fout.push("Engelse pagina zonder Nederlands tegenstuk: " + p.id + " (" + p.path + ")");
+  if (fout.length) { console.error(fout.join("\n")); process.exit(1); }
+  for (const p of L.nl.pages) { const e = enIds.get(p.id); if (e) { paar[p.href] = e.href; paar[e.href] = p.href; } }
+}
+
+const business = Lg => {
+  const t = Lg.t;
+  const b = { "@type": "Electrician", "@id": base + "/#bedrijf", name: cfg.handelsnaam, url: base + t.pre, description: Lg.homeDesc,
     logo: base + "/assets/logo.jpg", image: base + "/assets/og.png", email: cfg.email,
-    areaServed: [{ "@type": "AdministrativeArea", name: "Provincie Utrecht" }].concat(cfg.steden.map(c => ({ "@type": "City", name: c }))),
-    knowsAbout: diensten.map(d => d.service).concat(["Verdeelinrichtingen", "Utiliteitsbouw", "NEN 1010", "NEN 3140"]) };
+    areaServed: [{ "@type": "AdministrativeArea", name: t.regio }].concat(cfg.steden.map(c => ({ "@type": "City", name: c }))),
+    knowsAbout: Lg.diensten.map(d => d.service).concat(Lg.lang === "en" ? ["Distribution boards", "Commercial buildings", "NEN 1010", "NEN 3140"] : ["Verdeelinrichtingen", "Utiliteitsbouw", "NEN 1010", "NEN 3140"]) };
   if (tel) b.telephone = "+" + intl;
   // FIX.md stap 3: KvK als identifier, btw-id als taxID; geen adres
   if (cfg.kvk) b.identifier = { "@type": "PropertyValue", propertyID: "KvK", value: cfg.kvk };
@@ -110,31 +140,35 @@ const business = () => {
   return b;
 };
 
-function head(p, url) {
-  const graph = [business()];
-  if (p.service) graph.push({ "@type": "Service", name: p.service, description: p.desc, url, provider: { "@id": base + "/#bedrijf" },
+function head(p, url, Lg) {
+  const t = Lg.t, graph = [business(Lg)];
+  if (p.service) graph.push({ "@type": "Service", name: p.service, description: p.desc, url, inLanguage: Lg.lang, provider: { "@id": base + "/#bedrijf" },
     areaServed: cfg.steden.map(c => ({ "@type": "City", name: c })) });
-  if (p.path) { const trail = (p.trail || (p.kb ? [["Kennisbank", "/kennisbank/"]] : [])).concat([[p.crumb || p.title.split(" | ")[0], "/" + p.path]]);
-    graph.push({ "@type": "BreadcrumbList", itemListElement: [["Home", "/"]].concat(trail).map(([n, u], i) => ({ "@type": "ListItem", position: i + 1, name: n, item: base + u })) }); }
+  if (p.path && p.path !== "en/") { const trail = (p.trail || (p.kb ? [[t.nav.kennisbank[0], t.nav.kennisbank[1]]] : [])).concat([[p.crumb || p.title.split(" | ")[0], p.href]]);
+    graph.push({ "@type": "BreadcrumbList", itemListElement: [[t.home, t.pre]].concat(trail).map(([n, u], i) => ({ "@type": "ListItem", position: i + 1, name: n, item: base + u })) }); }
   if (p.article) graph.push({ "@type": "Article", headline: p.article.h1, description: p.desc, datePublished: p.article.datum, dateModified: p.article.datum,
-    inLanguage: "nl", mainEntityOfPage: url, image: base + "/assets/og.png",
+    inLanguage: Lg.lang, mainEntityOfPage: url, image: base + "/assets/og.png",
     author: { "@type": "Organization", "@id": base + "/#bedrijf", name: cfg.handelsnaam }, publisher: { "@id": base + "/#bedrijf" } });
+  const alt = paar[p.href];
+  const hreflang = alt && !p.noindex ? (() => { const nlU = Lg.lang === "nl" ? p.href : alt, enU = Lg.lang === "en" ? p.href : alt;
+    return `<link rel="alternate" hreflang="nl" href="${base}${nlU}">\n<link rel="alternate" hreflang="en" href="${base}${enU}">\n<link rel="alternate" hreflang="x-default" href="${base}${nlU}">\n`; })() : "";
+  const other = Lg.lang === "nl" ? T.en : T.nl;
   return `<!DOCTYPE html>
-<html lang="nl">
+<html lang="${Lg.lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(p.title)}</title>
 <meta name="description" content="${esc(p.desc)}">
 <link rel="canonical" href="${url}">
-<meta name="robots" content="${p.noindex ? "noindex,follow" : "index,follow"}">
+${hreflang}<meta name="robots" content="${p.noindex ? "noindex,follow" : "index,follow"}">
 <meta name="theme-color" content="#0d2c47">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/assets/inter.woff2" as="font" type="font/woff2" crossorigin>
-${p.preload ? preload(p.preload) : ""}<meta property="og:type" content="website"><meta property="og:locale" content="nl_NL"><meta property="og:site_name" content="${esc(cfg.handelsnaam)}">
+${p.preload ? preload(p.preload) : ""}<meta property="og:type" content="website"><meta property="og:locale" content="${t.locale}">${alt ? `<meta property="og:locale:alternate" content="${other.locale}">` : ""}<meta property="og:site_name" content="${esc(cfg.handelsnaam)}">
 <meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.desc)}"><meta property="og:url" content="${url}">
 <meta property="og:image" content="${base}/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -142,71 +176,79 @@ ${p.preload ? preload(p.preload) : ""}<meta property="og:type" content="website"
 ${p.noindex ? "" : `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>\n`}</head>`;
 }
 
-function header(p) {
-  const afs = p.path === "contact/" ? "#offerte" : "/contact/";
-  const groep = g => `<div class="dd"><button type="button" class="ddb" aria-expanded="false" aria-controls="dd-${g.key}">${esc(g.label)}<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-<ul class="ddm" id="dd-${g.key}">${g.overzicht ? `<li><a href="${g.url}">Alles over ${esc(g.label.toLowerCase())}</a></li>` : ""}${g.items.map(d => `<li><a href="${d.url}">${esc(d.menu)}</a></li>`).join("")}${g.key === "elektra" ? `<li><a href="/zakelijk/#utiliteitsbouw">Utiliteitsbouw</a></li>` : ""}</ul></div>`;
-  return `<a class="skip" href="#main">Naar de inhoud</a>
-<header><div class="wrap bar">
-<a class="logo" href="/" aria-label="${esc(cfg.handelsnaam)}, naar de homepage">${logoSvg}</a>
-<button class="menu" id="menu" aria-expanded="false" aria-controls="nav">Menu</button>
-<nav id="nav" aria-label="Hoofdmenu">
-<a href="/keurmerk/">Keurmerk</a>
-${groepen.map(groep).join("\n")}
-${projecten.length ? `<a href="/projecten/">Projecten</a>` : ""}<a href="/zakelijk/">Zakelijk</a><a href="/kennisbank/">Kennisbank</a><a href="/contact/">Contact</a><a class="btn" href="${afs}">Maak een afspraak</a>
-</nav></div></header>`;
+// Taalknop: altijd naar het tegenstuk van deze pagina (404: naar de andere homepage).
+function taalknop(p, Lg) {
+  if (!L.en) return "";
+  const other = Lg.lang === "nl" ? T.en : T.nl, href = paar[p.href] || other.pre;
+  return `<a class="lang" href="${href}" hreflang="${other.lang}" lang="${other.lang}" aria-label="${other.lang.toUpperCase()}, ${other.langAria}">${ico("globe")}<span>${other.lang.toUpperCase()}</span></a>`;
 }
 
-function form(p) {
-  const opts = groepen.map(g => `<optgroup label="${esc(g.label)}">${g.items.map(d => `<option${d.a ? ' data-a="1"' : ""}${d.z ? ' data-z="1"' : ""}>${esc(d.formOptie)}</option>`).join("")}</optgroup>`).join("")
-    + `<optgroup label="Overig"><option>Elektra aanleggen of renovatie, overig</option><option>Zakelijke inhuur</option>${cfg.erkendLeerbedrijf ? "<option>Stage</option>" : ""}</optgroup>`;
-  const st = !!p.stage, zk = !!p.zakelijk, U = st ? "Je" : "Uw", up = !!cfg.formulierEndpoint;
-  const kop = st ? ["Stage", "Meld je aan voor een stage", "Vertel kort welke opleiding je volgt en wanneer je stage wilt lopen. Wij reageren op je aanmelding."]
-    : zk ? ["Zakelijke aanvraag", "Leg uw project of opdracht voor", "Beschrijf de werkzaamheden, de locatie en de gewenste periode. U ontvangt een reactie met beschikbaarheid en tarief."]
-    : ["Afspraak maken", "Maak een afspraak of vraag een offerte aan", "Vertel in een paar zinnen wat u wilt laten doen. Wij nemen contact met u op voor een afspraak of sturen u een vrijblijvende offerte met de werkzaamheden, de materialen en een vaste prijs."];
-  const punten = st ? ["Noem je opleiding, niveau en leerjaar", "Geef aan of je BOL of BBL volgt", "Vermeld de periode en het aantal dagen per week", "Je cv stuur je mee per e-mail"]
-    : zk ? ["Inzet per klus of per project", "Zelfstandige uitvoering volgens afspraak", "Oplevering met meet- en opleverdocumentatie", up ? "Tekeningen en projectdocumentatie voegt u toe als bijlage" : "Tekeningen en projectdocumentatie stuurt u per e-mail"]
-    : ["Vrijblijvend: u zit nergens aan vast", "U weet de prijs voordat u beslist", "Offerte met een vaste scope en een vaste prijs", up ? "Foto's van uw meterkast voegt u toe aan het formulier" : ctx.fotoRoute];
+function header(p, Lg) {
+  const t = Lg.t, n = t.nav;
+  const afs = p.href === t.contactUrl ? "#offerte" : t.contactUrl;
+  const groep = g => `<div class="dd"><button type="button" class="ddb" aria-expanded="false" aria-controls="dd-${g.key}">${esc(g.label)}<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+<ul class="ddm" id="dd-${g.key}">${g.overzicht ? `<li><a href="${g.url}">${esc(t.allesOver(g.label))}</a></li>` : ""}${g.items.map(d => `<li><a href="${d.url}">${esc(d.menu)}</a></li>`).join("")}${g.key === "elektra" ? `<li><a href="${t.utiliteit[1]}">${t.utiliteit[0]}</a></li>` : ""}</ul></div>`;
+  const a = x => `<a href="${x[1]}">${x[0]}</a>`;
+  return `<a class="skip" href="#main">${t.skip}</a>
+<header><div class="wrap bar">
+<a class="logo" href="${t.pre}" aria-label="${esc(cfg.handelsnaam)}, ${t.logoAria}">${logoSvg}</a>
+<button class="menu" id="menu" aria-expanded="false" aria-controls="nav">${t.menu}</button>
+<nav id="nav" aria-label="${t.navAria}">
+${a(n.keurmerk)}
+${Lg.groepen.map(groep).join("\n")}
+${projecten.length ? a(n.projecten) : ""}${a(n.zakelijk)}${a(n.kennisbank)}${a(n.contact)}<a class="btn" href="${afs}">${t.afspraak}</a>
+</nav>${taalknop(p, Lg)}</div></header>`;
+}
+
+function form(p, Lg) {
+  const t = Lg.t, F = t.form;
+  const opts = Lg.groepen.map(g => `<optgroup label="${esc(g.label)}">${g.items.map(d => `<option${d.a ? ' data-a="1"' : ""}${d.z ? ' data-z="1"' : ""}>${esc(d.formOptie)}</option>`).join("")}</optgroup>`).join("")
+    + `<optgroup label="${F.overig}"><option>${F.overigOptie}</option><option data-zk="1">${F.inhuur}</option>${cfg.erkendLeerbedrijf ? `<option data-st="1">${F.stage}</option>` : ""}</optgroup>`;
+  const st = !!p.stage, zk = !!p.zakelijk, up = !!cfg.formulierEndpoint, wa = Lg.wa;
+  const kop = st ? F.kop.st : zk ? F.kop.zk : F.kop.std;
+  const punten = st ? F.punten.st : zk ? F.punten.zk(up) : F.punten.std(up, Lg.c.fotoRoute);
   return `<section class="band" id="offerte"><div class="wrap two">
 <div><span class="eyebrow">${kop[0]}</span>
 <h2>${kop[1]}</h2>
-<p class="lead">${kop[2]}${cfg.reactietijd && !st ? ` Wij reageren ${esc(cfg.reactietijd)}.` : ""}</p>
+<p class="lead">${kop[2]}${cfg.reactietijd && !st ? F.reageren(esc(cfg.reactietijd)) : ""}</p>
 <ul class="contact-list">
 <li><span class="ic">${ico("mail")}</span>${mail}</li>
 ${tel ? `<li><span class="ic">${ico("phone")}</span><a href="${tel.href}">${esc(tel.label)}</a></li>\n` : ""}${wa ? `<li><span class="ic">${ico("chat")}</span><a href="${wa}">WhatsApp</a></li>\n` : ""}</ul>
 <ul class="checks">${punten.map(x => `<li>${x}</li>`).join("")}</ul>
-${wa && !st && !zk ? `<div class="cta"><a class="btn ghost" href="https://wa.me/${intl}?text=${encodeURIComponent("Goedendag, hierbij foto's van mijn meterkast voor een offerte.")}">Stuur foto's via WhatsApp</a></div>` : ""}</div>
+${wa && !st && !zk ? `<div class="cta"><a class="btn ghost" href="https://wa.me/${intl}?text=${encodeURIComponent(F.waFoto[0])}">${F.waFoto[1]}</a></div>` : ""}</div>
 <form id="f" novalidate${zk ? ' data-zakelijk="1"' : ""}>
 <div class="hp" aria-hidden="true"><input name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true"></div>
-<div class="row"${zk ? " hidden" : ""}><label id="typewrap">Ik ben<select id="type"><option>Particulier</option><option>Bedrijf</option></select></label>
-<label>Onderwerp<select id="dienst">${!p.dienst && !st && !zk ? '<option value="">Maak een keuze</option>' : ""}${opts}</select><span class="err" id="e-dienst" role="alert"></span></label></div>
-<label id="bedr" hidden>Bedrijfsnaam<input id="bedrijf" autocomplete="organization"><span class="err" id="e-bedr" role="alert"></span></label>
-<label>${zk ? "Contactpersoon" : U + " naam"}<input id="naam" autocomplete="name" required><span class="err" id="e-naam" role="alert"></span></label>
-<div class="row"><label>${U} e-mailadres<input id="mail" type="email" autocomplete="email"></label><label>${U} telefoonnummer<input id="tel2" type="tel" autocomplete="tel"></label></div>
+<div class="row"${zk ? " hidden" : ""}><label id="typewrap">${F.ikBen}<select id="type"><option value="particulier">${F.particulier}</option><option value="bedrijf">${F.bedrijf}</option></select></label>
+<label>${F.onderwerp}<select id="dienst">${!p.dienst && !st && !zk ? `<option value="">${F.kies}</option>` : ""}${opts}</select><span class="err" id="e-dienst" role="alert"></span></label></div>
+<label id="bedr" hidden>${F.bedrijfsnaam}<input id="bedrijf" autocomplete="organization"><span class="err" id="e-bedr" role="alert"></span></label>
+<label>${zk ? F.contactpersoon : F.naam(st)}<input id="naam" autocomplete="name" required><span class="err" id="e-naam" role="alert"></span></label>
+<div class="row"><label>${F.mail(st)}<input id="mail" type="email" autocomplete="email"></label><label>${F.tel(st)}<input id="tel2" type="tel" autocomplete="tel"></label></div>
 <span class="err" id="e-contact" role="alert"></span>
-${zk ? `<label>Type werkzaamheden<select id="zwerk"><option>Groepenkasten en verdeelinrichtingen</option><option>Laadpalen</option><option>Thuisbatterijen</option><option>Elektrotechnisch installatiewerk</option><option>Anders</option></select></label>
-<div class="row"><label>Projectlocatie<input id="zloc" autocomplete="address-level2" placeholder="Plaats of regio"></label><label>Gewenste periode en inzet<input id="zper" placeholder="Bijv. week 3-6, drie dagen per week"></label></div>` : ""}
-<label id="l-pc"${zk ? " hidden" : ""}>${U} postcode<input id="pc" autocomplete="postal-code" placeholder="1234 AB"></label>
-<div class="row" id="inst"><label id="l-aansl">Uw aansluiting<select id="aansl"><option>Weet ik niet</option><option>1-fase</option><option>3-fase</option></select></label><label id="l-zon">Heeft u zonnepanelen?<select id="zon"><option>Nee</option><option>Ja</option></select></label></div>
-<label>${zk ? "Technische toelichting" : "Toelichting"}<textarea id="msg" rows="4" placeholder="${st ? "Bijvoorbeeld: je opleiding en leerjaar, BOL of BBL, de periode en waarom je bij ons stage wilt lopen." : zk ? "Bijvoorbeeld: aantallen, type installatie, wie het materiaal levert en bijzonderheden op locatie." : "Bijvoorbeeld: wat u wilt laten aanleggen of aansluiten, welke auto u heeft of wanneer het u uitkomt."}"></textarea></label>
-${up && !st ? `<label>${zk ? "Bijlagen" : "Foto's"} (optioneel, maximaal 3 bestanden van 10 MB)<input id="files" type="file" multiple accept="image/jpeg,image/png,image/heic,.heic,.pdf"><span class="err" id="e-files" role="alert"></span></label>` : ""}
-<button class="btn" type="submit">${st ? "Aanmelding versturen" : zk ? "Zakelijke aanvraag versturen" : "Aanvraag versturen"}</button>
-<p class="small">${st ? "Wij gebruiken je gegevens alleen om op je aanmelding te reageren. Meer lees je in de" : "Wij gebruiken uw gegevens alleen om op uw aanvraag te reageren. Meer leest u in de"} <a href="/privacyverklaring/">privacyverklaring</a>.</p>
+${zk ? `<label>${F.zwerk}<select id="zwerk">${F.zwerkOpties.map(o => `<option>${o}</option>`).join("")}</select></label>
+<div class="row"><label>${F.zloc}<input id="zloc" autocomplete="address-level2" placeholder="${F.zlocPh}"></label><label>${F.zper}<input id="zper" placeholder="${F.zperPh}"></label></div>` : ""}
+<label id="l-pc"${zk ? " hidden" : ""}>${F.pc(st)}<input id="pc" autocomplete="postal-code" placeholder="1234 AB"></label>
+<div class="row" id="inst"><label id="l-aansl">${F.aansl}<select id="aansl">${F.aanslOpties.map(o => `<option>${o}</option>`).join("")}</select></label><label id="l-zon">${F.zon}<select id="zon">${F.zonOpties.map(o => `<option>${o}</option>`).join("")}</select></label></div>
+<label>${zk ? F.toelZk : F.toel}<textarea id="msg" rows="4" placeholder="${st ? F.ph.st : zk ? F.ph.zk : F.ph.std}"></textarea></label>
+${up && !st ? `<label>${F.bijlagen(zk)}<input id="files" type="file" multiple accept="image/jpeg,image/png,image/heic,.heic,.pdf"><span class="err" id="e-files" role="alert"></span></label>` : ""}
+<button class="btn" type="submit">${st ? F.knop.st : zk ? F.knop.zk : F.knop.std}</button>
+<p class="small">${F.privacy(st)} <a href="${t.privacyUrl}">${F.privacyLink}</a>.</p>
 <p class="ok" id="ok" role="status"></p><p class="err" id="fail" role="alert"></p>
 </form></div></section>`;
 }
 
-function footer(p) {
-  const afs = p.form && !p.stage ? "#offerte" : "/contact/#offerte";
-  return `<div class="mbar"><a href="/contact/#terugbellen">Bel mij terug</a><a href="mailto:${esc(cfg.email)}">E-mail</a><a class="btn" href="${p.stage ? "#offerte" : afs}">${p.stage ? "Aanmelden" : "Afspraak"}</a></div>
+function footer(p, Lg) {
+  const t = Lg.t, f = t.footer, wa = Lg.wa;
+  const afs = p.form && !p.stage ? "#offerte" : t.contactUrl + "#offerte";
+  const li = x => `<li><a href="${x[1]}">${x[0]}</a></li>`;
+  return `<div class="mbar">${tel ? `<a href="${tel.href}">Bel</a>` : `<a href="${t.terugbelUrl}">${t.mbar.terug}</a>`}${wa ? `<a href="${wa}">WhatsApp</a>` : `<a href="mailto:${esc(cfg.email)}">${t.mbar.mail}</a>`}<a class="btn" href="${p.stage ? "#offerte" : afs}">${p.stage ? t.mbar.aanmelden : t.mbar.afspraak}</a></div>
 <footer><div class="wrap">
 <div class="fgrid">
-<div><a class="flogo" href="/" aria-label="${esc(cfg.handelsnaam)}"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>${esc(cfg.handelsnaam)} verzorgt elektrotechnische installaties voor particulieren en levert capaciteit in onderaanneming. Particulier: ${stedenOmg(3)}. Zakelijk: landelijk op projectbasis.</p></div>
-<div><h2 class="fh">Diensten</h2><ul>${groepen.filter(g => g.overzicht).map(g => `<li><a href="${g.url}">${esc(g.label)}</a></li>`).join("")}<li><a href="/laadpaal/">Laadpaal installatie</a></li><li><a href="/thuisbatterij/">Thuisbatterij-installatie</a></li><li><a href="/zakelijk/">Zakelijk en utiliteitsbouw</a></li><li><a href="/keurmerk/">Keurmerk en normen</a></li></ul></div>
-<div><h2 class="fh">Informatie</h2><ul><li><a href="/over/">Over ons</a></li><li><a href="/#werkwijze">Werkwijze</a></li><li><a href="/#faq">Veelgestelde vragen</a></li><li><a href="/kennisbank/">Kennisbank</a></li>${cfg.erkendLeerbedrijf ? `<li><a href="/stage/">Stage</a></li>` : ""}<li><a href="/algemene-voorwaarden/">Algemene voorwaarden</a></li><li><a href="/privacyverklaring/">Privacyverklaring</a></li></ul></div>
-<div><h2 class="fh">Contact</h2><ul><li>${mail}</li><li><a href="/contact/#terugbellen">Bel mij terug</a></li><li><a href="/contact/">Maak een afspraak</a></li><li><a href="/#werkgebied">Werkgebied</a></li></ul></div>
+<div><a class="flogo" href="${t.pre}" aria-label="${esc(cfg.handelsnaam)}"><img src="/assets/logo.jpg" alt="" width="420" height="194" loading="lazy"></a><p>${esc(f.over(Lg.c.stedenOmg(3)))}</p></div>
+<div><h2 class="fh">${f.diensten}</h2><ul>${Lg.groepen.filter(g => g.overzicht).map(g => `<li><a href="${g.url}">${esc(g.label)}</a></li>`).join("")}${f.dienstLinks.map(li).join("")}</ul></div>
+<div><h2 class="fh">${f.info}</h2><ul>${f.infoLinks.map(li).join("")}${cfg.erkendLeerbedrijf ? li(f.stage) : ""}${f.legal.map(li).join("")}</ul></div>
+<div><h2 class="fh">${f.contact}</h2><ul><li>${mail}</li>${f.contactLinks.map(li).join("")}</ul></div>
 </div>
-<div class="legal"><span>© <span id="y">${new Date().getFullYear()}</span> ${esc(cfg.handelsnaam)}${cfg.kvk ? ` · KvK ${esc(cfg.kvk)}` : ""}${cfg.btw ? ` · Btw ${esc(cfg.btw)}` : ""} · ${mail}</span><a href="#top">Naar boven ↑</a></div>
+<div class="legal"><span>© <span id="y">${new Date().getFullYear()}</span> ${esc(cfg.handelsnaam)}${cfg.kvk ? ` · ${f.kvk} ${esc(cfg.kvk)}` : ""}${cfg.btw ? ` · ${f.btw} ${esc(cfg.btw)}` : ""} · ${mail}</span><a href="#top">${f.boven}</a></div>
 </div></footer>
 <script src="/assets/site.js?v=${jsV}" defer></script>
 </body>
@@ -216,17 +258,22 @@ function footer(p) {
 
 const today = new Date().toISOString().slice(0, 10);
 const urls = [];
-for (const p of pages) {
-  const url = base + "/" + (p.file || p.path);
-  const attrs = [`data-email="${esc(cfg.email)}"`];
-  if (cfg.formulierEndpoint) attrs.push(`data-endpoint="${esc(cfg.formulierEndpoint)}"`);
-  if (p.dienst) attrs.push(`data-dienst="${esc(p.dienst)}"`);
-  if (p.type) attrs.push(`data-type="${esc(p.type)}"`);
-  const html = head(p, url) + `\n<body ${attrs.join(" ")}>\n` + header(p) + `\n<main id="main">\n` + p.body + "\n" + (p.form ? form(p) + "\n" : "") + "</main>\n" + footer(p);
-  const out = path.join(root, p.file || path.join(p.path, "index.html"));
-  fs.mkdirSync(path.dirname(out), { recursive: true });
-  fs.writeFileSync(out, html);
-  if (!p.noindex) urls.push(url);
+let aantal = 0;
+for (const lang of TALEN) {
+  const Lg = L[lang]; S = { lang, t: Lg.t };
+  for (const p of Lg.pages) {
+    const url = base + p.href;
+    const attrs = [`data-email="${esc(cfg.email)}"`, `data-bedankt="${Lg.t.bedanktUrl}"`];
+    if (cfg.formulierEndpoint) attrs.push(`data-endpoint="${esc(cfg.formulierEndpoint)}"`);
+    if (p.dienst) attrs.push(`data-dienst="${esc(p.dienst)}"`);
+    if (p.type) attrs.push(`data-type="${esc(p.type)}"`);
+    const html = head(p, url, Lg) + `\n<body ${attrs.join(" ")}>\n` + header(p, Lg) + `\n<main id="main">\n` + p.body + "\n" + (p.form ? form(p, Lg) + "\n" : "") + "</main>\n" + footer(p, Lg);
+    const out = path.join(root, p.file || path.join(p.path, "index.html"));
+    fs.mkdirSync(path.dirname(out), { recursive: true });
+    fs.writeFileSync(out, html);
+    if (!p.noindex) urls.push(url);
+    aantal++;
+  }
 }
 // GitHub Pages kent geen 301: oude adressen krijgen een doorverwijspagina (niet in de sitemap).
 const redirects = { "overige-elektrotechniek/": "/elektra/renovatie/" };
@@ -256,9 +303,9 @@ Gegenereerd door \`node tools/build.js\` uit \`content/fotos.json\` en \`content
 
 Stockfoto's zijn sfeerbeeld (RONDE3 regel 3.4): nooit als eigen werk tonen, niet op /projecten/, geen bijschrift als "onze installatie".
 
-| Bestand | Bron | Unsplash-pagina | Fotograaf | Licentie | Datum | Alt-tekst |
-|---|---|---|---|---|---|---|
-${Object.values(fotos).map(f => `| assets/img/${f.naam}-* | ${f.bron} | ${f.pagina || "TODO eigenaar"} | ${f.fotograaf || "TODO eigenaar"} | ${f.licentie} | ${f.datum} | ${f.alt} |`).join("\n")}
+| Bestand | Bron | Unsplash-pagina | Fotograaf | Licentie | Datum | Alt-tekst NL | Alt-tekst EN |
+|---|---|---|---|---|---|---|---|
+${Object.values(fotos).map(f => `| assets/img/${f.naam}-* | ${f.bron} | ${f.pagina || "TODO eigenaar"} | ${f.fotograaf || "TODO eigenaar"} | ${f.licentie} | ${f.datum} | ${f.alt} | ${f.alt_en || "-"} |`).join("\n")}
 
 ## Logo's
 
@@ -266,4 +313,4 @@ ${Object.values(fotos).map(f => `| assets/img/${f.naam}-* | ${f.bron} | ${f.pagi
 |---|---|---|---|---|---|---|
 ${Object.values(logos).map(l => `| ${l.naam} | ${l.type} | ${l.bestand} | ${fs.existsSync(path.join(root, l.bestand)) ? "ja" : "nee"} | ${logoBestand(l.naam) ? "logo" : l.type === "merk" ? "naam als tekst" : "icoon"} | ${l.bron} | ${l.datum || "-"} |`).join("\n")}
 `);
-console.log("Gebouwd:", pages.length, "pagina's voor", base);
+console.log("Gebouwd:", aantal, "pagina's (" + TALEN.join(", ") + ") voor", base);

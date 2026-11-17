@@ -181,7 +181,7 @@ footer ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .legal{border-top:1px solid rgba(255,255,255,.14);margin-top:40px;padding-top:20px;font-size:13px;color:#9fb2c9;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .mbar{display:none}
 
-@media(max-width:1259px){
+@media(max-width:1299px){
 .menu{display:block}
 nav{display:none;position:absolute;left:0;right:0;top:100%;background:var(--card);border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;padding:12px 24px 22px;box-shadow:var(--sh2);max-height:calc(100vh - 76px);overflow-y:auto}
 nav.open{display:flex}nav>a,.ddb{padding:14px 12px;font-size:17px;border-bottom:1px solid var(--line);border-radius:0}nav .btn{margin:16px 0 0;border-bottom:0;border-radius:11px;padding:14px}
@@ -273,7 +273,7 @@ nav>a{padding:10px 11px}
 #tb{box-shadow:var(--sh1);border:1px solid var(--line)}#tb h2{margin:0}#tb p{margin:0}
 header .wrap{max-width:1320px}
 nav>a,.ddb{white-space:nowrap}nav .btn{white-space:nowrap}
-@media(max-width:1259px){
+@media(max-width:1299px){
 nav>a,.ddb{padding:14px 12px;font-size:17px;border-bottom:1px solid var(--line);border-radius:0}
 .ddb{width:100%;justify-content:space-between}
 .ddm{position:static;box-shadow:none;border:0;min-width:0;margin:0;padding:4px 0 8px 14px;background:transparent;border-radius:0}
@@ -289,7 +289,7 @@ nav>a,.ddb{padding:14px 12px;font-size:17px;border-bottom:1px solid var(--line);
 .hero.has-foto .wrap{display:block}.hero.has-foto .wrap>div{max-width:600px}
 .hero.has-foto{padding:96px 0 136px}
 .phead.has-foto{padding:56px 0 72px}.phead.has-foto h1,.phead.has-foto .lead{max-width:640px}
-@media(max-width:1259px){
+@media(max-width:1299px){
 .has-foto .bg{width:100%}
 .has-foto .bg img{-webkit-mask-image:none;mask-image:none}
 .has-foto .bg::after{background:linear-gradient(180deg,rgba(13,44,71,.82) 0%,rgba(13,44,71,.9) 100%)}
@@ -326,3 +326,12 @@ nav>a,.ddb{padding:14px 12px;font-size:17px;border-bottom:1px solid var(--line);
 .legal span a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 @media(min-width:1001px){.trust ul.k4{grid-template-columns:.85fr 1.45fr 1.1fr 1fr}}
 .legal span a{white-space:nowrap}
+/* Taalknop rechtsboven (NL/EN); op mobiel naast de knop Menu, buiten het uitklapmenu */
+.lang{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;min-width:44px;padding:8px 12px;margin-left:12px;border:1px solid var(--line);border-radius:9px;color:var(--text);text-decoration:none;font-weight:700;font-size:14px;letter-spacing:.04em;flex:none}
+.lang:hover{background:var(--tint);border-color:var(--brand)}.lang .i{width:18px;height:18px;color:var(--brand)}
+@media(max-width:1299px){.bar>.logo{order:1}.bar>.lang{order:2;margin-left:auto}.bar>.menu{order:3;margin-left:10px}}
+@media(max-width:360px){.lang{padding:8px 9px}.lang .i{display:none}}
+.callout-note{background:var(--tint);border-left:4px solid var(--brand);border-radius:10px;padding:12px 16px;font-size:15px}
+.phead .lead span[lang] a{color:#fff}
+/* Compacte desktopnavigatie zodat logo, menu, afspraakknop en taalknop passen (NL en EN) */
+@media(min-width:1300px){header .wrap{padding:0 20px}.bar{gap:14px}nav>a,.ddb{padding:8px 8px}nav .btn{padding:10px 14px;margin-left:6px}.lang{margin-left:6px;padding:8px 10px}}

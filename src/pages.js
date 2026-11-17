@@ -455,7 +455,7 @@ ${cfg.garantieArbeid ? `<h2>Garantie</h2><p>Op het uitgevoerde werk geeft ${naam
   const kaal = (h1, lead, extra, knop) => `<div class="phead" id="top"><div class="wrap"><h1>${h1}</h1><p class="lead">${lead}</p>${extra ? `<p class="lead">${extra}</p>` : ""}<div class="cta"><a class="btn" href="/">${knop}</a></div></div></div>
 ${groepRelated}`;
   const bedankt = kaal("Bedankt voor uw aanvraag", `Uw aanvraag is goed aangekomen. Wij bekijken uw bericht${cfg.reactietijd ? " en reageren " + esc(cfg.reactietijd) : " en nemen contact met u op"}.`, c.fotoRoute, "Terug naar de homepage");
-  const nietGevonden = kaal("Deze pagina bestaat niet", "De pagina die u zoekt, is verplaatst of bestaat niet meer.", "", "Naar de homepage");
+  const nietGevonden = kaal("Deze pagina bestaat niet", "De pagina die u zoekt, is verplaatst of bestaat niet meer.", `<span lang="en">This page does not exist. <a href="/en/">Go to the English homepage</a>.</span>`, "Naar de homepage");
 
   const H = cfg.handelsnaam;
   return [
@@ -475,7 +475,7 @@ ${groepRelated}`;
     { path: "contact/", form: true, crumb: "Contact", body: contact,
       title: `Contact: afspraak of terugbelverzoek | ${H}`,
       desc: `Maak een afspraak, vraag een offerte aan of laat u terugbellen door ${H}. Particulier in Utrecht, Amersfoort en Amsterdam, zakelijk landelijk.` },
-    { path: "zakelijk/", form: true, zakelijk: true, dienst: "Zakelijke inhuur", type: "Bedrijf", service: "Elektromonteur inhuren als onderaannemer", crumb: "Zakelijk", body: zakelijk,
+    { path: "zakelijk/", form: true, zakelijk: true, dienst: "Zakelijke inhuur", type: "bedrijf", service: "Elektromonteur inhuren als onderaannemer", crumb: "Zakelijk", body: zakelijk,
       title: `Elektromonteur inhuren en utiliteitsbouw | ${H}`,
       desc: `Elektromonteur inhuren of elektra in de utiliteitsbouw? Onderaanneming voor installatiebedrijven en leveranciers, per klus of project, landelijk.` },
   ].concat(cfg.erkendLeerbedrijf ? [
