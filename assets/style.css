@@ -313,3 +313,7 @@ nav>a,.ddb{padding:14px 12px;font-size:17px;border-bottom:1px solid var(--line);
 .bijschrift{font-size:14px;font-weight:600;color:var(--brand)!important;margin:0 0 8px!important}
 .prose h2.metlogo{display:flex;align-items:center;gap:16px}.metlogo .logo-img{height:64px;width:auto;flex:none}
 .prose .metlogo+.bijschrift{margin-top:-6px!important}
+/* NEN-logo altijd op een lichte ondergrond (ook in donkere modus) */
+.trust .logo-img,.card>.logo-img,.metlogo .logo-img{background:#fff;border-radius:8px;padding:3px 5px;box-sizing:content-box}
+.trust .logo-img{height:34px}
+.card>.logo-img{height:56px}.metlogo .logo-img{height:48px}
