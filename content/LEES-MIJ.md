@@ -36,3 +36,7 @@ Zolang deze leeg zijn in `site.config.json`, staat er niets over op de site:
 - `reactietijd`, `startTermijn`
 - `formulierEndpoint` + `formulierdienst` (nu opent elke aanvraag het e-mailprogramma van de bezoeker)
 - Verrekensysteem voor de laadpaal: nog geen veld; tekst op `/laadpaal/zakelijk-verrekenen/` noemt bewust geen systeem.
+
+# Logo's van merken en normen (RONDE3 3a)
+
+Bestanden horen in `assets/merken/` (`hager-logo.png`, `abb-logo.png`, `schneider-electric-logo.png`) en `assets/normen/` (`nen-logo-transparant.png`). PNG met transparante achtergrond of SVG. Zolang een bestand ontbreekt of `tonen` in `content/logos.json` op `false` staat, toont de site de naam als tekst (merk) of het eigen icoon (norm). Een logo verwijderen: `"tonen": false` en opnieuw bouwen.

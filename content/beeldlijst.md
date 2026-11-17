@@ -1,36 +1,33 @@
-# Beeldlijst (Ronde 3, fase 2)
+# Beeldlijst (RONDE3 fase 2)
 
-Status: **wacht op foto's van de eigenaar.** Er staat nog geen enkele foto live.
-Zoeken op Unsplash en Pexels lukt niet vanuit de bouwomgeving (beide sites weren geautomatiseerde toegang). De eigenaar kiest zelf via de zoeklinks hieronder en stuurt per plek de link van de fotopagina of het gedownloade bestand; eigen foto's mogen ook. Licentie per gekozen beeld vastleggen in `content/beeldlicenties.md`.
+Licenties en bronnen staan in `content/beeldlicenties.md` (gegenereerd bij elke build).
 
-Regels
-- Alleen sfeerbeeld. Nooit presenteren als eigen werk; alt-tekst beschrijft wat er te zien is, zonder "ons project" of "door ons geïnstalleerd".
-- Europese installaties (Europese groepenkasten, stopcontacten, laadpalen). Geen Amerikaanse panelen of stopcontacten.
-- Geen herkenbare merken of logo's van andere installateurs, geen herkenbare personen zonder model release.
-- Formaten: AVIF/WebP/JPG in 480/960/1600 px, max. 200 kB per bestand, vaste breedte/hoogte, lazy loading behalve de hero.
+## Geplaatst (17-11-2026)
 
-| Plek | Onderwerp | Verhouding |
-|---|---|---|
-| Homepage hero | Nette moderne groepenkast of elektricien aan het werk (handen, geen gezicht) | 16:9, uitsnede rechts |
-| Dienstkaart Elektra aanleggen | Leidingen/inbouwdozen in een wand tijdens renovatie | 4:3 |
-| Dienstkaart Meterkast | Moderne Europese groepenkast met automaten | 4:3 |
-| Dienstkaart Laadpaal & thuisbatterij | Wandlaadpaal bij woning met elektrische auto | 4:3 |
-| Uitgelicht Thuisbatterij | Thuisbatterij aan de wand in garage of technische ruimte | 16:9 |
-| /elektra/keukenvoorbereiding/ | Keuken in aanbouw met aansluitpunten | 16:9 |
-| /elektra/inductiekookplaat/ | Inductiekookplaat in gebruik | 16:9 |
-| /elektra/verlichting/ | Inbouwspots in plafond | 16:9 |
-| /elektra/tuinverlichting/ | Tuinpad met verlichting in de avond | 16:9 |
-| /keurmerk/ | Meetinstrument op installatie (zonder merknaam in beeld) | 16:9 |
+| Foto | Waar |
+|---|---|
+| `groepenkast-abb` (Unsplash photo-1576446470246-499c738d1c8e) | Homepage-hero, kaart Meterkast, kop `/meterkast/` en `/meterkast/groepenkast-vervangen/` |
+| `laadpaal-auto` (Unsplash photo-1704475336842-0ab3798abf0e) | Kaart Laadpaal & thuisbatterij, kop `/laadpaal/` en `/laadpaal/zakelijk-verrekenen/` |
+| `elektra-lasdoos` (Unsplash photo-1581972327480-e3764d31e5e6) | Kaart Elektra aanleggen, kop `/elektra/` en `/elektra/renovatie/` |
 
-Zoeklinks (open in de browser, kies per plek één foto):
+Niet gebruikt: photo-1588616437819-7d30e6f76e66 (industriële kast, paars filter).
 
-- Hero / meterkast: https://unsplash.com/s/photos/electrician · https://unsplash.com/s/photos/fuse-box · https://unsplash.com/s/photos/circuit-breaker
-- Elektra aanleggen: https://unsplash.com/s/photos/electrical-wiring · https://unsplash.com/s/photos/renovation
-- Laadpaal: https://unsplash.com/s/photos/ev-charger · https://unsplash.com/s/photos/wallbox
-- Thuisbatterij: https://unsplash.com/s/photos/home-battery · https://unsplash.com/s/photos/solar-panels-house
-- Keuken / inductie: https://unsplash.com/s/photos/induction-cooktop · https://unsplash.com/s/photos/kitchen-renovation
-- Verlichting: https://unsplash.com/s/photos/recessed-lighting
-- Tuinverlichting: https://unsplash.com/s/photos/garden-lights
-- Keurmerk: https://unsplash.com/s/photos/multimeter
+## Nog nodig (F2.2), in volgorde van belang
 
-Let op bij het kiezen: geen foto's met het label "Unsplash+" (betaald), geen Amerikaanse stopcontacten of schakelkasten, geen herkenbare gezichten of merklogo's.
+1. Thuisbatterij aan de wand (uitgelichte kaart op de homepage, kop `/thuisbatterij/`)
+2. Keuken of inductiekookplaat (`/elektra/keukenvoorbereiding/`, `/elektra/inductiekookplaat/`)
+3. Binnenverlichting, inbouwspots (`/elektra/verlichting/`)
+4. Tuinverlichting (`/elektra/tuinverlichting/`)
+5. Utiliteit / kabelgoten (`/zakelijk/`)
+6. Meetapparatuur (`/keurmerk/`)
+
+Eisen: alleen gratis Unsplash-foto's (bestandsnaam begint met `photo-`, niet `premium_photo-`; geen iStock-advertenties), Europese installaties, geen herkenbare gezichten, geen leesbaar merk behalve Hager, ABB of Schneider Electric.
+
+Zoeken op Unsplash lukt niet vanuit de bouwomgeving. De eigenaar stuurt de `photo-…`-code of de link van de afbeelding; de foto wordt dan opgehaald met `node tools/fotos.js` na een regel in `content/fotos.json`.
+
+## Foto toevoegen
+
+1. Regel toevoegen in `content/fotos.json` (naam, id, alt, bron, licentie, datum, uitsneden met focuspunt).
+2. `node tools/fotos.js` (haalt AVIF, WebP en JPG op in 480/960/1600 px).
+3. Veld `foto` zetten bij de dienst in `src/diensten.js`.
+4. `node tools/build.js && node tools/check.js .`

@@ -61,6 +61,36 @@ const ctx = { cfg, esc, tel, wa, mail, reviews, projecten, stedenTekst, stedenOm
 ctx.partner = cfg.partner.tonen && cfg.partner.naam
   ? `<p>Wij leveren en installeren batterijen van ${esc(cfg.partner.naam)}. Heeft u zelf al een batterij gekocht? Laat het ons weten bij uw aanvraag.</p>`
   : `<p>Heeft u al een batterij gekocht of een model op het oog? Geef dan het merk en type door bij uw aanvraag. Wij beoordelen of uw installatie er geschikt voor is en sluiten de batterij aan volgens de voorschriften van de fabrikant.</p>`;
+/* ---------- Foto's (content/fotos.json, bestanden via tools/fotos.js) ---------- */
+const fotos = {}; read("content/fotos.json").forEach(f => fotos[f.naam] = f);
+const BREED = { hero: [480, 960, 1600], kaart: [480, 960] };
+const srcset = (naam, u, ext) => BREED[u].map(w => `/assets/img/${naam}-${u}-${w}.${ext} ${w}w`).join(", ");
+const SIZES = { hero: "(max-width:1000px) 100vw, 58vw", kaart: "(max-width:640px) 100vw, (max-width:1000px) 50vw, 360px" };
+function foto(naam, u, o = {}) {
+  const f = fotos[naam]; if (!f || !f.uitsneden[u]) return "";
+  const [a, b] = f.uitsneden[u].ar.split(":").map(Number), w = 960, h = Math.round(w * b / a), sz = o.sizes || SIZES[u];
+  return `<picture${o.cls ? ` class="${o.cls}"` : ""}><source type="image/avif" srcset="${srcset(naam, u, "avif")}" sizes="${sz}"><source type="image/webp" srcset="${srcset(naam, u, "webp")}" sizes="${sz}"><img src="/assets/img/${naam}-${u}-960.jpg" srcset="${srcset(naam, u, "jpg")}" sizes="${sz}" alt="${esc(f.alt)}" width="${w}" height="${h}" ${o.eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></picture>`;
+}
+const preload = naam => fotos[naam] ? `<link rel="preload" as="image" type="image/avif" imagesrcset="${srcset(naam, "hero", "avif")}" imagesizes="${SIZES.hero}" fetchpriority="high">
+` : "";
+
+/* ---------- Logo's van merken en normen (content/logos.json, RONDE3 3a) ---------- */
+const logos = {}; read("content/logos.json").forEach(l => logos[l.naam] = l);
+const afm = bestand => { // breedte/hoogte uit PNG-header of SVG-viewBox
+  const buf = fs.readFileSync(path.join(root, bestand));
+  if (bestand.endsWith(".png")) return [buf.readUInt32BE(16), buf.readUInt32BE(20)];
+  const vb = (buf.toString().match(/viewBox="[\d.\s-]*?([\d.]+)\s+([\d.]+)"/) || []); return [+vb[1] || 1, +vb[2] || 1];
+};
+const logoBestand = naam => { const l = logos[naam]; return l && l.tonen && l.bestand && fs.existsSync(path.join(root, l.bestand)) ? l : null; };
+// Merk: logo als het bestand er is en tonen aan staat, anders de naam als tekst. Norm: logo of niets (dan blijft het icoon staan).
+function logo(naam, hoogte, tekstTerug = true) {
+  const l = logoBestand(naam);
+  if (!l) return tekstTerug ? `<span class="logo-tekst">${esc(naam)}</span>` : "";
+  const [w, h] = afm(l.bestand);
+  return `<img class="logo-img" src="/${esc(l.bestand)}" alt="${esc(naam)}" height="${hoogte}" width="${Math.round(hoogte * w / h)}" loading="lazy" decoding="async">`;
+}
+
+ctx.foto = foto; ctx.logo = logo; ctx.logos = logos;
 ctx.dd = require(path.join(root, "src/diensten.js"))(ctx, { naam: esc(cfg.handelsnaam), stedenOmg, partner: ctx.partner });
 const { groepen, diensten } = ctx.dd;
 const pages = require(path.join(root, "src/pages.js"))(ctx);
@@ -102,7 +132,7 @@ function head(p, url) {
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/assets/inter.woff2" as="font" type="font/woff2" crossorigin>
-<meta property="og:type" content="website"><meta property="og:locale" content="nl_NL"><meta property="og:site_name" content="${esc(cfg.handelsnaam)}">
+${p.preload ? preload(p.preload) : ""}<meta property="og:type" content="website"><meta property="og:locale" content="nl_NL"><meta property="og:site_name" content="${esc(cfg.handelsnaam)}">
 <meta property="og:title" content="${esc(p.title)}"><meta property="og:description" content="${esc(p.desc)}"><meta property="og:url" content="${url}">
 <meta property="og:image" content="${base}/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -214,4 +244,24 @@ ${urls.map(u => `<url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join("\
 `);
 fs.writeFileSync(path.join(root, "robots.txt"), `User-agent: *\nAllow: /\nSitemap: ${base}/sitemap.xml\n`);
 fs.writeFileSync(path.join(root, "CNAME"), cfg.domein);
+
+// Beeldlicenties: altijd gelijk aan wat er in content/fotos.json en content/logos.json staat.
+fs.writeFileSync(path.join(root, "content/beeldlicenties.md"), `# Beeldlicenties
+
+Gegenereerd door \`node tools/build.js\` uit \`content/fotos.json\` en \`content/logos.json\`. Niet met de hand wijzigen.
+
+## Foto's
+
+Stockfoto's zijn sfeerbeeld (RONDE3 regel 3.4): nooit als eigen werk tonen, niet op /projecten/, geen bijschrift als "onze installatie".
+
+| Bestand | Bron | Unsplash-pagina | Fotograaf | Licentie | Datum | Alt-tekst |
+|---|---|---|---|---|---|---|
+${Object.values(fotos).map(f => `| assets/img/${f.naam}-* | ${f.bron} | ${f.pagina || "TODO eigenaar"} | ${f.fotograaf || "TODO eigenaar"} | ${f.licentie} | ${f.datum} | ${f.alt} |`).join("\n")}
+
+## Logo's
+
+| Naam | Type | Bestand | Aanwezig | Getoond | Bron | Datum |
+|---|---|---|---|---|---|---|
+${Object.values(logos).map(l => `| ${l.naam} | ${l.type} | ${l.bestand} | ${fs.existsSync(path.join(root, l.bestand)) ? "ja" : "nee"} | ${logoBestand(l.naam) ? "logo" : l.type === "merk" ? "naam als tekst" : "icoon"} | ${l.bron} | ${l.datum || "-"} |`).join("\n")}
+`);
 console.log("Gebouwd:", pages.length, "pagina's voor", base);

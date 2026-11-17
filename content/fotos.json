@@ -1,0 +1,44 @@
+[
+  {
+    "naam": "groepenkast-abb",
+    "id": "photo-1576446470246-499c738d1c8e",
+    "alt": "Groepenkast in aanbouw met installatieautomaten en blauwe nulrails",
+    "bron": "https://images.unsplash.com/photo-1576446470246-499c738d1c8e",
+    "pagina": "",
+    "fotograaf": "",
+    "licentie": "Unsplash License",
+    "datum": "2026-11-17",
+    "uitsneden": {
+      "hero": { "ar": "16:9", "fpx": 0.5, "fpy": 0.3, "fpz": 1 },
+      "kaart": { "ar": "3:2", "fpx": 0.55, "fpy": 0.3, "fpz": 1.35 }
+    }
+  },
+  {
+    "naam": "laadpaal-auto",
+    "id": "photo-1704475336842-0ab3798abf0e",
+    "alt": "Laadstekker wordt in een elektrische auto gestoken",
+    "bron": "https://images.unsplash.com/photo-1704475336842-0ab3798abf0e",
+    "pagina": "",
+    "fotograaf": "",
+    "licentie": "Unsplash License",
+    "datum": "2026-11-17",
+    "uitsneden": {
+      "hero": { "ar": "16:9", "fpx": 0.5, "fpy": 0.5, "fpz": 1 },
+      "kaart": { "ar": "3:2", "fpx": 0.5, "fpy": 0.5, "fpz": 1.2 }
+    }
+  },
+  {
+    "naam": "elektra-lasdoos",
+    "id": "photo-1581972327480-e3764d31e5e6",
+    "alt": "Lasklemmen en bedrading in een lasdoos tijdens het aanleggen van elektra",
+    "bron": "https://images.unsplash.com/photo-1581972327480-e3764d31e5e6",
+    "pagina": "",
+    "fotograaf": "",
+    "licentie": "Unsplash License",
+    "datum": "2026-11-17",
+    "uitsneden": {
+      "hero": { "ar": "16:9", "fpx": 0.5, "fpy": 0.45, "fpz": 1 },
+      "kaart": { "ar": "3:2", "fpx": 0.45, "fpy": 0.5, "fpz": 1.2 }
+    }
+  }
+]

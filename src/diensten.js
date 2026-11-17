@@ -6,17 +6,17 @@ module.exports = function (c, h) {
   const { naam, stedenOmg } = h;
 
   const groepen = [
-    { key: "elektra", label: "Elektra aanleggen", url: "/elektra/", icon: "elektra", overzicht: true,
+    { key: "elektra", foto: "elektra-lasdoos", label: "Elektra aanleggen", url: "/elektra/", icon: "elektra", overzicht: true,
       intro: "Nieuwe elektra bij een renovatie, een keuken die klaar moet voor inductie, of verlichting binnen en in de tuin." },
-    { key: "meterkast", label: "Meterkast", url: "/meterkast/", icon: "meterkast", overzicht: true,
+    { key: "meterkast", foto: "groepenkast-abb", label: "Meterkast", url: "/meterkast/", icon: "meterkast", overzicht: true,
       intro: "Een veilige meterkast met ruimte voor wat u nu en straks wilt aansluiten." },
-    { key: "laden", label: "Laadpaal & thuisbatterij", url: "/laadpaal/", icon: "laadpaal",
+    { key: "laden", foto: "laadpaal-auto", label: "Laadpaal & thuisbatterij", url: "/laadpaal/", icon: "laadpaal",
       intro: "Laden bij uw woning of bedrijf en uw zonnestroom zelf gebruiken." }
   ];
 
   const D = [
     /* =================== METERKAST =================== */
-    { key: "groepenkast-vervangen", groep: "meterkast", url: "/meterkast/groepenkast-vervangen/", menu: "Groepenkast installatie", icon: "meterkast",
+    { key: "groepenkast-vervangen", foto: "groepenkast-abb", groep: "meterkast", url: "/meterkast/groepenkast-vervangen/", menu: "Groepenkast installatie", icon: "meterkast",
       formOptie: "Groepenkast vervangen", a: true, prijsKey: "meterkast",
       kaart: "Een verouderde kast of stoppenkast vervangen door een moderne groepenkast.",
       title: "Groepenkast vervangen Utrecht en Amersfoort",
@@ -96,7 +96,7 @@ module.exports = function (c, h) {
       verwant: ["groepenkast-vervangen", "laadpaal", "thuisbatterij"], lezen: ["1-fase-of-3-fase", "meterkast-geschikt-laadpaal-thuisbatterij"] },
 
     /* =================== ELEKTRA =================== */
-    { key: "renovatie", groep: "elektra", url: "/elektra/renovatie/", menu: "Elektra renovatie", icon: "tool",
+    { key: "renovatie", foto: "elektra-lasdoos", groep: "elektra", url: "/elektra/renovatie/", menu: "Elektra renovatie", icon: "tool",
       formOptie: "Elektra renovatie",
       kaart: "Nieuwe leidingen en aansluitpunten bij een verbouwing of renovatie.",
       title: "Elektra renovatie Utrecht, Amersfoort en Amsterdam",
@@ -196,7 +196,7 @@ module.exports = function (c, h) {
       verwant: ["verlichting", "extra-groep", "renovatie"], lezen: ["aardlekschakelaar-valt-uit", "wat-zit-er-in-mijn-meterkast"] },
 
     /* =================== LADEN =================== */
-    { key: "laadpaal", groep: "laden", url: "/laadpaal/", menu: "Laadpaal installatie", icon: "laadpaal",
+    { key: "laadpaal", foto: "laadpaal-auto", groep: "laden", url: "/laadpaal/", menu: "Laadpaal installatie", icon: "laadpaal",
       formOptie: "Laadpaal", a: true, z: true, prijsKey: "laadpaal",
       kaart: "Veilig laden bij uw woning, op een eigen groep met de juiste beveiliging.",
       title: "Laadpaal installateur Utrecht en Amersfoort",
@@ -216,7 +216,7 @@ module.exports = function (c, h) {
       vragen: [["Kan ik niet gewoon via een stopcontact laden?", "Af en toe kan dat, op ongeveer 2,3 kW. Een gewoon stopcontact is alleen niet gemaakt om dag in, dag uit urenlang vol belast te worden."], ["Sluit u een laadpaal aan die ik zelf heb gekocht?", "Ja. Geef het merk en type door, dan bepalen wij welke beveiliging en bekabeling daarbij horen."], ["Heb ik 3-fase nodig?", "Alleen als u op 11 kW wilt laden. Wie vooral 's nachts laadt, heeft aan 1-fase vaak genoeg."], ["Kan de laadpaal op zonnestroom laden?", "Veel laadpalen kunnen laden op het overschot van uw zonnepanelen. Dat hangt af van het model en de meting in uw meterkast."], ["Kan mijn werkgever de stroom vergoeden?", "Ja, met een laadpaal die het verbruik registreert. Zie zakelijk verrekenen."]],
       verwant: ["zakelijk-verrekenen", "thuisbatterij", "3-fase"], lezen: ["meterkast-geschikt-laadpaal-thuisbatterij", "1-fase-of-3-fase"] },
 
-    { key: "zakelijk-verrekenen", groep: "laden", url: "/laadpaal/zakelijk-verrekenen/", menu: "Zakelijk verrekenen laadpaal", icon: "tag",
+    { key: "zakelijk-verrekenen", foto: "laadpaal-auto", groep: "laden", url: "/laadpaal/zakelijk-verrekenen/", menu: "Zakelijk verrekenen laadpaal", icon: "tag",
       formOptie: "Laadpaal zakelijk verrekenen", a: true,
       kaart: "Thuis laden voor de zaak, met registratie van elke kWh.",
       title: "Laadpaal zakelijk verrekenen | Utrecht en Amersfoort",
