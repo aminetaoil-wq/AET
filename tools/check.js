@@ -14,5 +14,14 @@ for(const p of pages){const h=html[p];
   if(f){if(!f.startsWith("/")){console.log("  RELATIEF",p,u);}tp=f.replace(/^\//,"");if(tp===""||tp.endsWith("/"))tp+="index.html";
    if(!fs.existsSync(path.join(root,tp))){bad++;console.log("  KAPOT",p,u);continue}}
   if(a&&ids[tp]&&!ids[tp].has(a)){bad++;console.log("  ANKER ONTBREEKT",p,u)}}}
+// RONDE3 3a/3b: srcset-bestanden, kwalificatieformulering, merkenblok, licenties
+for(const p of pages){const h=html[p],zicht=h.replace(/<script[\s\S]*?<\/script>/g," ").replace(/<[^>]+>/g," ");
+ for(const m of h.matchAll(/(?:srcset|imagesrcset)="([^"]+)"/g))for(const part of m[1].split(",")){const u=part.trim().split(/\s+/)[0];n++;if(!fs.existsSync(path.join(root,u.replace(/^\//,"")))){bad++;console.log("  KAPOT (srcset)",p,u)}}
+ if(/gecertificeerd/i.test(zicht)){bad++;console.log("  VERBODEN WOORD 'gecertificeerd'",p)}
+ const mb=(h.match(/<section class="merken"[\s\S]*?<\/section>/)||[""])[0].replace(/<[^>]+>/g," ");
+ if(/partner|erkend|officieel|dealer|geautoriseerd|in samenwerking met|aanbevolen door/i.test(mb)){bad++;console.log("  MERKENBLOK suggereert relatie",p)}}
+const lic=JSON.parse(fs.readFileSync(path.join(root,"content/fotos.json"),"utf8")),lg=JSON.parse(fs.readFileSync(path.join(root,"content/logos.json"),"utf8"));
+for(const f of lic)if(!f.bron||!f.licentie||!f.alt){bad++;console.log("  FOTO zonder bron/licentie/alt",f.naam)}
+for(const l of lg)if(!l.bron){bad++;console.log("  LOGO zonder bron",l.naam)}
 console.log("links gecontroleerd:",n,"fouten:",bad);
 if(bad)process.exit(1);

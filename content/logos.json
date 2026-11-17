@@ -1,0 +1,14 @@
+[
+  { "naam": "Hager", "type": "merk", "bestand": "assets/merken/hager-logo.png", "tonen": true,
+    "bron": "Hager, pagina Branding guidelines (bestand aan te leveren door eigenaar)", "datum": "" },
+  { "naam": "ABB", "type": "merk", "bestand": "assets/merken/abb-logo.png", "tonen": false,
+    "bron": "ABB, downloadpagina logo's / Media Bank (nog niet aangeleverd; eigenaar beslist logo of tekst)", "datum": "" },
+  { "naam": "Schneider Electric", "type": "merk", "bestand": "assets/merken/schneider-electric-logo.png", "tonen": true,
+    "bron": "Wikimedia Commons, Schneider_Electric_2007 (geen officiële bron; vervangen zodra officieel bestand beschikbaar)", "datum": "" },
+  { "naam": "NEN 3140", "type": "norm", "bestand": "assets/normen/nen-logo-transparant.png", "tonen": true,
+    "bijschrift": "NEN 3140 Vakbekwaam Persoon: opleiding behaald (ROVC, januari 2026)",
+    "bron": "Aangeleverd door eigenaar (nog niet in de repository)", "datum": "" },
+  { "naam": "NEN 1010", "type": "norm", "bestand": "assets/normen/nen-logo-transparant.png", "tonen": true,
+    "bijschrift": "NEN 1010: installaties volgens de norm",
+    "bron": "Aangeleverd door eigenaar (nog niet in de repository)", "datum": "" }
+]

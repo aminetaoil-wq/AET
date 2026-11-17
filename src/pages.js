@@ -1,7 +1,7 @@
 // Alle paginateksten. Contactgegevens, regio en kwalificaties komen uit site.config.json.
 // Na een wijziging: node tools/build.js
 module.exports = function (c) {
-  const { cfg, esc, mail, tel, wa, reviews, projecten, stedenTekst, stedenOmg, ico } = c;
+  const { cfg, esc, mail, tel, wa, reviews, projecten, stedenTekst, stedenOmg, ico, foto, logo, logos } = c;
   const regio = esc(cfg.regio);
   const naam = esc(cfg.handelsnaam);
   const kwal = cfg.kwalificaties.map(esc).concat(cfg.erkendLeerbedrijf ? ["Erkend leerbedrijf (SBB)"] : []);
@@ -14,7 +14,7 @@ module.exports = function (c) {
   const icards = items => `<ul class="icards">${items.map(([i, t, d]) => `<li><span class="ic">${ico(i)}</span><b>${t}</b><p>${d}</p></li>`).join("")}</ul>`;
   const callout = t => `<div class="callout">${ico("alert")}<p>${t}</p></div>`;
   const vanaf = k => cfg.vanafPrijs[k] ? `<p><strong>Richtprijs:</strong> vanaf ${esc(cfg.vanafPrijs[k])}. De exacte prijs staat in uw offerte.</p>` : "";
-  const phead = (o, knop) => `<div class="phead" id="top"><div class="wrap">
+  const phead = (o, knop) => `<div class="phead${o.foto ? " has-foto" : ""}" id="top">${o.foto ? foto(o.foto, "hero", { cls: "bg", eager: true }) : ""}<div class="wrap">
 <ol class="crumbs"><li><a href="/">Home</a></li>${(o.crumbs || [[o.crumb]]).map(k => k[1] ? `<li><a href="${k[1]}">${k[0]}</a></li>` : `<li>${k[0]}</li>`).join("")}</ol>
 <h1>${o.h1}</h1>
 <p class="lead">${o.lead}</p>
@@ -48,7 +48,15 @@ ${o.geenRelated ? "" : groepRelated}`;
 <div class="wrap solo prose">
 ${o.body}
 </div>`;
-  const normen = `<p>Wij werken volgens NEN 1010, de norm voor elektrische installaties, en zijn gecertificeerd als NEN 3140 Vakbekwaam Persoon (VP); het certificaat is op aanvraag in te zien. <a href="/keurmerk/">Meer over onze normen en werkwijze</a>.</p>`;
+  const normen = `<p>Wij werken volgens NEN 1010, de norm voor elektrische installaties. De opleiding NEN 3140 Vakbekwaam Persoon (VP) is behaald (ROVC, januari 2026); het certificaat is op aanvraag in te zien. <a href="/keurmerk/">Meer over onze normen en werkwijze</a>.</p>`;
+  // Merkenblok volgens RONDE3 3a: alleen "Wij werken met", geen relatie met het merk suggereren.
+  const merkenBlok = `<section class="merken" aria-labelledby="merken-h"><div class="wrap">
+<h2 id="merken-h">Wij werken met</h2>
+<ul class="merkrij">${["Hager", "ABB", "Schneider Electric"].map(m => `<li>${logo(m, 40)}</li>`).join("")}</ul>
+<p class="small">${naam} is een onafhankelijk installatiebedrijf. Merknamen en logo's zijn eigendom van de betreffende fabrikanten.</p>
+</div></section>`;
+  const normLogo = (n, h) => logo(n, h, false);
+  const bijschrift = n => esc(logos[n].bijschrift);
   const docs = ["KvK-uittreksel", "Diploma en NEN 3140 VP-certificaat"]
     .concat(cfg.vca ? ["VCA-certificaat (" + esc(cfg.vca) + ")"] : [])
     .concat(cfg.verzekerd ? ["Polis aansprakelijkheidsverzekering"] : []);
@@ -57,7 +65,7 @@ ${o.body}
   const dienstPagina = d => {
     const g = groepen.find(x => x.key === d.groep);
     const ouder = d.key === "zakelijk-verrekenen" ? ["Laadpaal installatie", "/laadpaal/"] : g.overzicht ? [g.label, g.url] : null;
-    const body = `${phead({ crumbs: (ouder ? [ouder] : []).concat([[d.menu]]), h1: d.h1, lead: d.lead }, true)}
+    const body = `${phead({ crumbs: (ouder ? [ouder] : []).concat([[d.menu]]), h1: d.h1, lead: d.lead, foto: d.foto }, true)}
 <div class="wrap layout"><div class="prose">
 <h2>Wanneer is dit nodig?</h2>
 <ul class="checks">${d.wanneer.map(x => `<li>${x}</li>`).join("")}</ul>
@@ -83,15 +91,15 @@ ${faq(d.vragen)}
 ${meerLezen(d.lezen)}
 </div>
 ${side(d.kort)}</div>
-${related(d.verwant)}`;
-    return { path: d.url.slice(1), form: true, dienst: d.formOptie, service: d.service, crumb: d.menu, trail: ouder ? [ouder] : [], body, title: `${d.title} | ${cfg.handelsnaam}`, desc: d.desc };
+${d.groep === "meterkast" ? merkenBlok + "\n" : ""}${related(d.verwant)}`;
+    return { path: d.url.slice(1), form: true, preload: d.foto, dienst: d.formOptie, service: d.service, crumb: d.menu, trail: ouder ? [ouder] : [], body, title: `${d.title} | ${cfg.handelsnaam}`, desc: d.desc };
   };
 
   const groepKaart = d => `<a class="svc" href="${d.url}"><span class="ic">${ico(d.icon)}</span><h3>${d.menu}</h3><p>${d.kaart}</p><span class="more">Meer over ${d.menu.toLowerCase()}${ico("arrow")}</span></a>`;
 
   /* ---------- Overzicht: elektra ---------- */
   const gE = groepen.find(g => g.key === "elektra"), gM = groepen.find(g => g.key === "meterkast"), gL = groepen.find(g => g.key === "laden");
-  const elektraOverzicht = svc({ crumb: "Elektra aanleggen",
+  const elektraOverzicht = svc({ crumb: "Elektra aanleggen", foto: "elektra-lasdoos",
     h1: "Elektra aanleggen in Utrecht, Amersfoort en Amsterdam",
     lead: `Nieuwe leidingen bij een verbouwing, een keuken die klaar moet voor inductie of verlichting binnen en in de tuin. ${naam} legt de elektra aan, monteert alles netjes af en levert het werk doorgemeten op. U weet vooraf wat het kost.`,
     kort: ["Renovatie, keuken, verlichting en tuin", "Afgestemd met uw aannemer", "Doorgemeten opgeleverd", "Prijs vooraf, meerwerk alleen na akkoord"],
@@ -111,7 +119,7 @@ ${related(d.verwant)}`;
 ${normen}` });
 
   /* ---------- Overzicht: meterkast ---------- */
-  const meterkastOverzicht = svc({ crumb: "Meterkast", lezen: ["wat-zit-er-in-mijn-meterkast", "meterkast-geschikt-laadpaal-thuisbatterij", "1-fase-of-3-fase"],
+  const meterkastOverzicht = svc({ crumb: "Meterkast", foto: "groepenkast-abb", lezen: ["wat-zit-er-in-mijn-meterkast", "meterkast-geschikt-laadpaal-thuisbatterij", "1-fase-of-3-fase"],
     h1: "Meterkast en groepenkast in Utrecht, Amersfoort en Amsterdam",
     lead: `Wilt u een laadpaal, inductiekookplaat of thuisbatterij aansluiten? Dan heeft elk van die apparaten een eigen groep nodig. In een volle of verouderde meterkast is daar geen ruimte voor. ${naam} vervangt, breidt uit en bereidt voor op 3-fase, in woningen en bedrijfspanden.`,
     kort: ["Vervangen, uitbreiden of een groep erbij", "3-fase voorbereiding", "Opgebouwd en getest volgens NEN 1010", "Meestal binnen één werkdag klaar"],
@@ -133,7 +141,7 @@ ${callout("<strong>Worden onderdelen warm, zijn ze verkleurd of ruikt u een bran
 ${normen}` });
 
   /* ---------- Homepage ---------- */
-  const kern = [["tag", "Vaste prijs vooraf", "Vrijblijvende offerte"], ["doc", "Werkt volgens NEN 1010", "Norm voor elektrische installaties"], ["shield", "NEN 3140 VP", "Certificaat op aanvraag"]]
+  const kern = [["tag", "Vaste prijs vooraf", "Vrijblijvende offerte"], ["doc", "Werkt volgens NEN 1010", "Installaties volgens de norm", "NEN 1010"], ["shield", "NEN 3140 VP", "Opleiding behaald, ROVC 2026", "NEN 3140"]]
     .concat(cfg.erkendLeerbedrijf ? [["cap", "Erkend leerbedrijf", "Erkend door SBB"]] : [])
     .concat([["gauge", "Doorgemeten opgeleverd", "Gemeten en getest"]])
     .concat(cfg.reactietijd ? [["clock", "Reactie " + esc(cfg.reactietijd), "Op elke aanvraag"]] : []);
@@ -144,7 +152,7 @@ ${normen}` });
     ["Wat gebeurt er als er meerwerk nodig is?", `Komt er tijdens het werk iets onverwachts naar voren, dan bespreken wij dat eerst met u. Meerwerk voeren wij alleen uit na uw akkoord.`],
     ["Kan ik gebeld worden in plaats van zelf te bellen?", `Ja. Laat via een <a href="/contact/#terugbellen">terugbelverzoek</a> uw naam, telefoonnummer en voorkeurstijd achter, dan bellen wij u terug.`],
     ["In welk gebied zijn jullie actief?", `Voor particulieren in ${cfg.steden.map(esc).join(", ")} en omliggende plaatsen. Zakelijk: landelijk op projectbasis.`],
-    [`Welke kwalificaties heeft ${naam}?`, `Wij werken volgens NEN 1010, de norm voor elektrische installaties, en zijn gecertificeerd als Vakbekwaam Persoon (VP) volgens NEN 3140; het certificaat is op aanvraag in te zien.${cfg.erkendLeerbedrijf ? " " + naam + " is daarnaast erkend leerbedrijf (SBB)." : ""} Meer op de pagina <a href="/keurmerk/">keurmerk en normen</a>.`],
+    [`Welke kwalificaties heeft ${naam}?`, `Wij werken volgens NEN 1010, de norm voor elektrische installaties, De opleiding NEN 3140 Vakbekwaam Persoon (VP) is behaald (ROVC, januari 2026); het certificaat is op aanvraag in te zien.${cfg.erkendLeerbedrijf ? " " + naam + " is daarnaast erkend leerbedrijf (SBB)." : ""} Meer op de pagina <a href="/keurmerk/">keurmerk en normen</a>.`],
     ["Werken jullie ook als onderaannemer?", `Ja, voor installatiebedrijven en voor leveranciers van thuisbatterijen en laadpalen, per klus of per project. Zie <a href="/zakelijk/">Zakelijk</a>.`]
   ].concat(cfg.startTermijn ? [["Hoe snel kunnen jullie starten?", esc(cfg.startTermijn)]] : [])
    .concat(cfg.garantieArbeid ? [["Welke garantie krijg ik?", `Op ons installatiewerk krijgt u ${esc(cfg.garantieArbeid)} garantie. Voor materialen geldt de garantie van de fabrikant. De volledige regeling staat in de algemene voorwaarden, die u bij de offerte ontvangt.`]] : []);
@@ -160,26 +168,22 @@ ${normen}` });
 ${projecten.length > 3 ? `<div class="cta"><a class="btn line" href="/projecten/">Alle projecten</a></div>` : ""}
 </div></section>\n\n` : "";
 
-  const groepBlok = g => `<article class="card groep"><span class="ic">${ico(g.icon)}</span><h3><a href="${g.url}">${g.label}</a></h3><p>${g.intro}</p>
+  const groepBlok = g => `<article class="card groep">${g.foto ? `<div class="kfoto">${foto(g.foto, "kaart")}</div>` : `<span class="ic">${ico(g.icon)}</span>`}<h3><a href="${g.url}">${g.label}</a></h3><p>${g.intro}</p>
 <ul class="links">${g.items.filter(d => !d.uitgelicht).map(d => `<li><a href="${d.url}">${d.menu}${ico("arrow")}</a></li>`).join("")}${g.key === "elektra" ? `<li><a href="/zakelijk/#utiliteitsbouw">Utiliteitsbouw${ico("arrow")}</a></li>` : ""}</ul></article>`;
   const tb = byKey.thuisbatterij;
 
   const home = `
-<div class="hero" id="top"><div class="wrap">
+<div class="hero has-foto" id="top">${foto("groepenkast-abb", "hero", { cls: "bg", eager: true })}<div class="wrap">
 <div>
 <div class="eyebrow">Elektrotechniek · Utrecht · Amersfoort · Amsterdam</div>
 <h1>Elektrotechniek, goed geregeld.<br><em>Van meterkast tot thuisbatterij.</em></h1>
 <p class="lead"><strong>Vakkundige installatie. Duidelijke afspraken. Eén aanspreekpunt.</strong> Elektra aanleggen, groepenkasten, laadpalen en complete thuisbatterij-installaties, voor particulieren en zakelijke opdrachtgevers.${cfg.reactietijd ? " U krijgt " + esc(cfg.reactietijd) + " een reactie." : ""}</p>
 <div class="cta"><a class="btn" href="#offerte">Maak een afspraak</a><a class="btn ghost" href="/contact/#terugbellen">Bel mij terug</a></div>
 </div>
-<div class="quick"><p class="quick-t">Direct naar</p>
-${groepen.map(g => `<a href="${g.url}"><span class="ic">${ico(g.icon)}</span><span><b>${g.label}</b><span>${g.items.slice(0, 2).map(d => d.menu).join(", ")}</span></span><span class="arr">${ico("arrow")}</span></a>`).join("\n")}
-<a href="/thuisbatterij/"><span class="ic">${ico("batterij")}</span><span><b>Thuisbatterij</b><span>Van advies tot registratie</span></span><span class="arr">${ico("arrow")}</span></a>
-</div>
 </div></div>
 
 <div class="trust"><div class="wrap"><ul>
-${kern.map(t => `<li><span class="ic">${ico(t[0])}</span><span><b>${t[1]}</b><span>${t[2]}</span></span></li>`).join("\n")}
+${kern.map(t => `<li>${(t[3] && normLogo(t[3], 40)) || `<span class="ic">${ico(t[0])}</span>`}<span><b>${t[1]}</b><span>${t[2]}</span></span></li>`).join("\n")}
 </ul></div></div>
 
 <section id="over"><div class="wrap two">
@@ -196,8 +200,8 @@ ${kern.map(t => `<li><span class="ic">${ico(t[0])}</span><span><b>${t[1]}</b><sp
 <div class="shead"><span class="kicker">Keurmerk en normen</span><h2>Veilig werk volgens de geldende normen</h2>
 <p class="sub">Twee normen bepalen hoe wij werken: hoe een installatie moet worden aangelegd, en hoe je er veilig aan werkt.</p></div>
 <div class="grid two">
-<article class="card"><span class="ic">${ico("shield")}</span><h3>NEN 3140</h3><p>De norm voor het veilig werken aan en het beheer van elektrische installaties. Wij zijn gecertificeerd als Vakbekwaam Persoon (VP): wij hebben de kennis en ervaring om zelfstandig en veilig aan installaties te werken. Het certificaat is op aanvraag in te zien.</p></article>
-<article class="card"><span class="ic">${ico("doc")}</span><h3>NEN 1010</h3><p>De norm met de veiligheidseisen voor het ontwerpen en aanleggen van laagspanningsinstallaties, zoals de elektra in uw woning of bedrijfspand. Wij werken volgens NEN 1010 en meten elke installatie door bij de oplevering.</p></article>
+<article class="card">${normLogo("NEN 3140", 64) || `<span class="ic">${ico("shield")}</span>`}<h3>NEN 3140</h3><p class="bijschrift">${bijschrift("NEN 3140")}</p><p>De norm voor het veilig werken aan en het beheer van elektrische installaties. De opleiding Vakbekwaam Persoon (VP) is afgerond: wij hebben de kennis om zelfstandig en veilig aan installaties te werken. Het certificaat is op aanvraag in te zien.</p></article>
+<article class="card">${normLogo("NEN 1010", 64) || `<span class="ic">${ico("doc")}</span>`}<h3>NEN 1010</h3><p class="bijschrift">${bijschrift("NEN 1010")}</p><p>De norm met de veiligheidseisen voor het ontwerpen en aanleggen van laagspanningsinstallaties, zoals de elektra in uw woning of bedrijfspand. Wij werken volgens NEN 1010 en meten elke installatie door bij de oplevering.</p></article>
 </div>
 <div class="cta"><a class="btn line" href="/keurmerk/">Meer lezen</a></div>
 </div></section>
@@ -230,7 +234,9 @@ ${groepen.map(groepBlok).join("\n")}
 <div class="cta"><a class="btn line" href="/laadpaal/zakelijk-verrekenen/">Zakelijk verrekenen</a></div></article>
 </div></div></section>
 
-${reviewsBlok}${projectenBlok}<section class="alt" id="faq"><div class="wrap narrow">
+${reviewsBlok}${projectenBlok}${merkenBlok}
+
+<section class="alt" id="faq"><div class="wrap narrow">
 <div class="shead"><span class="kicker">Veelgestelde vragen</span><h2>Goed om vooraf te weten</h2></div>
 ${faq(homeFaq)}
 </div></section>
@@ -245,11 +251,13 @@ ${faq(homeFaq)}
   /* ---------- Keurmerk ---------- */
   const keurmerk = tekst({ crumb: "Keurmerk", h1: "Keurmerk en normen: NEN 3140 en NEN 1010",
     lead: `Een elektrische installatie moet veilig zijn, nu en over twintig jaar. Op deze pagina leest u welke normen ${naam} volgt, wat ze betekenen en wat u daarvan terugziet bij de oplevering.`,
-    body: `<h2>NEN 3140: veilig werken aan elektrische installaties</h2>
+    body: `<h2 class="metlogo">${normLogo("NEN 3140", 64)}<span>NEN 3140: veilig werken aan elektrische installaties</span></h2>
+<p class="bijschrift">${bijschrift("NEN 3140")}</p>
 <p>NEN 3140 is de norm voor de bedrijfsvoering van elektrische installaties: hoe je veilig aan een installatie werkt, hoe je hem beheert en wie welk werk mag doen. De norm onderscheidt onder meer de Vakbekwaam Persoon (VP): iemand met de opleiding, kennis en ervaring om zelfstandig en veilig aan elektrische installaties te werken.</p>
-<ul class="checks"><li>${naam} is gecertificeerd als NEN 3140 Vakbekwaam Persoon (VP).</li><li>Het certificaat is op aanvraag in te zien. Stuur een e-mail naar ${mail}.</li><li>Wij werken spanningsloos waar dat kan, en beveiligen tegen onbedoeld herinschakelen.</li></ul>
+<ul class="checks"><li>De opleiding NEN 3140 Vakbekwaam Persoon (VP) is behaald bij ROVC, in januari 2026.</li><li>Het certificaat is op aanvraag in te zien. Stuur een e-mail naar ${mail}.</li><li>Wij werken spanningsloos waar dat kan, en beveiligen tegen onbedoeld herinschakelen.</li></ul>
 
-<h2>NEN 1010: eisen aan de aanleg van een installatie</h2>
+<h2 class="metlogo">${normLogo("NEN 1010", 64)}<span>NEN 1010: eisen aan de aanleg van een installatie</span></h2>
+<p class="bijschrift">${bijschrift("NEN 1010")}</p>
 <p>NEN 1010 bevat de veiligheidseisen voor het ontwerpen en aanleggen van laagspanningsinstallaties: de elektra in woningen, bedrijfspanden en utiliteitsgebouwen. De norm beschrijft onder meer hoe groepen worden beveiligd, welke aardlekbeveiliging nodig is, hoe kabels worden gedimensioneerd en welke eisen gelden in badkamers en buiten.</p>
 <ul class="checks"><li>Wij werken volgens NEN 1010, van groepenkast tot laatste stopcontact.</li><li>Kabeldikte en beveiliging kiezen wij op elkaar afgestemd.</li><li>Na de aanleg meten en testen wij de installatie.</li></ul>
 
@@ -455,19 +463,19 @@ ${groepRelated}`;
 
   const H = cfg.handelsnaam;
   return [
-    { path: "", form: true, body: home,
+    { path: "", form: true, preload: "groepenkast-abb", body: home,
       title: `Elektricien Utrecht, Amersfoort en Amsterdam | ${H}`,
       desc: `Elektricien in Utrecht, Amersfoort, Amsterdam en omgeving. Elektra aanleggen, groepenkast, laadpaal en thuisbatterij. Vaste prijs vooraf, NEN 1010.` },
-    { path: "elektra/", form: true, dienst: "Elektra renovatie", crumb: "Elektra aanleggen", body: elektraOverzicht,
+    { path: "elektra/", form: true, preload: "elektra-lasdoos", dienst: "Elektra renovatie", crumb: "Elektra aanleggen", body: elektraOverzicht,
       title: `Elektra aanleggen Utrecht en Amersfoort | ${H}`,
       desc: `Elektra laten aanleggen in Utrecht, Amersfoort of Amsterdam: renovatie, keukenvoorbereiding, inductie, verlichting en tuinverlichting. Prijs vooraf.` },
-    { path: "meterkast/", form: true, dienst: "Groepenkast vervangen", crumb: "Meterkast", body: meterkastOverzicht,
+    { path: "meterkast/", form: true, preload: "groepenkast-abb", dienst: "Groepenkast vervangen", crumb: "Meterkast", body: meterkastOverzicht,
       title: `Meterkast en groepenkast Utrecht e.o. | ${H}`,
       desc: `Meterkast of groepenkast vervangen, uitbreiden of voorbereiden op 3-fase in Utrecht, Amersfoort of Amsterdam. Volgens NEN 1010, prijs vooraf.` }
   ].concat(DL.map(dienstPagina)).concat([
     { path: "keurmerk/", crumb: "Keurmerk", body: keurmerk,
       title: `Keurmerk en normen: NEN 3140 en NEN 1010 | ${H}`,
-      desc: `${H} werkt volgens NEN 1010 en is gecertificeerd als NEN 3140 Vakbekwaam Persoon (VP). Wat dat betekent en wat u bij de oplevering terugziet.` },
+      desc: `${H} werkt volgens NEN 1010 en heeft de opleiding NEN 3140 Vakbekwaam Persoon afgerond. Wat dat betekent en wat u terugziet bij de oplevering.` },
     { path: "contact/", form: true, crumb: "Contact", body: contact,
       title: `Contact: afspraak of terugbelverzoek | ${H}`,
       desc: `Maak een afspraak, vraag een offerte aan of laat u terugbellen door ${H}. Particulier in Utrecht, Amersfoort en Amsterdam, zakelijk landelijk.` },
