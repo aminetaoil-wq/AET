@@ -321,3 +321,8 @@ nav>a,.ddb{padding:14px 12px;font-size:17px;border-bottom:1px solid var(--line);
 .merkrij li:has(img[alt="ABB"]){padding:8px 40px}
 @media(max-width:640px){.merkrij li:has(img[alt="ABB"]){padding:6px 28px}}
 .phead .lead a,.legal a{color:#fff}
+/* Onderbalk mag nooit een gefocust of in beeld gescrold element bedekken (verzendknop, foutmelding) */
+@media(max-width:1000px){html{scroll-padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}}
+.legal span a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+@media(min-width:1001px){.trust ul.k4{grid-template-columns:.85fr 1.45fr 1.1fr 1fr}}
+.legal span a{white-space:nowrap}

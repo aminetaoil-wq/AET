@@ -141,7 +141,7 @@ ${normen}` });
 
   /* ---------- Homepage ---------- */
   // Kernwaardenbalk (FIX.md stap 1): vier feiten, geen dubbele subregels; SBB staat los hiervan.
-  const kern = [["tag", "Vaste prijs vooraf", ""], ["shield", "Gediplomeerd, ervaren NEN 3140 Vakbekwaam Persoon", "", "NEN 3140"], ["doc", "Werkt volgens NEN 1010", "", "NEN 1010"], ["gauge", "Doorgemeten opgeleverd", ""]]
+  const kern = [["tag", "Vaste prijs vooraf", ""], ["shield", "Gediplomeerd, ervaren NEN&nbsp;3140 Vakbekwaam Persoon", "", "NEN 3140"], ["doc", "Werkt volgens NEN&nbsp;1010", "", "NEN 1010"], ["gauge", "Doorgemeten opgeleverd", ""]]
     .concat(cfg.reactietijd ? [["clock", "Reactie " + esc(cfg.reactietijd), "Op elke aanvraag"]] : []);
 
   const homeFaq = [
@@ -180,7 +180,7 @@ ${projecten.length > 3 ? `<div class="cta"><a class="btn line" href="/projecten/
 </div>
 </div></div>
 
-<div class="trust"><div class="wrap"><ul>
+<div class="trust"><div class="wrap"><ul class="k${kern.length}">
 ${kern.map(t => `<li>${(t[3] && normLogo(t[3], 40)) || `<span class="ic">${ico(t[0])}</span>`}<span><b>${t[1]}</b>${t[2] ? `<span>${t[2]}</span>` : ""}</span></li>`).join("\n")}
 </ul></div></div>
 
