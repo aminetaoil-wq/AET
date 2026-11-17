@@ -11,9 +11,9 @@
     "naam": "ABB",
     "type": "merk",
     "bestand": "assets/merken/abb-logo.png",
-    "tonen": false,
-    "bron": "Nog geen bruikbaar bestand: aangeleverde versie (17-11) afgekeurd wegens watermerk cleanpng, geen transparantie en geen officiële bron. Officieel logo via de ABB-downloadpagina",
-    "datum": ""
+    "tonen": true,
+    "bron": "Aangeleverd door eigenaar; herkomst seeklogo.com (abb-logo-png_seeklogo-1844), geen officiële bron van ABB; bijgesneden en verkleind naar 80 px hoog. Vervangen door bestand van de ABB-downloadpagina zodra beschikbaar",
+    "datum": "2026-11-17"
   },
   {
     "naam": "Schneider Electric",

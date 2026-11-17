@@ -17,7 +17,7 @@ Stockfoto's zijn sfeerbeeld (RONDE3 regel 3.4): nooit als eigen werk tonen, niet
 | Naam | Type | Bestand | Aanwezig | Getoond | Bron | Datum |
 |---|---|---|---|---|---|---|
 | Hager | merk | assets/merken/hager-logo.png | ja | logo | Aangeleverd door eigenaar (RONDE3 3a: Hager, pagina Branding guidelines); verkleind naar 80 px hoog | 2026-11-17 |
-| ABB | merk | assets/merken/abb-logo.png | nee | naam als tekst | Nog geen bruikbaar bestand: aangeleverde versie (17-11) afgekeurd wegens watermerk cleanpng, geen transparantie en geen officiële bron. Officieel logo via de ABB-downloadpagina | - |
+| ABB | merk | assets/merken/abb-logo.png | ja | logo | Aangeleverd door eigenaar; herkomst seeklogo.com (abb-logo-png_seeklogo-1844), geen officiële bron van ABB; bijgesneden en verkleind naar 80 px hoog. Vervangen door bestand van de ABB-downloadpagina zodra beschikbaar | 2026-11-17 |
 | Schneider Electric | merk | assets/merken/schneider-electric-logo.png | ja | logo | Aangeleverd door eigenaar; herkomst Wikimedia Commons (Schneider_Electric_2007), geen officiële bron van Schneider; verkleind naar 80 px hoog | 2026-11-17 |
 | NEN 3140 | norm | assets/normen/nen-logo-transparant.png | ja | logo | Aangeleverd door eigenaar (184 x 111 px, transparant) | 2026-11-17 |
 | NEN 1010 | norm | assets/normen/nen-logo-transparant.png | ja | logo | Aangeleverd door eigenaar (184 x 111 px, transparant) | 2026-11-17 |
