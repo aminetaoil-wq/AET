@@ -23,7 +23,8 @@ for(const p of pages){const h=html[p],zicht=h.replace(/<script[\s\S]*?<\/script>
  const mb=(h.match(/<section class="merken"[\s\S]*?<\/section>/)||[""])[0].replace(/<[^>]+>/g," ");
  if(/partner|erkend|officieel|dealer|geautoriseerd|in samenwerking met|aanbevolen door/i.test(mb)){bad++;console.log("  MERKENBLOK suggereert relatie",p)}}
 // Talen: html lang, hreflang-paren wederzijds, taalknop naar het tegenstuk, geen Nederlandse resten op Engelse pagina's.
-const NL_IN_EN=/\b(de|het|een|van|voor|wij|uw|niet|met|zijn|wordt|naar|ook|bij|aanvraag|offerte|afspraak|lezen|terug|bellen|groepen|laadpaal|thuisbatterij)\b/i;
+// Nederlandse woorden die in het Engels niet voorkomen ("met" en "van" ontbreken bewust: dat zijn ook Engelse woorden).
+const NL_IN_EN=/\b(de|het|een|voor|wij|uw|niet|zijn|wordt|naar|ook|bij|aanvraag|offerte|afspraak|lezen|terug|bellen|groepen|laadpaal|thuisbatterij)\b/i;
 for(const p of pages){const h=html[p],lang=(h.match(/<html lang="(\w+)"/)||[])[1],url="/"+p.replace(/index\.html$/,"");
  if(/http-equiv="refresh"/.test(h))continue;
  if(lang!==(p.startsWith("en/")?"en":"nl")){bad++;console.log("  HTML LANG",p,lang)}
@@ -38,7 +39,7 @@ for(const p of pages){const h=html[p],lang=(h.match(/<html lang="(\w+)"/)||[])[1
  if(terug!==url){bad++;console.log("  TAALKNOP NIET WEDERZIJDS",p,knop,terug)}
  if(lang==="en"){const z=h.replace(/<script[\s\S]*?<\/script>/g," ").replace(/<head>[\s\S]*?<\/head>/," ").replace(/<[^>]+>/g," ");
   const m=z.match(NL_IN_EN);if(m){bad++;console.log("  NEDERLANDS OP EN-PAGINA",p,JSON.stringify(m[0]))}
-  if(/\bcertified\b|we are an? (NEN 3140 )?Qualified Person/i.test(z)){bad++;console.log("  VERBODEN FORMULERING (EN)",p)}
+  if(/\bcertified\b|Qualified Person|we are an? (NEN 3140 )?Skilled Person/i.test(z)){bad++;console.log("  VERBODEN FORMULERING (EN)",p)}
   if(/breakdown service/i.test(z)&&!p.startsWith("en/knowledge-base/")){bad++;console.log("  STORINGSDIENST BUITEN KENNISBANK",p)}}}
 const lic=JSON.parse(fs.readFileSync(path.join(root,"content/fotos.json"),"utf8")),lg=JSON.parse(fs.readFileSync(path.join(root,"content/logos.json"),"utf8"));
 for(const f of lic)if(!f.bron||!f.licentie||!f.alt){bad++;console.log("  FOTO zonder bron/licentie/alt",f.naam)}

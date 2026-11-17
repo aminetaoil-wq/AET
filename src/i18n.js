@@ -60,55 +60,56 @@ module.exports = function (cfg) {
   const en = {
     lang: "en", locale: "en_GB", pre: "/en/", home: "Home",
     langNaam: "English", langAria: "English version",
-    skip: "Skip to content", logoAria: "to the homepage", navAria: "Main menu", menu: "Menu",
+    skip: "Skip to content", logoAria: "home page", navAria: "Main menu", menu: "Menu",
     nav: { keurmerk: ["Standards", "/en/standards/"], projecten: ["Projects", "/en/projects/"], zakelijk: ["Business", "/en/business/"],
       kennisbank: ["Knowledge base", "/en/knowledge-base/"], contact: ["Contact", "/en/contact/"] },
-    allesOver: l => `All about ${l.toLowerCase()}`,
+    allesOver: l => `${l}: overview`,
     utiliteit: ["Commercial buildings", "/en/business/#commercial-buildings"],
     afspraak: "Book an appointment", contactUrl: "/en/contact/", terugbelUrl: "/en/contact/#callback", bedanktUrl: "/en/thank-you/",
     privacyUrl: "/en/privacy-statement/",
-    en: " and ", omgeving: " and the surrounding area",
+    en: " and ", omgeving: " and surrounding areas",
     regio: "Province of Utrecht",
     form: {
-      overig: "Other", overigOptie: "Other electrical installation or renovation work", inhuur: "Business: hire an electrician", stage: "Internship",
-      ikBen: "I am", particulier: "A private customer", bedrijf: "A business", onderwerp: "Subject", kies: "Please choose",
-      bedrijfsnaam: "Company name", contactpersoon: "Contact person",
+      overig: "Other", overigOptie: "Other electrical or renovation work", inhuur: "Subcontracting / electrician hire", stage: "Internship",
+      ikBen: "Enquiring as", particulier: "Private individual", bedrijf: "Business", onderwerp: "Service", kies: "Select a service",
+      bedrijfsnaam: "Company name", contactpersoon: "Contact name",
       naam: () => "Your name", mail: () => "Your email address", tel: () => "Your phone number", pc: () => "Your postcode",
       zwerk: "Type of work", zwerkOpties: ["Fuse boxes and distribution boards", "EV chargers", "Home batteries", "Electrical installation work", "Other"],
-      zloc: "Project location", zlocPh: "Town or region", zper: "Preferred period and capacity", zperPh: "E.g. weeks 3-6, three days a week",
-      aansl: "Your connection", aanslOpties: ["I don't know", "Single-phase", "Three-phase"], zon: "Do you have solar panels?", zonOpties: ["No", "Yes"],
-      toel: "Details", toelZk: "Technical details",
-      ph: { st: "For example: your course and year, BOL or BBL, the period and why you would like to do your internship with us.",
-        zk: "For example: quantities, type of installation, who supplies the materials and anything specific on site.",
-        std: "For example: what you would like installed or connected, which car you drive or when suits you." },
-      bijlagen: zk => `${zk ? "Attachments" : "Photos"} (optional, up to 3 files of 10 MB)`,
-      knop: { st: "Send application", zk: "Send business enquiry", std: "Send request" },
-      privacy: () => "We only use your details to respond to your request. Read more in our",
+      zloc: "Project location", zlocPh: "Town or region", zper: "Preferred dates and capacity", zperPh: "E.g. weeks 3-6, three days a week",
+      aansl: "Your supply", aanslOpties: ["Not sure", "Single-phase", "Three-phase"], zon: "Do you have solar panels?", zonOpties: ["No", "Yes"],
+      toel: "Message", toelZk: "Technical details",
+      ph: { st: "For example: your course and year, BOL or BBL, the period, and why you would like to do your internship with us.",
+        zk: "For example: quantities, type of installation, who supplies the materials and anything specific about the site.",
+        std: "For example: what you would like installed or connected, which car you drive, or when suits you best." },
+      bijlagen: zk => `${zk ? "Attachments" : "Photos"} (optional, up to 3 files of 10 MB each)`,
+      knop: { st: "Send application", zk: "Send business enquiry", std: "Send enquiry" },
+      privacy: () => "We only use your details to respond to your enquiry. See our",
       privacyLink: "privacy statement",
       kop: {
-        st: ["Internship", "Apply for an internship", "Tell us briefly which course you are following and when you would like to do your internship. We will respond to your application."],
-        zk: ["Business enquiry", "Tell us about your project or job", "Describe the work, the location and the preferred period. We will reply with our availability and rate."],
-        std: ["Book an appointment", "Book an appointment or request a quote", "Tell us in a few sentences what you would like done. We will contact you to arrange an appointment or send you a no-obligation quote with the work, the materials and a fixed price."]
+        st: ["Internship", "Apply for an internship", "Tell us briefly which course you are following and when you would like to start. We will respond to every application."],
+        zk: ["Business enquiry", "Tell us about your project", "Describe the work, the location and your preferred dates. We'll come back to you with our availability and rate."],
+        std: ["Book an appointment", "Book an appointment or request a quote", "Tell us briefly what you need. We'll get in touch to arrange an appointment, or send you a no-obligation quote setting out the work, the materials and a fixed price."]
       },
       reageren: t => ` We respond ${t}.`,
       punten: {
-        st: ["Mention your course, level and year", "Say whether you follow BOL or BBL", "Give the period and the number of days per week", "Email us your CV"],
-        zk: up => ["Per job or per project", "Independent work as agreed", "Handover with test and completion records", up ? "Add drawings and project documents as attachments" : "Email us drawings and project documents"],
-        std: (up, fotoRoute) => ["No obligation: you are not committed to anything", "You know the price before you decide", "A quote with a fixed scope and a fixed price", up ? "Add photos of your meter cupboard to the form" : fotoRoute]
+        st: ["Your course, level and year", "Whether you follow the BOL or BBL route", "The period and number of days per week", "Please email us your CV"],
+        zk: up => ["Per job or per project", "Independent working, as agreed", "Full test and completion records", up ? "Attach drawings and project documents" : "Email us drawings and project documents"],
+        std: (up, fotoRoute) => ["No obligation whatsoever", "You know the price before you decide", "A quote with a fixed scope and fixed price", up ? "Add photos of your meter cupboard to the form" : fotoRoute]
       },
-      waFoto: ["Hello, here are photos of my meter cupboard for a quote.", "Send photos via WhatsApp"]
+      waFoto: ["Hello, here are some photos of my meter cupboard for a quote.", "Send photos via WhatsApp"]
     },
-    fotoRoute: wa => wa ? `You can send photos of your meter cupboard via <a href="${wa}">WhatsApp</a> or by email.` : "You can email us photos of your meter cupboard.",
+    fotoRoute: wa => wa ? `Send photos of your meter cupboard via <a href="${wa}">WhatsApp</a> or by email.` : "You can email us photos of your meter cupboard.",
     waTekst: "Hello AET Solutions, I have a question about ",
-    mbar: { terug: "Call me back", mail: "Email", afspraak: "Appointment", aanmelden: "Apply" },
+    mbar: { terug: "Callback", mail: "Email", afspraak: "Appointment", aanmelden: "Apply" },
     footer: {
-      over: omg => `${cfg.handelsnaam} carries out electrical installations for private customers and provides capacity as a subcontractor. Private customers: ${omg}. Business: nationwide, per project.`,
-      diensten: "Services", dienstLinks: [["EV charger installation", "/en/ev-charger/"], ["Home battery installation", "/en/home-battery/"], ["Business and commercial buildings", "/en/business/"], ["Standards", "/en/standards/"]],
-      info: "Information", infoLinks: [["About us", "/en/about/"], ["How we work", "/en/#how-we-work"], ["Frequently asked questions", "/en/#faq"], ["Knowledge base", "/en/knowledge-base/"]],
-      stage: ["Internship", "/en/internship/"], legal: [["Terms and conditions", "/en/terms-and-conditions/"], ["Privacy statement", "/en/privacy-statement/"]],
-      contact: "Contact", contactLinks: [["Call me back", "/en/contact/#callback"], ["Book an appointment", "/en/contact/"], ["Service area", "/en/#service-area"]],
+      over: omg => `${cfg.handelsnaam} carries out electrical installations for residential clients and works as a subcontractor for the trade. Residential: ${omg}. Business: nationwide, on a project basis.`,
+      diensten: "Services", dienstLinks: [["EV charger installation", "/en/ev-charger/"], ["Home battery installation", "/en/home-battery/"], ["Business and commercial buildings", "/en/business/"], ["Our standards", "/en/standards/"]],
+      info: "Information", infoLinks: [["About us", "/en/about/"], ["How we work", "/en/#how-we-work"], ["FAQ", "/en/#faq"], ["Knowledge base", "/en/knowledge-base/"]],
+      stage: ["Internships", "/en/internship/"], legal: [["Terms and conditions", "/en/terms-and-conditions/"], ["Privacy statement", "/en/privacy-statement/"]],
+      contact: "Contact", contactLinks: [["Request a callback", "/en/contact/#callback"], ["Book an appointment", "/en/contact/"], ["Service area", "/en/#service-area"]],
       kvk: "Chamber of Commerce (KvK)", btw: "VAT", boven: "Back to top ↑"
     }
   };
+
   return { nl, en };
 };

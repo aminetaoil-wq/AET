@@ -22,7 +22,7 @@
         "fpz": 1.35
       }
     },
-    "alt_en": "Fuse box under construction with circuit breakers and blue neutral bars"
+    "alt_en": "Consumer unit being installed, with circuit breakers and blue neutral bars"
   },
   {
     "naam": "laadpaal-auto",
@@ -47,7 +47,7 @@
         "fpz": 1.2
       }
     },
-    "alt_en": "Charging plug being inserted into an electric car"
+    "alt_en": "Charging plug being connected to an electric car"
   },
   {
     "naam": "elektra-lasdoos",
@@ -72,6 +72,6 @@
         "fpz": 1.2
       }
     },
-    "alt_en": "Connectors and wiring in a junction box during electrical installation work"
+    "alt_en": "Wire connectors and cabling in a junction box during electrical installation work"
   }
 ]
