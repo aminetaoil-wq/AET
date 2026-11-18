@@ -4,6 +4,7 @@ exclude:
   - VERBETERPLAN.md
   - RONDE3.md
   - FIX.md
+  - RONDE4.md
   - site.config.json
   - src
   - tools
